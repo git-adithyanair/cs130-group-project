@@ -3,3 +3,6 @@ postgres:
 
 createdb:
 	docker exec -it postgres-12 createdb --username=root --owner=root good_grocer
+
+dropdb:
+	docker exec -it postgres-12 dropdb good_grocer
