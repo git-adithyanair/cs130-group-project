@@ -6,3 +6,6 @@ createdb:
 
 dropdb:
 	docker exec -it postgres-12 dropdb good_grocer
+
+server:
+	go run main.go
