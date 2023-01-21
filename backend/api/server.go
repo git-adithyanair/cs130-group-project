@@ -4,19 +4,22 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/git-adithyanair/cs130-group-project/util"
 )
 
 type Server struct {
-	// config     util.Config
+	config util.Config
 	// store      db.Store
 	router *gin.Engine
 	// tokenMaker token.Maker
 }
 
 // Initializes and returns a new Server instance.
-func NewServer() (*Server, error) {
+func NewServer(config util.Config) (*Server, error) {
 
-	server := &Server{}
+	server := &Server{
+		config: config,
+	}
 	server.setupRouter()
 
 	return server, nil
