@@ -7,5 +7,14 @@ createdb:
 dropdb:
 	docker exec -it postgres-12 dropdb good_grocer
 
+migrateup:
+	migrate -path db/migration -database "postgresql://root:secret@localhost:5432/good_grocer?sslmode=disable" -verbose up
+
+migratedown:
+	migrate -path db/migration -database "postgresql://root:secret@localhost:5432/good_grocer?sslmode=disable" -verbose down
+
+sqlc:
+	sqlc generate
+
 server:
 	go run main.go
