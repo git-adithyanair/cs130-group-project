@@ -14,7 +14,7 @@ SELECT * FROM errands WHERE user_id = $1;
 
 -- name: GetErrandsByCommunityId :many
 SELECT * FROM errands 
-WHERE user_id = $1
+WHERE community_id = $1
 LIMIT $2
 OFFSET $3; 
 
