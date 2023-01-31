@@ -97,6 +97,8 @@ CREATE INDEX ON "communities" ("admin");
 
 CREATE INDEX ON "items" ("requested_by");
 
+CREATE INDEX ON "items" ("request_id");
+
 CREATE INDEX ON "items" ("preferred_store");
 
 CREATE INDEX ON "stores" ("place_id");

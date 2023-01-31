@@ -66,19 +66,19 @@ func (q *Queries) GetErrand(ctx context.Context, id int64) (Errand, error) {
 
 const getErrandsByCommunityId = `-- name: GetErrandsByCommunityId :many
 SELECT id, user_id, community_id, is_complete, created_at, completed_at FROM errands 
-WHERE user_id = $1
+WHERE community_id = $1
 LIMIT $2
 OFFSET $3
 `
 
 type GetErrandsByCommunityIdParams struct {
-	UserID int64 `json:"user_id"`
-	Limit  int32 `json:"limit"`
-	Offset int32 `json:"offset"`
+	CommunityID int64 `json:"community_id"`
+	Limit       int32 `json:"limit"`
+	Offset      int32 `json:"offset"`
 }
 
 func (q *Queries) GetErrandsByCommunityId(ctx context.Context, arg GetErrandsByCommunityIdParams) ([]Errand, error) {
-	rows, err := q.db.QueryContext(ctx, getErrandsByCommunityId, arg.UserID, arg.Limit, arg.Offset)
+	rows, err := q.db.QueryContext(ctx, getErrandsByCommunityId, arg.CommunityID, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
