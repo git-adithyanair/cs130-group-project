@@ -76,7 +76,7 @@ CREATE TABLE "requests" (
   "created_at" timestamptz NOT NULL DEFAULT (now()),
   "user_id" bigint NOT NULL,
   "community_id" bigint,
-  "status" request_status NOT NULL,
+  "status" request_status NOT NULL DEFAULT 'pending',
   "errand_id" bigint NOT NULL
 );
 
