@@ -15,7 +15,6 @@ INSERT INTO items (
     name,
     requested_by,
     request_id,
-    name,
     quantity_type,
     quantity,
     preferred_brand,
@@ -23,7 +22,7 @@ INSERT INTO items (
     image,
     extra_notes
 ) VALUES (
-    $1, $2, $3, $4, $5, $6, $7, $8, $9, $10
+    $1, $2, $3, $4, $5, $6, $7, $8, $9
 ) RETURNING id, requested_by, request_id, name, quantity_type, quantity, preferred_brand, preferred_store, image, found, extra_notes
 `
 
@@ -31,7 +30,6 @@ type CreateItemParams struct {
 	Name           string           `json:"name"`
 	RequestedBy    int64            `json:"requested_by"`
 	RequestID      int64            `json:"request_id"`
-	Name_2         string           `json:"name_2"`
 	QuantityType   ItemQuantityType `json:"quantity_type"`
 	Quantity       float64          `json:"quantity"`
 	PreferredBrand sql.NullString   `json:"preferred_brand"`
@@ -45,7 +43,6 @@ func (q *Queries) CreateItem(ctx context.Context, arg CreateItemParams) (Item, e
 		arg.Name,
 		arg.RequestedBy,
 		arg.RequestID,
-		arg.Name_2,
 		arg.QuantityType,
 		arg.Quantity,
 		arg.PreferredBrand,
@@ -297,13 +294,12 @@ UPDATE items SET
     name = $2,
     requested_by = $3,
     request_id = $4,
-    name = $5,
-    quantity_type = $6,
-    quantity = $7,
-    preferred_brand = $8,
-    preferred_store = $9,
-    image = $10,
-    extra_notes = $11
+    quantity_type = $5,
+    quantity = $6,
+    preferred_brand = $7,
+    preferred_store = $8,
+    image = $9,
+    extra_notes = $10
 WHERE id = $1
 RETURNING id, requested_by, request_id, name, quantity_type, quantity, preferred_brand, preferred_store, image, found, extra_notes
 `
@@ -313,7 +309,6 @@ type UpdateItemParams struct {
 	Name           string           `json:"name"`
 	RequestedBy    int64            `json:"requested_by"`
 	RequestID      int64            `json:"request_id"`
-	Name_2         string           `json:"name_2"`
 	QuantityType   ItemQuantityType `json:"quantity_type"`
 	Quantity       float64          `json:"quantity"`
 	PreferredBrand sql.NullString   `json:"preferred_brand"`
@@ -328,7 +323,6 @@ func (q *Queries) UpdateItem(ctx context.Context, arg UpdateItemParams) (Item, e
 		arg.Name,
 		arg.RequestedBy,
 		arg.RequestID,
-		arg.Name_2,
 		arg.QuantityType,
 		arg.Quantity,
 		arg.PreferredBrand,

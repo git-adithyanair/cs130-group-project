@@ -3,7 +3,6 @@ INSERT INTO items (
     name,
     requested_by,
     request_id,
-    name,
     quantity_type,
     quantity,
     preferred_brand,
@@ -11,7 +10,7 @@ INSERT INTO items (
     image,
     extra_notes
 ) VALUES (
-    $1, $2, $3, $4, $5, $6, $7, $8, $9, $10
+    $1, $2, $3, $4, $5, $6, $7, $8, $9
 ) RETURNING *;
 
 -- name: GetItem :one
@@ -36,13 +35,12 @@ UPDATE items SET
     name = $2,
     requested_by = $3,
     request_id = $4,
-    name = $5,
-    quantity_type = $6,
-    quantity = $7,
-    preferred_brand = $8,
-    preferred_store = $9,
-    image = $10,
-    extra_notes = $11
+    quantity_type = $5,
+    quantity = $6,
+    preferred_brand = $7,
+    preferred_store = $8,
+    image = $9,
+    extra_notes = $10
 WHERE id = $1
 RETURNING *;
 
