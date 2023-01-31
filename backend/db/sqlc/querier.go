@@ -6,15 +6,39 @@ package db
 
 import (
 	"context"
+	"database/sql"
 )
 
 type Querier interface {
+	CreateErrand(ctx context.Context, arg CreateErrandParams) (Errand, error)
+	CreateRequest(ctx context.Context, arg CreateRequestParams) (Request, error)
+	CreateStore(ctx context.Context, arg CreateStoreParams) (Store, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
+	DeleteErrand(ctx context.Context, id int64) error
+	DeleteRequest(ctx context.Context, id int64) error
+	DeleteStore(ctx context.Context, id int64) error
 	DeleteUser(ctx context.Context, id int64) error
+	GetErrand(ctx context.Context, id int64) (Errand, error)
+	GetErrandsByCommunityId(ctx context.Context, arg GetErrandsByCommunityIdParams) ([]Errand, error)
+	GetErrandsByUserId(ctx context.Context, userID int64) ([]Errand, error)
+	GetPendingRequestsByCommunityId(ctx context.Context, communityID sql.NullInt64) ([]Request, error)
+	GetRequest(ctx context.Context, id int64) (Request, error)
+	GetRequestsByCommunityId(ctx context.Context, arg GetRequestsByCommunityIdParams) ([]Request, error)
+	GetRequestsByErrandId(ctx context.Context, errandID int64) ([]Request, error)
+	GetRequestsByUserId(ctx context.Context, arg GetRequestsByUserIdParams) ([]Request, error)
+	GetStore(ctx context.Context, id int64) (Store, error)
+	GetStoreByPlaceId(ctx context.Context, placeID string) (Store, error)
 	GetUser(ctx context.Context, id int64) (User, error)
 	GetUserByEmail(ctx context.Context, email string) (User, error)
 	GetUserByPhoneNumber(ctx context.Context, phoneNumber string) (User, error)
+	ListErrands(ctx context.Context, arg ListErrandsParams) ([]Errand, error)
+	ListRequests(ctx context.Context, arg ListRequestsParams) ([]Request, error)
+	ListStores(ctx context.Context, arg ListStoresParams) ([]Store, error)
 	ListUsers(ctx context.Context, arg ListUsersParams) ([]User, error)
+	UpdateErrand(ctx context.Context, arg UpdateErrandParams) (Errand, error)
+	UpdateRequest(ctx context.Context, arg UpdateRequestParams) (Request, error)
+	UpdateRequestStatus(ctx context.Context, arg UpdateRequestStatusParams) error
+	UpdateStore(ctx context.Context, arg UpdateStoreParams) (Store, error)
 	UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error)
 }
 
