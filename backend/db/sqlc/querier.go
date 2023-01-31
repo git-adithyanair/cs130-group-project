@@ -10,17 +10,35 @@ import (
 )
 
 type Querier interface {
+	CreateCommunity(ctx context.Context, arg CreateCommunityParams) (Community, error)
 	CreateErrand(ctx context.Context, arg CreateErrandParams) (Errand, error)
+	CreateItem(ctx context.Context, arg CreateItemParams) (Item, error)
+	CreateMember(ctx context.Context, arg CreateMemberParams) (Member, error)
 	CreateRequest(ctx context.Context, arg CreateRequestParams) (Request, error)
 	CreateStore(ctx context.Context, arg CreateStoreParams) (Store, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
+	DeleteCommunity(ctx context.Context, id int64) error
 	DeleteErrand(ctx context.Context, id int64) error
+	DeleteItem(ctx context.Context, id int64) error
+	DeleteItemsByPreferredStore(ctx context.Context, preferredStore sql.NullInt64) error
+	DeleteItemsByRequest(ctx context.Context, requestID int64) error
+	DeleteItemsByUser(ctx context.Context, requestedBy int64) error
+	DeleteMember(ctx context.Context, arg DeleteMemberParams) error
+	DeleteMembersByCommunity(ctx context.Context, communityID int64) error
+	DeleteMembersByUser(ctx context.Context, userID int64) error
 	DeleteRequest(ctx context.Context, id int64) error
 	DeleteStore(ctx context.Context, id int64) error
 	DeleteUser(ctx context.Context, id int64) error
+	GetCommunitiesByAdmin(ctx context.Context, admin int64) ([]Community, error)
+	GetCommunity(ctx context.Context, id int64) (Community, error)
 	GetErrand(ctx context.Context, id int64) (Errand, error)
 	GetErrandsByCommunityId(ctx context.Context, arg GetErrandsByCommunityIdParams) ([]Errand, error)
 	GetErrandsByUserId(ctx context.Context, userID int64) ([]Errand, error)
+	GetItem(ctx context.Context, id int64) (Item, error)
+	GetItemsByPreferredStore(ctx context.Context, preferredStore sql.NullInt64) ([]Item, error)
+	GetItemsByRequest(ctx context.Context, requestID int64) ([]Item, error)
+	GetItemsByUser(ctx context.Context, requestedBy int64) ([]Item, error)
+	GetMember(ctx context.Context, arg GetMemberParams) (Member, error)
 	GetPendingRequestsByCommunityId(ctx context.Context, communityID sql.NullInt64) ([]Request, error)
 	GetRequest(ctx context.Context, id int64) (Request, error)
 	GetRequestsByCommunityId(ctx context.Context, arg GetRequestsByCommunityIdParams) ([]Request, error)
@@ -31,11 +49,24 @@ type Querier interface {
 	GetUser(ctx context.Context, id int64) (User, error)
 	GetUserByEmail(ctx context.Context, email string) (User, error)
 	GetUserByPhoneNumber(ctx context.Context, phoneNumber string) (User, error)
+	ListCommunities(ctx context.Context, arg ListCommunitiesParams) ([]Community, error)
 	ListErrands(ctx context.Context, arg ListErrandsParams) ([]Errand, error)
+	ListItems(ctx context.Context, arg ListItemsParams) ([]Item, error)
+	ListMembersByCommunity(ctx context.Context, communityID int64) ([]Member, error)
+	ListMembersByUser(ctx context.Context, userID int64) ([]Member, error)
 	ListRequests(ctx context.Context, arg ListRequestsParams) ([]Request, error)
 	ListStores(ctx context.Context, arg ListStoresParams) ([]Store, error)
 	ListUsers(ctx context.Context, arg ListUsersParams) ([]User, error)
+	UpdateCommunity(ctx context.Context, arg UpdateCommunityParams) (Community, error)
+	UpdateCommunityAdmin(ctx context.Context, arg UpdateCommunityAdminParams) (Community, error)
 	UpdateErrand(ctx context.Context, arg UpdateErrandParams) (Errand, error)
+	UpdateItem(ctx context.Context, arg UpdateItemParams) (Item, error)
+	UpdateItemExtraNotes(ctx context.Context, arg UpdateItemExtraNotesParams) (Item, error)
+	UpdateItemImage(ctx context.Context, arg UpdateItemImageParams) (Item, error)
+	UpdateItemName(ctx context.Context, arg UpdateItemNameParams) (Item, error)
+	UpdateItemPreferredBrand(ctx context.Context, arg UpdateItemPreferredBrandParams) (Item, error)
+	UpdateItemPreferredStore(ctx context.Context, arg UpdateItemPreferredStoreParams) (Item, error)
+	UpdateItemQuantity(ctx context.Context, arg UpdateItemQuantityParams) (Item, error)
 	UpdateRequest(ctx context.Context, arg UpdateRequestParams) (Request, error)
 	UpdateRequestStatus(ctx context.Context, arg UpdateRequestStatusParams) error
 	UpdateStore(ctx context.Context, arg UpdateStoreParams) (Store, error)
