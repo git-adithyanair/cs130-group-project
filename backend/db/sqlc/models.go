@@ -127,7 +127,6 @@ type Item struct {
 	QuantityType   ItemQuantityType `json:"quantity_type"`
 	Quantity       float64          `json:"quantity"`
 	PreferredBrand sql.NullString   `json:"preferred_brand"`
-	PreferredStore sql.NullInt64    `json:"preferred_store"`
 	// base64 encoded
 	Image      sql.NullString `json:"image"`
 	Found      sql.NullBool   `json:"found"`
@@ -147,6 +146,7 @@ type Request struct {
 	CommunityID sql.NullInt64 `json:"community_id"`
 	Status      RequestStatus `json:"status"`
 	ErrandID    int64         `json:"errand_id"`
+	StoreID     sql.NullInt64 `json:"store_id"`
 }
 
 type Store struct {

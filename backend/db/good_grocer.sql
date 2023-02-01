@@ -52,7 +52,6 @@ CREATE TABLE "items" (
   "quantity_type" item_quantity_type NOT NULL,
   "quantity" float NOT NULL,
   "preferred_brand" varchar,
-  "preferred_store" bigint,
   "image" varchar,
   "found" bool DEFAULT null,
   "extra_notes" varchar
@@ -77,7 +76,8 @@ CREATE TABLE "requests" (
   "user_id" bigint NOT NULL,
   "community_id" bigint,
   "status" request_status NOT NULL DEFAULT 'pending',
-  "errand_id" bigint NOT NULL
+  "errand_id" bigint NOT NULL,
+  "store_id" bigint
 );
 
 CREATE TABLE "errands" (
@@ -99,9 +99,9 @@ CREATE INDEX ON "items" ("requested_by");
 
 CREATE INDEX ON "items" ("request_id");
 
-CREATE INDEX ON "items" ("preferred_store");
-
 CREATE INDEX ON "stores" ("place_id");
+
+CREATE INDEX ON "requests" ("store_id");
 
 COMMENT ON COLUMN "items"."image" IS 'base64 encoded';
 
@@ -115,13 +115,13 @@ ALTER TABLE "items" ADD FOREIGN KEY ("requested_by") REFERENCES "users" ("id");
 
 ALTER TABLE "items" ADD FOREIGN KEY ("request_id") REFERENCES "requests" ("id");
 
-ALTER TABLE "items" ADD FOREIGN KEY ("preferred_store") REFERENCES "stores" ("id");
-
 ALTER TABLE "requests" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
 
 ALTER TABLE "requests" ADD FOREIGN KEY ("community_id") REFERENCES "communities" ("id");
 
 ALTER TABLE "requests" ADD FOREIGN KEY ("errand_id") REFERENCES "errands" ("id");
+
+ALTER TABLE "requests" ADD FOREIGN KEY ("store_id") REFERENCES "stores" ("id");
 
 ALTER TABLE "errands" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
 

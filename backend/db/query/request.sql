@@ -2,9 +2,10 @@
 INSERT INTO requests (
     user_id, 
     community_id, 
-    errand_id
+    errand_id, 
+    store_id
 ) VALUES (
-    $1, $2, $3
+    $1, $2, $3, $4
 ) RETURNING *; 
 
 -- name: GetRequest :one
@@ -16,6 +17,9 @@ WHERE user_id = $1
 LIMIT $2
 OFFSET $3; 
 
+-- name: GetRequestsByStoreId :many
+SELECT * FROM requests WHERE store_id = $1; 
+
 -- name: GetRequestsByCommunityId :many
 SELECT * FROM requests 
 WHERE community_id = $1
@@ -25,6 +29,10 @@ OFFSET $3;
 -- name: GetPendingRequestsByCommunityId :many
 SELECT * FROM requests 
 WHERE community_id = $1 AND status = 'pending'; 
+
+-- name: GetPendingRequestsByStoreId :many
+SELECT * FROM requests 
+WHERE store_id = $1 AND status = 'pending'; 
 
 -- name: GetRequestsByErrandId :many
 SELECT * FROM requests WHERE errand_id = $1; 
@@ -39,7 +47,8 @@ UPDATE requests SET
     user_id = $2, 
     community_id = $3, 
     status = $4, 
-    errand_id = $5
+    errand_id = $5, 
+    store_id = $6
 WHERE id = $1
 RETURNING *; 
 
@@ -48,3 +57,12 @@ UPDATE requests SET status = $2 WHERE id = $1;
 
 -- name: DeleteRequest :exec
 DELETE FROM requests WHERE id = $1; 
+
+-- name: DeleteRequestsByStore :exec
+DELETE FROM requests WHERE store_id = $1; 
+
+-- name: DeleteRequestsByUser :exec
+DELETE FROM requests WHERE user_id = $1; 
+
+-- name: DeleteRequestsByErrand :exec
+DELETE FROM requests WHERE errand_id = $1; 
