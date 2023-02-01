@@ -6,11 +6,10 @@ INSERT INTO items (
     quantity_type,
     quantity,
     preferred_brand,
-    preferred_store,
     image,
     extra_notes
 ) VALUES (
-    $1, $2, $3, $4, $5, $6, $7, $8, $9
+    $1, $2, $3, $4, $5, $6, $7, $8
 ) RETURNING *;
 
 -- name: GetItem :one
@@ -21,9 +20,6 @@ SELECT * FROM items WHERE requested_by = $1;
 
 -- name: GetItemsByRequest :many
 SELECT * FROM items WHERE request_id = $1;
-
--- name: GetItemsByPreferredStore :many
-SELECT * FROM items WHERE preferred_store = $1;
 
 -- name: ListItems :many
 SELECT * FROM items
@@ -38,9 +34,8 @@ UPDATE items SET
     quantity_type = $5,
     quantity = $6,
     preferred_brand = $7,
-    preferred_store = $8,
-    image = $9,
-    extra_notes = $10
+    image = $8,
+    extra_notes = $9
 WHERE id = $1
 RETURNING *;
 
@@ -60,12 +55,6 @@ RETURNING *;
 -- name: UpdateItemPreferredBrand :one
 UPDATE items SET
     preferred_brand = $2
-WHERE id = $1
-RETURNING *;
-
--- name: UpdateItemPreferredStore :one
-UPDATE items SET
-    preferred_store = $2
 WHERE id = $1
 RETURNING *;
 
@@ -89,6 +78,3 @@ DELETE FROM items WHERE requested_by = $1;
 
 -- name: DeleteItemsByRequest :exec
 DELETE FROM items WHERE request_id = $1;
-
--- name: DeleteItemsByPreferredStore :exec
-DELETE FROM items WHERE preferred_store = $1;

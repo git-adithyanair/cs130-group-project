@@ -20,13 +20,15 @@ type Querier interface {
 	DeleteCommunity(ctx context.Context, id int64) error
 	DeleteErrand(ctx context.Context, id int64) error
 	DeleteItem(ctx context.Context, id int64) error
-	DeleteItemsByPreferredStore(ctx context.Context, preferredStore sql.NullInt64) error
 	DeleteItemsByRequest(ctx context.Context, requestID int64) error
 	DeleteItemsByUser(ctx context.Context, requestedBy int64) error
 	DeleteMember(ctx context.Context, arg DeleteMemberParams) error
 	DeleteMembersByCommunity(ctx context.Context, communityID int64) error
 	DeleteMembersByUser(ctx context.Context, userID int64) error
 	DeleteRequest(ctx context.Context, id int64) error
+	DeleteRequestsByErrand(ctx context.Context, errandID int64) error
+	DeleteRequestsByStore(ctx context.Context, storeID sql.NullInt64) error
+	DeleteRequestsByUser(ctx context.Context, userID int64) error
 	DeleteStore(ctx context.Context, id int64) error
 	DeleteUser(ctx context.Context, id int64) error
 	GetCommunitiesByAdmin(ctx context.Context, admin int64) ([]Community, error)
@@ -35,14 +37,15 @@ type Querier interface {
 	GetErrandsByCommunityId(ctx context.Context, arg GetErrandsByCommunityIdParams) ([]Errand, error)
 	GetErrandsByUserId(ctx context.Context, userID int64) ([]Errand, error)
 	GetItem(ctx context.Context, id int64) (Item, error)
-	GetItemsByPreferredStore(ctx context.Context, preferredStore sql.NullInt64) ([]Item, error)
 	GetItemsByRequest(ctx context.Context, requestID int64) ([]Item, error)
 	GetItemsByUser(ctx context.Context, requestedBy int64) ([]Item, error)
 	GetMember(ctx context.Context, arg GetMemberParams) (Member, error)
 	GetPendingRequestsByCommunityId(ctx context.Context, communityID sql.NullInt64) ([]Request, error)
+	GetPendingRequestsByStoreId(ctx context.Context, storeID sql.NullInt64) ([]Request, error)
 	GetRequest(ctx context.Context, id int64) (Request, error)
 	GetRequestsByCommunityId(ctx context.Context, arg GetRequestsByCommunityIdParams) ([]Request, error)
 	GetRequestsByErrandId(ctx context.Context, errandID int64) ([]Request, error)
+	GetRequestsByStoreId(ctx context.Context, storeID sql.NullInt64) ([]Request, error)
 	GetRequestsByUserId(ctx context.Context, arg GetRequestsByUserIdParams) ([]Request, error)
 	GetStore(ctx context.Context, id int64) (Store, error)
 	GetStoreByPlaceId(ctx context.Context, placeID string) (Store, error)
@@ -65,7 +68,6 @@ type Querier interface {
 	UpdateItemImage(ctx context.Context, arg UpdateItemImageParams) (Item, error)
 	UpdateItemName(ctx context.Context, arg UpdateItemNameParams) (Item, error)
 	UpdateItemPreferredBrand(ctx context.Context, arg UpdateItemPreferredBrandParams) (Item, error)
-	UpdateItemPreferredStore(ctx context.Context, arg UpdateItemPreferredStoreParams) (Item, error)
 	UpdateItemQuantity(ctx context.Context, arg UpdateItemQuantityParams) (Item, error)
 	UpdateRequest(ctx context.Context, arg UpdateRequestParams) (Request, error)
 	UpdateRequestStatus(ctx context.Context, arg UpdateRequestStatusParams) error

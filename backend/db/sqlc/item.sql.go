@@ -18,12 +18,11 @@ INSERT INTO items (
     quantity_type,
     quantity,
     preferred_brand,
-    preferred_store,
     image,
     extra_notes
 ) VALUES (
-    $1, $2, $3, $4, $5, $6, $7, $8, $9
-) RETURNING id, requested_by, request_id, name, quantity_type, quantity, preferred_brand, preferred_store, image, found, extra_notes
+    $1, $2, $3, $4, $5, $6, $7, $8
+) RETURNING id, requested_by, request_id, name, quantity_type, quantity, preferred_brand, image, found, extra_notes
 `
 
 type CreateItemParams struct {
@@ -33,7 +32,6 @@ type CreateItemParams struct {
 	QuantityType   ItemQuantityType `json:"quantity_type"`
 	Quantity       float64          `json:"quantity"`
 	PreferredBrand sql.NullString   `json:"preferred_brand"`
-	PreferredStore sql.NullInt64    `json:"preferred_store"`
 	Image          sql.NullString   `json:"image"`
 	ExtraNotes     sql.NullString   `json:"extra_notes"`
 }
@@ -46,7 +44,6 @@ func (q *Queries) CreateItem(ctx context.Context, arg CreateItemParams) (Item, e
 		arg.QuantityType,
 		arg.Quantity,
 		arg.PreferredBrand,
-		arg.PreferredStore,
 		arg.Image,
 		arg.ExtraNotes,
 	)
@@ -59,7 +56,6 @@ func (q *Queries) CreateItem(ctx context.Context, arg CreateItemParams) (Item, e
 		&i.QuantityType,
 		&i.Quantity,
 		&i.PreferredBrand,
-		&i.PreferredStore,
 		&i.Image,
 		&i.Found,
 		&i.ExtraNotes,
@@ -73,15 +69,6 @@ DELETE FROM items WHERE id = $1
 
 func (q *Queries) DeleteItem(ctx context.Context, id int64) error {
 	_, err := q.db.ExecContext(ctx, deleteItem, id)
-	return err
-}
-
-const deleteItemsByPreferredStore = `-- name: DeleteItemsByPreferredStore :exec
-DELETE FROM items WHERE preferred_store = $1
-`
-
-func (q *Queries) DeleteItemsByPreferredStore(ctx context.Context, preferredStore sql.NullInt64) error {
-	_, err := q.db.ExecContext(ctx, deleteItemsByPreferredStore, preferredStore)
 	return err
 }
 
@@ -104,7 +91,7 @@ func (q *Queries) DeleteItemsByUser(ctx context.Context, requestedBy int64) erro
 }
 
 const getItem = `-- name: GetItem :one
-SELECT id, requested_by, request_id, name, quantity_type, quantity, preferred_brand, preferred_store, image, found, extra_notes FROM items WHERE id = $1
+SELECT id, requested_by, request_id, name, quantity_type, quantity, preferred_brand, image, found, extra_notes FROM items WHERE id = $1
 `
 
 func (q *Queries) GetItem(ctx context.Context, id int64) (Item, error) {
@@ -118,7 +105,6 @@ func (q *Queries) GetItem(ctx context.Context, id int64) (Item, error) {
 		&i.QuantityType,
 		&i.Quantity,
 		&i.PreferredBrand,
-		&i.PreferredStore,
 		&i.Image,
 		&i.Found,
 		&i.ExtraNotes,
@@ -126,47 +112,8 @@ func (q *Queries) GetItem(ctx context.Context, id int64) (Item, error) {
 	return i, err
 }
 
-const getItemsByPreferredStore = `-- name: GetItemsByPreferredStore :many
-SELECT id, requested_by, request_id, name, quantity_type, quantity, preferred_brand, preferred_store, image, found, extra_notes FROM items WHERE preferred_store = $1
-`
-
-func (q *Queries) GetItemsByPreferredStore(ctx context.Context, preferredStore sql.NullInt64) ([]Item, error) {
-	rows, err := q.db.QueryContext(ctx, getItemsByPreferredStore, preferredStore)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	items := []Item{}
-	for rows.Next() {
-		var i Item
-		if err := rows.Scan(
-			&i.ID,
-			&i.RequestedBy,
-			&i.RequestID,
-			&i.Name,
-			&i.QuantityType,
-			&i.Quantity,
-			&i.PreferredBrand,
-			&i.PreferredStore,
-			&i.Image,
-			&i.Found,
-			&i.ExtraNotes,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
 const getItemsByRequest = `-- name: GetItemsByRequest :many
-SELECT id, requested_by, request_id, name, quantity_type, quantity, preferred_brand, preferred_store, image, found, extra_notes FROM items WHERE request_id = $1
+SELECT id, requested_by, request_id, name, quantity_type, quantity, preferred_brand, image, found, extra_notes FROM items WHERE request_id = $1
 `
 
 func (q *Queries) GetItemsByRequest(ctx context.Context, requestID int64) ([]Item, error) {
@@ -186,7 +133,6 @@ func (q *Queries) GetItemsByRequest(ctx context.Context, requestID int64) ([]Ite
 			&i.QuantityType,
 			&i.Quantity,
 			&i.PreferredBrand,
-			&i.PreferredStore,
 			&i.Image,
 			&i.Found,
 			&i.ExtraNotes,
@@ -205,7 +151,7 @@ func (q *Queries) GetItemsByRequest(ctx context.Context, requestID int64) ([]Ite
 }
 
 const getItemsByUser = `-- name: GetItemsByUser :many
-SELECT id, requested_by, request_id, name, quantity_type, quantity, preferred_brand, preferred_store, image, found, extra_notes FROM items WHERE requested_by = $1
+SELECT id, requested_by, request_id, name, quantity_type, quantity, preferred_brand, image, found, extra_notes FROM items WHERE requested_by = $1
 `
 
 func (q *Queries) GetItemsByUser(ctx context.Context, requestedBy int64) ([]Item, error) {
@@ -225,7 +171,6 @@ func (q *Queries) GetItemsByUser(ctx context.Context, requestedBy int64) ([]Item
 			&i.QuantityType,
 			&i.Quantity,
 			&i.PreferredBrand,
-			&i.PreferredStore,
 			&i.Image,
 			&i.Found,
 			&i.ExtraNotes,
@@ -244,7 +189,7 @@ func (q *Queries) GetItemsByUser(ctx context.Context, requestedBy int64) ([]Item
 }
 
 const listItems = `-- name: ListItems :many
-SELECT id, requested_by, request_id, name, quantity_type, quantity, preferred_brand, preferred_store, image, found, extra_notes FROM items
+SELECT id, requested_by, request_id, name, quantity_type, quantity, preferred_brand, image, found, extra_notes FROM items
 LIMIT $1
 OFFSET $2
 `
@@ -271,7 +216,6 @@ func (q *Queries) ListItems(ctx context.Context, arg ListItemsParams) ([]Item, e
 			&i.QuantityType,
 			&i.Quantity,
 			&i.PreferredBrand,
-			&i.PreferredStore,
 			&i.Image,
 			&i.Found,
 			&i.ExtraNotes,
@@ -297,11 +241,10 @@ UPDATE items SET
     quantity_type = $5,
     quantity = $6,
     preferred_brand = $7,
-    preferred_store = $8,
-    image = $9,
-    extra_notes = $10
+    image = $8,
+    extra_notes = $9
 WHERE id = $1
-RETURNING id, requested_by, request_id, name, quantity_type, quantity, preferred_brand, preferred_store, image, found, extra_notes
+RETURNING id, requested_by, request_id, name, quantity_type, quantity, preferred_brand, image, found, extra_notes
 `
 
 type UpdateItemParams struct {
@@ -312,7 +255,6 @@ type UpdateItemParams struct {
 	QuantityType   ItemQuantityType `json:"quantity_type"`
 	Quantity       float64          `json:"quantity"`
 	PreferredBrand sql.NullString   `json:"preferred_brand"`
-	PreferredStore sql.NullInt64    `json:"preferred_store"`
 	Image          sql.NullString   `json:"image"`
 	ExtraNotes     sql.NullString   `json:"extra_notes"`
 }
@@ -326,7 +268,6 @@ func (q *Queries) UpdateItem(ctx context.Context, arg UpdateItemParams) (Item, e
 		arg.QuantityType,
 		arg.Quantity,
 		arg.PreferredBrand,
-		arg.PreferredStore,
 		arg.Image,
 		arg.ExtraNotes,
 	)
@@ -339,7 +280,6 @@ func (q *Queries) UpdateItem(ctx context.Context, arg UpdateItemParams) (Item, e
 		&i.QuantityType,
 		&i.Quantity,
 		&i.PreferredBrand,
-		&i.PreferredStore,
 		&i.Image,
 		&i.Found,
 		&i.ExtraNotes,
@@ -351,7 +291,7 @@ const updateItemExtraNotes = `-- name: UpdateItemExtraNotes :one
 UPDATE items SET
     extra_notes = $2
 WHERE id = $1
-RETURNING id, requested_by, request_id, name, quantity_type, quantity, preferred_brand, preferred_store, image, found, extra_notes
+RETURNING id, requested_by, request_id, name, quantity_type, quantity, preferred_brand, image, found, extra_notes
 `
 
 type UpdateItemExtraNotesParams struct {
@@ -370,7 +310,6 @@ func (q *Queries) UpdateItemExtraNotes(ctx context.Context, arg UpdateItemExtraN
 		&i.QuantityType,
 		&i.Quantity,
 		&i.PreferredBrand,
-		&i.PreferredStore,
 		&i.Image,
 		&i.Found,
 		&i.ExtraNotes,
@@ -382,7 +321,7 @@ const updateItemImage = `-- name: UpdateItemImage :one
 UPDATE items SET
     image = $2
 WHERE id = $1
-RETURNING id, requested_by, request_id, name, quantity_type, quantity, preferred_brand, preferred_store, image, found, extra_notes
+RETURNING id, requested_by, request_id, name, quantity_type, quantity, preferred_brand, image, found, extra_notes
 `
 
 type UpdateItemImageParams struct {
@@ -401,7 +340,6 @@ func (q *Queries) UpdateItemImage(ctx context.Context, arg UpdateItemImageParams
 		&i.QuantityType,
 		&i.Quantity,
 		&i.PreferredBrand,
-		&i.PreferredStore,
 		&i.Image,
 		&i.Found,
 		&i.ExtraNotes,
@@ -413,7 +351,7 @@ const updateItemName = `-- name: UpdateItemName :one
 UPDATE items SET
     name = $2
 WHERE id = $1
-RETURNING id, requested_by, request_id, name, quantity_type, quantity, preferred_brand, preferred_store, image, found, extra_notes
+RETURNING id, requested_by, request_id, name, quantity_type, quantity, preferred_brand, image, found, extra_notes
 `
 
 type UpdateItemNameParams struct {
@@ -432,7 +370,6 @@ func (q *Queries) UpdateItemName(ctx context.Context, arg UpdateItemNameParams) 
 		&i.QuantityType,
 		&i.Quantity,
 		&i.PreferredBrand,
-		&i.PreferredStore,
 		&i.Image,
 		&i.Found,
 		&i.ExtraNotes,
@@ -444,7 +381,7 @@ const updateItemPreferredBrand = `-- name: UpdateItemPreferredBrand :one
 UPDATE items SET
     preferred_brand = $2
 WHERE id = $1
-RETURNING id, requested_by, request_id, name, quantity_type, quantity, preferred_brand, preferred_store, image, found, extra_notes
+RETURNING id, requested_by, request_id, name, quantity_type, quantity, preferred_brand, image, found, extra_notes
 `
 
 type UpdateItemPreferredBrandParams struct {
@@ -463,38 +400,6 @@ func (q *Queries) UpdateItemPreferredBrand(ctx context.Context, arg UpdateItemPr
 		&i.QuantityType,
 		&i.Quantity,
 		&i.PreferredBrand,
-		&i.PreferredStore,
-		&i.Image,
-		&i.Found,
-		&i.ExtraNotes,
-	)
-	return i, err
-}
-
-const updateItemPreferredStore = `-- name: UpdateItemPreferredStore :one
-UPDATE items SET
-    preferred_store = $2
-WHERE id = $1
-RETURNING id, requested_by, request_id, name, quantity_type, quantity, preferred_brand, preferred_store, image, found, extra_notes
-`
-
-type UpdateItemPreferredStoreParams struct {
-	ID             int64         `json:"id"`
-	PreferredStore sql.NullInt64 `json:"preferred_store"`
-}
-
-func (q *Queries) UpdateItemPreferredStore(ctx context.Context, arg UpdateItemPreferredStoreParams) (Item, error) {
-	row := q.db.QueryRowContext(ctx, updateItemPreferredStore, arg.ID, arg.PreferredStore)
-	var i Item
-	err := row.Scan(
-		&i.ID,
-		&i.RequestedBy,
-		&i.RequestID,
-		&i.Name,
-		&i.QuantityType,
-		&i.Quantity,
-		&i.PreferredBrand,
-		&i.PreferredStore,
 		&i.Image,
 		&i.Found,
 		&i.ExtraNotes,
@@ -507,7 +412,7 @@ UPDATE items SET
     quantity = $2,
     quantity_type = $3
 WHERE id = $1
-RETURNING id, requested_by, request_id, name, quantity_type, quantity, preferred_brand, preferred_store, image, found, extra_notes
+RETURNING id, requested_by, request_id, name, quantity_type, quantity, preferred_brand, image, found, extra_notes
 `
 
 type UpdateItemQuantityParams struct {
@@ -527,7 +432,6 @@ func (q *Queries) UpdateItemQuantity(ctx context.Context, arg UpdateItemQuantity
 		&i.QuantityType,
 		&i.Quantity,
 		&i.PreferredBrand,
-		&i.PreferredStore,
 		&i.Image,
 		&i.Found,
 		&i.ExtraNotes,
