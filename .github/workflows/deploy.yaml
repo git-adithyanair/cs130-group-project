@@ -1,0 +1,58 @@
+name: Deploy to production
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  deploy:
+    name: Build image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v1
+        id: install
+        working-directory: ./backend
+        with:
+          version: "v1.26.1"
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        working-directory: ./backend
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-west-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+        working-directory: ./backend
+
+      - name: Load secrets and save to app.env
+        working-directory: ./backend
+        run: aws secretsmanager get-secret-value --secret-id good-grocer --query SecretString --output text | jq -r 'to_entries|map("\(.key)=\(.value)")|.[]' > app.env
+
+      - name: Build, tag, and push docker image to Amazon ECR
+        working-directory: ./backend
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: good-grocer
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -t $REGISTRY/$REPOSITORY:latest .
+          docker push -a $REGISTRY/$REPOSITORY
+
+      - name: Update kube config
+        working-directory: ./backend
+        run: aws eks update-kubeconfig --name good-grocer --region us-west-1
+
+      - name: Deploy image to Amazon EKS
+        working-directory: ./backend
+        run: |
+          kubectl apply -f eks/aws-auth.yaml
+          kubectl apply -f eks/deployment.yaml
+          kubectl apply -f eks/service.yaml
