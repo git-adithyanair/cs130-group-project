@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: good-grocer-api-deployment
+  labels:
+    app: good-grocer-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: good-grocer-api
+  template:
+    metadata:
+      labels:
+        app: good-grocer-api
+    spec:
+      containers:
+        - name: good-grocer-api
+          image: 628227663153.dkr.ecr.us-west-1.amazonaws.com/good-grocer:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
