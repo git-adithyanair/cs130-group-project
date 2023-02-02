@@ -53,3 +53,4 @@ jobs:
           kubectl apply -f eks/aws-auth.yaml
           kubectl apply -f eks/deployment.yaml
           kubectl apply -f eks/service.yaml
+          kubectl rollout restart deployment/good-grocer-api-deployment --namespace=default
