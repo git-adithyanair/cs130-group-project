@@ -4,21 +4,28 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/git-adithyanair/cs130-group-project/token"
 	"github.com/git-adithyanair/cs130-group-project/util"
 )
 
 type Server struct {
 	config util.Config
 	// store      db.Store
-	router *gin.Engine
-	// tokenMaker token.Maker
+	router     *gin.Engine
+	tokenMaker token.Maker
 }
 
 // Initializes and returns a new Server instance.
 func NewServer(config util.Config) (*Server, error) {
 
+	tokenMaker, err := token.NewPasetoMaker(config.TokenSymmetricKey)
+	if err != nil {
+		return nil, err
+	}
+
 	server := &Server{
-		config: config,
+		config:     config,
+		tokenMaker: tokenMaker,
 	}
 	server.setupRouter()
 
