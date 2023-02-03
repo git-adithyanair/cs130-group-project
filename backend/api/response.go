@@ -34,3 +34,19 @@ func newUserResponse(user db.User) userResponse {
 }
 
 // ========================================================================
+
+// ========================================================================
+// Type to return only unprotected user information.
+type registerUserResponse struct {
+	Token string       `json:"token"`
+	User  userResponse `json:"user"`
+}
+
+func newRegisterUserResponse(token string, user db.User) registerUserResponse {
+	return registerUserResponse{
+		Token: token,
+		User:  newUserResponse(user),
+	}
+}
+
+// ========================================================================

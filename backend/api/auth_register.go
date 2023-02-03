@@ -57,7 +57,13 @@ func (server *Server) RegisterUser(ctx *gin.Context) {
 		return
 	}
 
-	res := newUserResponse(user)
+	token, err := server.tokenMaker.CreateToken(user.ID, user.Email)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+
+	res := newRegisterUserResponse(token, user)
 	ctx.JSON(http.StatusOK, res)
 
 }
