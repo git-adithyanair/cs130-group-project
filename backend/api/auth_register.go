@@ -57,6 +57,7 @@ func (server *Server) RegisterUser(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, user)
+	res := newUserResponse(user)
+	ctx.JSON(http.StatusOK, res)
 
 }

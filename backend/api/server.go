@@ -56,8 +56,3 @@ func (server *Server) setupRouter() {
 func (server *Server) Start(address string) error {
 	return server.router.Run(address)
 }
-
-// Function to convert errors into a form that can be sent as a response.
-func errorResponse(err error) gin.H {
-	return gin.H{"error": err.Error()}
-}
