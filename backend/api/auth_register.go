@@ -63,7 +63,7 @@ func (server *Server) RegisterUser(ctx *gin.Context) {
 		return
 	}
 
-	res := newRegisterUserResponse(token, user)
+	res := newAuthUserResponse(token, user)
 	ctx.JSON(http.StatusOK, res)
 
 }

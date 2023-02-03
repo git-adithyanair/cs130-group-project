@@ -45,6 +45,7 @@ func (server *Server) setupRouter() {
 	})
 
 	router.POST("/user", server.RegisterUser)
+	router.POST("/user/login", server.LoginUser)
 
 	// Routes that require auth middleware.
 	// authRoutes := router.Group("/").Use(authMiddleware(server.tokenMaker))
