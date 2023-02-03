@@ -6,7 +6,9 @@ services:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=secret
       - POSTGRES_DB=good_grocer
-  api:
+    ports:
+      - "5432:5432"
+  good-grocer-api:
     build:
       context: .
       dockerfile: Dockerfile

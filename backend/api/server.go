@@ -4,19 +4,20 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	db "github.com/git-adithyanair/cs130-group-project/db/sqlc"
 	"github.com/git-adithyanair/cs130-group-project/token"
 	"github.com/git-adithyanair/cs130-group-project/util"
 )
 
 type Server struct {
-	config util.Config
-	// store      db.Store
+	config     util.Config
+	queries    *db.Queries
 	router     *gin.Engine
 	tokenMaker token.Maker
 }
 
 // Initializes and returns a new Server instance.
-func NewServer(config util.Config) (*Server, error) {
+func NewServer(config util.Config, queries *db.Queries) (*Server, error) {
 
 	tokenMaker, err := token.NewPasetoMaker(config.TokenSymmetricKey)
 	if err != nil {
@@ -26,6 +27,7 @@ func NewServer(config util.Config) (*Server, error) {
 	server := &Server{
 		config:     config,
 		tokenMaker: tokenMaker,
+		queries:    queries,
 	}
 	server.setupRouter()
 
@@ -38,12 +40,14 @@ func (server *Server) setupRouter() {
 
 	router := gin.Default()
 
-	// Routes that require auth middleware.
-	// authRoutes := router.Group("/").Use(authMiddleware(server.tokenMaker))
-
 	router.GET("/ping", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, "ok")
 	})
+
+	router.POST("/user", server.RegisterUser)
+
+	// Routes that require auth middleware.
+	// authRoutes := router.Group("/").Use(authMiddleware(server.tokenMaker))
 
 	server.router = router
 }

@@ -1,6 +1,6 @@
 package token
 
 type Maker interface {
-	CreateToken(userID string, email string) (string, error)
+	CreateToken(userID int64, email string) (string, error)
 	VerifyToken(token string) (*Payload, error)
 }
