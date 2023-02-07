@@ -4,13 +4,17 @@ INSERT INTO communities (
   admin,
   center_x_coord,
   center_y_coord,
-  range
+  range,
+  place_id,
+  address
 ) VALUES (
   $1,
   $2,
   $3,
   $4,
-  $5
+  $5,
+  $6,
+  $7
 ) RETURNING *;
 
 -- name: GetCommunity :one
@@ -30,7 +34,9 @@ UPDATE communities SET
   admin = $3,
   center_x_coord = $4,
   center_y_coord = $5,
-  range = $6
+  range = $6,
+  place_id = $7,
+  address = $8
 WHERE id = $1
 RETURNING *;
 

@@ -11,6 +11,7 @@ import (
 
 type Querier interface {
 	CreateCommunity(ctx context.Context, arg CreateCommunityParams) (Community, error)
+	CreateCommunityStore(ctx context.Context, arg CreateCommunityStoreParams) (CommunityStore, error)
 	CreateErrand(ctx context.Context, arg CreateErrandParams) (Errand, error)
 	CreateItem(ctx context.Context, arg CreateItemParams) (Item, error)
 	CreateMember(ctx context.Context, arg CreateMemberParams) (Member, error)
@@ -18,6 +19,9 @@ type Querier interface {
 	CreateStore(ctx context.Context, arg CreateStoreParams) (Store, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
 	DeleteCommunity(ctx context.Context, id int64) error
+	DeleteCommunityStore(ctx context.Context, arg DeleteCommunityStoreParams) error
+	DeleteCommunityStoresByCommunity(ctx context.Context, communityID int64) error
+	DeleteCommunityStoresByStore(ctx context.Context, storeID int64) error
 	DeleteErrand(ctx context.Context, id int64) error
 	DeleteItem(ctx context.Context, id int64) error
 	DeleteItemsByRequest(ctx context.Context, requestID int64) error
@@ -33,6 +37,7 @@ type Querier interface {
 	DeleteUser(ctx context.Context, id int64) error
 	GetCommunitiesByAdmin(ctx context.Context, admin int64) ([]Community, error)
 	GetCommunity(ctx context.Context, id int64) (Community, error)
+	GetCommunityStore(ctx context.Context, arg GetCommunityStoreParams) (CommunityStore, error)
 	GetErrand(ctx context.Context, id int64) (Errand, error)
 	GetErrandsByCommunityId(ctx context.Context, arg GetErrandsByCommunityIdParams) ([]Errand, error)
 	GetErrandsByUserId(ctx context.Context, userID int64) ([]Errand, error)
@@ -53,6 +58,8 @@ type Querier interface {
 	GetUserByEmail(ctx context.Context, email string) (User, error)
 	GetUserByPhoneNumber(ctx context.Context, phoneNumber string) (User, error)
 	ListCommunities(ctx context.Context, arg ListCommunitiesParams) ([]Community, error)
+	ListCommunityStoresByCommunity(ctx context.Context, communityID int64) ([]CommunityStore, error)
+	ListCommunityStoresByStores(ctx context.Context, storeID int64) ([]CommunityStore, error)
 	ListErrands(ctx context.Context, arg ListErrandsParams) ([]Errand, error)
 	ListItems(ctx context.Context, arg ListItemsParams) ([]Item, error)
 	ListMembersByCommunity(ctx context.Context, communityID int64) ([]Member, error)

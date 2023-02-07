@@ -4,13 +4,12 @@ INSERT INTO users (
     hashed_password,
     full_name,
     phone_number,
-    address_line_1,
-    address_line_2,
-    zip_code,
-    city,
-    state
+    place_id,
+    address,
+    x_coord,
+    y_coord
 ) VALUES (
-    $1, $2, $3, $4, $5, $6, $7, $8, $9
+    $1, $2, $3, $4, $5, $6, $7, $8
 ) RETURNING *;
 
 -- name: GetUser :one
@@ -33,11 +32,10 @@ UPDATE users SET
     hashed_password = $3,
     full_name = $4,
     phone_number = $5,
-    address_line_1 = $6,
-    address_line_2 = $7,
-    zip_code = $8,
-    city = $9,
-    state = $10
+    place_id = $6,
+    address = $7,
+    x_coord = $8,
+    y_coord = $9
 WHERE id = $1
 RETURNING *;
 

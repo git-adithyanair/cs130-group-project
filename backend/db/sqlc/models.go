@@ -104,10 +104,18 @@ type Community struct {
 	ID           int64     `json:"id"`
 	Name         string    `json:"name"`
 	Admin        int64     `json:"admin"`
+	PlaceID      string    `json:"place_id"`
 	CenterXCoord float64   `json:"center_x_coord"`
 	CenterYCoord float64   `json:"center_y_coord"`
 	Range        int32     `json:"range"`
+	Address      string    `json:"address"`
 	CreatedAt    time.Time `json:"created_at"`
+}
+
+type CommunityStore struct {
+	CommunityID int64     `json:"community_id"`
+	StoreID     int64     `json:"store_id"`
+	AddedAt     time.Time `json:"added_at"`
 }
 
 type Errand struct {
@@ -150,28 +158,25 @@ type Request struct {
 }
 
 type Store struct {
-	ID           int64          `json:"id"`
-	Name         string         `json:"name"`
-	AddressLine1 string         `json:"address_line_1"`
-	AddressLine2 sql.NullString `json:"address_line_2"`
-	ZipCode      string         `json:"zip_code"`
-	City         string         `json:"city"`
-	State        string         `json:"state"`
-	XCoord       float64        `json:"x_coord"`
-	YCoord       string         `json:"y_coord"`
-	PlaceID      string         `json:"place_id"`
+	ID      int64   `json:"id"`
+	Name    string  `json:"name"`
+	XCoord  float64 `json:"x_coord"`
+	YCoord  float64 `json:"y_coord"`
+	Address string  `json:"address"`
+	PlaceID string  `json:"place_id"`
 }
 
 type User struct {
-	ID             int64          `json:"id"`
-	Email          string         `json:"email"`
-	HashedPassword string         `json:"hashed_password"`
-	FullName       string         `json:"full_name"`
-	PhoneNumber    string         `json:"phone_number"`
-	CreatedAt      time.Time      `json:"created_at"`
-	AddressLine1   string         `json:"address_line_1"`
-	AddressLine2   sql.NullString `json:"address_line_2"`
-	ZipCode        string         `json:"zip_code"`
-	City           string         `json:"city"`
-	State          string         `json:"state"`
+	ID             int64     `json:"id"`
+	Email          string    `json:"email"`
+	HashedPassword string    `json:"hashed_password"`
+	FullName       string    `json:"full_name"`
+	PhoneNumber    string    `json:"phone_number"`
+	CreatedAt      time.Time `json:"created_at"`
+	PlaceID        string    `json:"place_id"`
+	// base64 encoded
+	ProfilePicture string  `json:"profile_picture"`
+	XCoord         float64 `json:"x_coord"`
+	YCoord         float64 `json:"y_coord"`
+	Address        string  `json:"address"`
 }

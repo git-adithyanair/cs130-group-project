@@ -1,7 +1,6 @@
 package api
 
 import (
-	"database/sql"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -10,15 +9,14 @@ import (
 )
 
 type RegisterUserRequest struct {
-	Email        string `json:"email" binding:"required,email"`
-	Password     string `json:"password" binding:"required,min=6"`
-	FullName     string `json:"full_name" binding:"required"`
-	PhoneNumber  string `json:"phone_number" binding:"required,numeric"`
-	AddressLine1 string `json:"address_line_1" binding:"required"`
-	AddressLine2 string `json:"address_line_2"`
-	City         string `json:"city" binding:"required"`
-	State        string `json:"state" binding:"required,alpha,len=2"`
-	ZipCode      string `json:"zip_code" binding:"required,numeric,len=5"`
+	Email       string  `json:"email" binding:"required,email"`
+	Password    string  `json:"password" binding:"required,min=6"`
+	FullName    string  `json:"full_name" binding:"required"`
+	PhoneNumber string  `json:"phone_number" binding:"required,numeric"`
+	Address     string  `json:"address" binding:"required"`
+	PlaceID     string  `json:"place_id" binding:"required"`
+	XCoord      float64 `json:"x_coord" binding:"required,numeric"`
+	YCoord      float64 `json:"y_coord" binding:"required,numeric"`
 }
 
 func (server *Server) RegisterUser(ctx *gin.Context) {
@@ -34,21 +32,15 @@ func (server *Server) RegisterUser(ctx *gin.Context) {
 		return
 	}
 
-	addressLine2 := sql.NullString{String: req.AddressLine2, Valid: true}
-	if req.AddressLine2 == "" {
-		addressLine2 = sql.NullString{String: "", Valid: false}
-	}
-
 	arg := db.CreateUserParams{
 		Email:          req.Email,
 		HashedPassword: hashedPassword,
 		FullName:       req.FullName,
 		PhoneNumber:    req.PhoneNumber,
-		AddressLine1:   req.AddressLine1,
-		AddressLine2:   addressLine2,
-		City:           req.City,
-		State:          req.State,
-		ZipCode:        req.ZipCode,
+		Address:        req.Address,
+		PlaceID:        req.PlaceID,
+		XCoord:         req.XCoord,
+		YCoord:         req.YCoord,
 	}
 
 	user, err := server.queries.CreateUser(ctx, arg)

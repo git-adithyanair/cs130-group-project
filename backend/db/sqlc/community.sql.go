@@ -15,14 +15,18 @@ INSERT INTO communities (
   admin,
   center_x_coord,
   center_y_coord,
-  range
+  range,
+  place_id,
+  address
 ) VALUES (
   $1,
   $2,
   $3,
   $4,
-  $5
-) RETURNING id, name, admin, center_x_coord, center_y_coord, range, created_at
+  $5,
+  $6,
+  $7
+) RETURNING id, name, admin, place_id, center_x_coord, center_y_coord, range, address, created_at
 `
 
 type CreateCommunityParams struct {
@@ -31,6 +35,8 @@ type CreateCommunityParams struct {
 	CenterXCoord float64 `json:"center_x_coord"`
 	CenterYCoord float64 `json:"center_y_coord"`
 	Range        int32   `json:"range"`
+	PlaceID      string  `json:"place_id"`
+	Address      string  `json:"address"`
 }
 
 func (q *Queries) CreateCommunity(ctx context.Context, arg CreateCommunityParams) (Community, error) {
@@ -40,15 +46,19 @@ func (q *Queries) CreateCommunity(ctx context.Context, arg CreateCommunityParams
 		arg.CenterXCoord,
 		arg.CenterYCoord,
 		arg.Range,
+		arg.PlaceID,
+		arg.Address,
 	)
 	var i Community
 	err := row.Scan(
 		&i.ID,
 		&i.Name,
 		&i.Admin,
+		&i.PlaceID,
 		&i.CenterXCoord,
 		&i.CenterYCoord,
 		&i.Range,
+		&i.Address,
 		&i.CreatedAt,
 	)
 	return i, err
@@ -64,7 +74,7 @@ func (q *Queries) DeleteCommunity(ctx context.Context, id int64) error {
 }
 
 const getCommunitiesByAdmin = `-- name: GetCommunitiesByAdmin :many
-SELECT id, name, admin, center_x_coord, center_y_coord, range, created_at FROM communities WHERE admin = $1
+SELECT id, name, admin, place_id, center_x_coord, center_y_coord, range, address, created_at FROM communities WHERE admin = $1
 `
 
 func (q *Queries) GetCommunitiesByAdmin(ctx context.Context, admin int64) ([]Community, error) {
@@ -80,9 +90,11 @@ func (q *Queries) GetCommunitiesByAdmin(ctx context.Context, admin int64) ([]Com
 			&i.ID,
 			&i.Name,
 			&i.Admin,
+			&i.PlaceID,
 			&i.CenterXCoord,
 			&i.CenterYCoord,
 			&i.Range,
+			&i.Address,
 			&i.CreatedAt,
 		); err != nil {
 			return nil, err
@@ -99,7 +111,7 @@ func (q *Queries) GetCommunitiesByAdmin(ctx context.Context, admin int64) ([]Com
 }
 
 const getCommunity = `-- name: GetCommunity :one
-SELECT id, name, admin, center_x_coord, center_y_coord, range, created_at FROM communities WHERE id = $1
+SELECT id, name, admin, place_id, center_x_coord, center_y_coord, range, address, created_at FROM communities WHERE id = $1
 `
 
 func (q *Queries) GetCommunity(ctx context.Context, id int64) (Community, error) {
@@ -109,16 +121,18 @@ func (q *Queries) GetCommunity(ctx context.Context, id int64) (Community, error)
 		&i.ID,
 		&i.Name,
 		&i.Admin,
+		&i.PlaceID,
 		&i.CenterXCoord,
 		&i.CenterYCoord,
 		&i.Range,
+		&i.Address,
 		&i.CreatedAt,
 	)
 	return i, err
 }
 
 const listCommunities = `-- name: ListCommunities :many
-SELECT id, name, admin, center_x_coord, center_y_coord, range, created_at FROM communities
+SELECT id, name, admin, place_id, center_x_coord, center_y_coord, range, address, created_at FROM communities
 LIMIT $1
 OFFSET $2
 `
@@ -141,9 +155,11 @@ func (q *Queries) ListCommunities(ctx context.Context, arg ListCommunitiesParams
 			&i.ID,
 			&i.Name,
 			&i.Admin,
+			&i.PlaceID,
 			&i.CenterXCoord,
 			&i.CenterYCoord,
 			&i.Range,
+			&i.Address,
 			&i.CreatedAt,
 		); err != nil {
 			return nil, err
@@ -165,9 +181,11 @@ UPDATE communities SET
   admin = $3,
   center_x_coord = $4,
   center_y_coord = $5,
-  range = $6
+  range = $6,
+  place_id = $7,
+  address = $8
 WHERE id = $1
-RETURNING id, name, admin, center_x_coord, center_y_coord, range, created_at
+RETURNING id, name, admin, place_id, center_x_coord, center_y_coord, range, address, created_at
 `
 
 type UpdateCommunityParams struct {
@@ -177,6 +195,8 @@ type UpdateCommunityParams struct {
 	CenterXCoord float64 `json:"center_x_coord"`
 	CenterYCoord float64 `json:"center_y_coord"`
 	Range        int32   `json:"range"`
+	PlaceID      string  `json:"place_id"`
+	Address      string  `json:"address"`
 }
 
 func (q *Queries) UpdateCommunity(ctx context.Context, arg UpdateCommunityParams) (Community, error) {
@@ -187,15 +207,19 @@ func (q *Queries) UpdateCommunity(ctx context.Context, arg UpdateCommunityParams
 		arg.CenterXCoord,
 		arg.CenterYCoord,
 		arg.Range,
+		arg.PlaceID,
+		arg.Address,
 	)
 	var i Community
 	err := row.Scan(
 		&i.ID,
 		&i.Name,
 		&i.Admin,
+		&i.PlaceID,
 		&i.CenterXCoord,
 		&i.CenterYCoord,
 		&i.Range,
+		&i.Address,
 		&i.CreatedAt,
 	)
 	return i, err
@@ -205,7 +229,7 @@ const updateCommunityAdmin = `-- name: UpdateCommunityAdmin :one
 UPDATE communities SET
   admin = $2
 WHERE id = $1
-RETURNING id, name, admin, center_x_coord, center_y_coord, range, created_at
+RETURNING id, name, admin, place_id, center_x_coord, center_y_coord, range, address, created_at
 `
 
 type UpdateCommunityAdminParams struct {
@@ -220,9 +244,11 @@ func (q *Queries) UpdateCommunityAdmin(ctx context.Context, arg UpdateCommunityA
 		&i.ID,
 		&i.Name,
 		&i.Admin,
+		&i.PlaceID,
 		&i.CenterXCoord,
 		&i.CenterYCoord,
 		&i.Range,
+		&i.Address,
 		&i.CreatedAt,
 	)
 	return i, err
