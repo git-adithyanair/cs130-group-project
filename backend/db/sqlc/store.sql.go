@@ -7,60 +7,43 @@ package db
 
 import (
 	"context"
-	"database/sql"
 )
 
 const createStore = `-- name: CreateStore :one
 INSERT INTO stores (
     name, 
-    address_line_1, 
-    address_line_2, 
-    zip_code, 
-    city, 
-    state, 
     x_coord, 
     y_coord, 
-    place_id
+    place_id,
+    address
 ) VALUES (
-    $1, $2, $3, $4, $5, $6, $7, $8, $9
-) RETURNING id, name, address_line_1, address_line_2, zip_code, city, state, x_coord, y_coord, place_id
+    $1, $2, $3, $4, $5
+) RETURNING id, name, x_coord, y_coord, address, place_id
 `
 
 type CreateStoreParams struct {
-	Name         string         `json:"name"`
-	AddressLine1 string         `json:"address_line_1"`
-	AddressLine2 sql.NullString `json:"address_line_2"`
-	ZipCode      string         `json:"zip_code"`
-	City         string         `json:"city"`
-	State        string         `json:"state"`
-	XCoord       float64        `json:"x_coord"`
-	YCoord       string         `json:"y_coord"`
-	PlaceID      string         `json:"place_id"`
+	Name    string  `json:"name"`
+	XCoord  float64 `json:"x_coord"`
+	YCoord  float64 `json:"y_coord"`
+	PlaceID string  `json:"place_id"`
+	Address string  `json:"address"`
 }
 
 func (q *Queries) CreateStore(ctx context.Context, arg CreateStoreParams) (Store, error) {
 	row := q.db.QueryRowContext(ctx, createStore,
 		arg.Name,
-		arg.AddressLine1,
-		arg.AddressLine2,
-		arg.ZipCode,
-		arg.City,
-		arg.State,
 		arg.XCoord,
 		arg.YCoord,
 		arg.PlaceID,
+		arg.Address,
 	)
 	var i Store
 	err := row.Scan(
 		&i.ID,
 		&i.Name,
-		&i.AddressLine1,
-		&i.AddressLine2,
-		&i.ZipCode,
-		&i.City,
-		&i.State,
 		&i.XCoord,
 		&i.YCoord,
+		&i.Address,
 		&i.PlaceID,
 	)
 	return i, err
@@ -76,7 +59,7 @@ func (q *Queries) DeleteStore(ctx context.Context, id int64) error {
 }
 
 const getStore = `-- name: GetStore :one
-SELECT id, name, address_line_1, address_line_2, zip_code, city, state, x_coord, y_coord, place_id FROM stores WHERE id = $1
+SELECT id, name, x_coord, y_coord, address, place_id FROM stores WHERE id = $1
 `
 
 func (q *Queries) GetStore(ctx context.Context, id int64) (Store, error) {
@@ -85,20 +68,16 @@ func (q *Queries) GetStore(ctx context.Context, id int64) (Store, error) {
 	err := row.Scan(
 		&i.ID,
 		&i.Name,
-		&i.AddressLine1,
-		&i.AddressLine2,
-		&i.ZipCode,
-		&i.City,
-		&i.State,
 		&i.XCoord,
 		&i.YCoord,
+		&i.Address,
 		&i.PlaceID,
 	)
 	return i, err
 }
 
 const getStoreByPlaceId = `-- name: GetStoreByPlaceId :one
-SELECT id, name, address_line_1, address_line_2, zip_code, city, state, x_coord, y_coord, place_id FROM stores WHERE place_id = $1
+SELECT id, name, x_coord, y_coord, address, place_id FROM stores WHERE place_id = $1
 `
 
 func (q *Queries) GetStoreByPlaceId(ctx context.Context, placeID string) (Store, error) {
@@ -107,20 +86,16 @@ func (q *Queries) GetStoreByPlaceId(ctx context.Context, placeID string) (Store,
 	err := row.Scan(
 		&i.ID,
 		&i.Name,
-		&i.AddressLine1,
-		&i.AddressLine2,
-		&i.ZipCode,
-		&i.City,
-		&i.State,
 		&i.XCoord,
 		&i.YCoord,
+		&i.Address,
 		&i.PlaceID,
 	)
 	return i, err
 }
 
 const listStores = `-- name: ListStores :many
-SELECT id, name, address_line_1, address_line_2, zip_code, city, state, x_coord, y_coord, place_id FROM stores
+SELECT id, name, x_coord, y_coord, address, place_id FROM stores
 LIMIT $1
 OFFSET $2
 `
@@ -142,13 +117,9 @@ func (q *Queries) ListStores(ctx context.Context, arg ListStoresParams) ([]Store
 		if err := rows.Scan(
 			&i.ID,
 			&i.Name,
-			&i.AddressLine1,
-			&i.AddressLine2,
-			&i.ZipCode,
-			&i.City,
-			&i.State,
 			&i.XCoord,
 			&i.YCoord,
+			&i.Address,
 			&i.PlaceID,
 		); err != nil {
 			return nil, err
@@ -167,55 +138,39 @@ func (q *Queries) ListStores(ctx context.Context, arg ListStoresParams) ([]Store
 const updateStore = `-- name: UpdateStore :one
 UPDATE stores SET
     name = $2, 
-    address_line_1 = $3, 
-    address_line_2 = $4,
-    zip_code = $5, 
-    city = $6, 
-    state = $7, 
-    x_coord = $8, 
-    y_coord = $9, 
-    place_id = $10
+    x_coord = $3, 
+    y_coord = $4, 
+    place_id = $5,
+    address = $6
 WHERE id = $1
-RETURNING id, name, address_line_1, address_line_2, zip_code, city, state, x_coord, y_coord, place_id
+RETURNING id, name, x_coord, y_coord, address, place_id
 `
 
 type UpdateStoreParams struct {
-	ID           int64          `json:"id"`
-	Name         string         `json:"name"`
-	AddressLine1 string         `json:"address_line_1"`
-	AddressLine2 sql.NullString `json:"address_line_2"`
-	ZipCode      string         `json:"zip_code"`
-	City         string         `json:"city"`
-	State        string         `json:"state"`
-	XCoord       float64        `json:"x_coord"`
-	YCoord       string         `json:"y_coord"`
-	PlaceID      string         `json:"place_id"`
+	ID      int64   `json:"id"`
+	Name    string  `json:"name"`
+	XCoord  float64 `json:"x_coord"`
+	YCoord  float64 `json:"y_coord"`
+	PlaceID string  `json:"place_id"`
+	Address string  `json:"address"`
 }
 
 func (q *Queries) UpdateStore(ctx context.Context, arg UpdateStoreParams) (Store, error) {
 	row := q.db.QueryRowContext(ctx, updateStore,
 		arg.ID,
 		arg.Name,
-		arg.AddressLine1,
-		arg.AddressLine2,
-		arg.ZipCode,
-		arg.City,
-		arg.State,
 		arg.XCoord,
 		arg.YCoord,
 		arg.PlaceID,
+		arg.Address,
 	)
 	var i Store
 	err := row.Scan(
 		&i.ID,
 		&i.Name,
-		&i.AddressLine1,
-		&i.AddressLine2,
-		&i.ZipCode,
-		&i.City,
-		&i.State,
 		&i.XCoord,
 		&i.YCoord,
+		&i.Address,
 		&i.PlaceID,
 	)
 	return i, err

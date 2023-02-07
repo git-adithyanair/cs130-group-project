@@ -1,16 +1,12 @@
 -- name: CreateStore :one
 INSERT INTO stores (
     name, 
-    address_line_1, 
-    address_line_2, 
-    zip_code, 
-    city, 
-    state, 
     x_coord, 
     y_coord, 
-    place_id
+    place_id,
+    address
 ) VALUES (
-    $1, $2, $3, $4, $5, $6, $7, $8, $9
+    $1, $2, $3, $4, $5
 ) RETURNING *;
 
 -- name: GetStore :one
@@ -27,14 +23,10 @@ OFFSET $2;
 -- name: UpdateStore :one
 UPDATE stores SET
     name = $2, 
-    address_line_1 = $3, 
-    address_line_2 = $4,
-    zip_code = $5, 
-    city = $6, 
-    state = $7, 
-    x_coord = $8, 
-    y_coord = $9, 
-    place_id = $10
+    x_coord = $3, 
+    y_coord = $4, 
+    place_id = $5,
+    address = $6
 WHERE id = $1
 RETURNING *;
 

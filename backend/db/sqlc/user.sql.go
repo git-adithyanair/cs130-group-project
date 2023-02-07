@@ -7,7 +7,6 @@ package db
 
 import (
 	"context"
-	"database/sql"
 )
 
 const createUser = `-- name: CreateUser :one
@@ -16,26 +15,24 @@ INSERT INTO users (
     hashed_password,
     full_name,
     phone_number,
-    address_line_1,
-    address_line_2,
-    zip_code,
-    city,
-    state
+    place_id,
+    address,
+    x_coord,
+    y_coord
 ) VALUES (
-    $1, $2, $3, $4, $5, $6, $7, $8, $9
-) RETURNING id, email, hashed_password, full_name, phone_number, created_at, address_line_1, address_line_2, zip_code, city, state
+    $1, $2, $3, $4, $5, $6, $7, $8
+) RETURNING id, email, hashed_password, full_name, phone_number, created_at, place_id, profile_picture, x_coord, y_coord, address
 `
 
 type CreateUserParams struct {
-	Email          string         `json:"email"`
-	HashedPassword string         `json:"hashed_password"`
-	FullName       string         `json:"full_name"`
-	PhoneNumber    string         `json:"phone_number"`
-	AddressLine1   string         `json:"address_line_1"`
-	AddressLine2   sql.NullString `json:"address_line_2"`
-	ZipCode        string         `json:"zip_code"`
-	City           string         `json:"city"`
-	State          string         `json:"state"`
+	Email          string  `json:"email"`
+	HashedPassword string  `json:"hashed_password"`
+	FullName       string  `json:"full_name"`
+	PhoneNumber    string  `json:"phone_number"`
+	PlaceID        string  `json:"place_id"`
+	Address        string  `json:"address"`
+	XCoord         float64 `json:"x_coord"`
+	YCoord         float64 `json:"y_coord"`
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
@@ -44,11 +41,10 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		arg.HashedPassword,
 		arg.FullName,
 		arg.PhoneNumber,
-		arg.AddressLine1,
-		arg.AddressLine2,
-		arg.ZipCode,
-		arg.City,
-		arg.State,
+		arg.PlaceID,
+		arg.Address,
+		arg.XCoord,
+		arg.YCoord,
 	)
 	var i User
 	err := row.Scan(
@@ -58,11 +54,11 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		&i.FullName,
 		&i.PhoneNumber,
 		&i.CreatedAt,
-		&i.AddressLine1,
-		&i.AddressLine2,
-		&i.ZipCode,
-		&i.City,
-		&i.State,
+		&i.PlaceID,
+		&i.ProfilePicture,
+		&i.XCoord,
+		&i.YCoord,
+		&i.Address,
 	)
 	return i, err
 }
@@ -77,7 +73,7 @@ func (q *Queries) DeleteUser(ctx context.Context, id int64) error {
 }
 
 const getUser = `-- name: GetUser :one
-SELECT id, email, hashed_password, full_name, phone_number, created_at, address_line_1, address_line_2, zip_code, city, state FROM users WHERE id = $1
+SELECT id, email, hashed_password, full_name, phone_number, created_at, place_id, profile_picture, x_coord, y_coord, address FROM users WHERE id = $1
 `
 
 func (q *Queries) GetUser(ctx context.Context, id int64) (User, error) {
@@ -90,17 +86,17 @@ func (q *Queries) GetUser(ctx context.Context, id int64) (User, error) {
 		&i.FullName,
 		&i.PhoneNumber,
 		&i.CreatedAt,
-		&i.AddressLine1,
-		&i.AddressLine2,
-		&i.ZipCode,
-		&i.City,
-		&i.State,
+		&i.PlaceID,
+		&i.ProfilePicture,
+		&i.XCoord,
+		&i.YCoord,
+		&i.Address,
 	)
 	return i, err
 }
 
 const getUserByEmail = `-- name: GetUserByEmail :one
-SELECT id, email, hashed_password, full_name, phone_number, created_at, address_line_1, address_line_2, zip_code, city, state FROM users WHERE email = $1
+SELECT id, email, hashed_password, full_name, phone_number, created_at, place_id, profile_picture, x_coord, y_coord, address FROM users WHERE email = $1
 `
 
 func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error) {
@@ -113,17 +109,17 @@ func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error
 		&i.FullName,
 		&i.PhoneNumber,
 		&i.CreatedAt,
-		&i.AddressLine1,
-		&i.AddressLine2,
-		&i.ZipCode,
-		&i.City,
-		&i.State,
+		&i.PlaceID,
+		&i.ProfilePicture,
+		&i.XCoord,
+		&i.YCoord,
+		&i.Address,
 	)
 	return i, err
 }
 
 const getUserByPhoneNumber = `-- name: GetUserByPhoneNumber :one
-SELECT id, email, hashed_password, full_name, phone_number, created_at, address_line_1, address_line_2, zip_code, city, state FROM users WHERE phone_number = $1
+SELECT id, email, hashed_password, full_name, phone_number, created_at, place_id, profile_picture, x_coord, y_coord, address FROM users WHERE phone_number = $1
 `
 
 func (q *Queries) GetUserByPhoneNumber(ctx context.Context, phoneNumber string) (User, error) {
@@ -136,17 +132,17 @@ func (q *Queries) GetUserByPhoneNumber(ctx context.Context, phoneNumber string) 
 		&i.FullName,
 		&i.PhoneNumber,
 		&i.CreatedAt,
-		&i.AddressLine1,
-		&i.AddressLine2,
-		&i.ZipCode,
-		&i.City,
-		&i.State,
+		&i.PlaceID,
+		&i.ProfilePicture,
+		&i.XCoord,
+		&i.YCoord,
+		&i.Address,
 	)
 	return i, err
 }
 
 const listUsers = `-- name: ListUsers :many
-SELECT id, email, hashed_password, full_name, phone_number, created_at, address_line_1, address_line_2, zip_code, city, state FROM users
+SELECT id, email, hashed_password, full_name, phone_number, created_at, place_id, profile_picture, x_coord, y_coord, address FROM users
 LIMIT $1
 OFFSET $2
 `
@@ -172,11 +168,11 @@ func (q *Queries) ListUsers(ctx context.Context, arg ListUsersParams) ([]User, e
 			&i.FullName,
 			&i.PhoneNumber,
 			&i.CreatedAt,
-			&i.AddressLine1,
-			&i.AddressLine2,
-			&i.ZipCode,
-			&i.City,
-			&i.State,
+			&i.PlaceID,
+			&i.ProfilePicture,
+			&i.XCoord,
+			&i.YCoord,
+			&i.Address,
 		); err != nil {
 			return nil, err
 		}
@@ -197,26 +193,24 @@ UPDATE users SET
     hashed_password = $3,
     full_name = $4,
     phone_number = $5,
-    address_line_1 = $6,
-    address_line_2 = $7,
-    zip_code = $8,
-    city = $9,
-    state = $10
+    place_id = $6,
+    address = $7,
+    x_coord = $8,
+    y_coord = $9
 WHERE id = $1
-RETURNING id, email, hashed_password, full_name, phone_number, created_at, address_line_1, address_line_2, zip_code, city, state
+RETURNING id, email, hashed_password, full_name, phone_number, created_at, place_id, profile_picture, x_coord, y_coord, address
 `
 
 type UpdateUserParams struct {
-	ID             int64          `json:"id"`
-	Email          string         `json:"email"`
-	HashedPassword string         `json:"hashed_password"`
-	FullName       string         `json:"full_name"`
-	PhoneNumber    string         `json:"phone_number"`
-	AddressLine1   string         `json:"address_line_1"`
-	AddressLine2   sql.NullString `json:"address_line_2"`
-	ZipCode        string         `json:"zip_code"`
-	City           string         `json:"city"`
-	State          string         `json:"state"`
+	ID             int64   `json:"id"`
+	Email          string  `json:"email"`
+	HashedPassword string  `json:"hashed_password"`
+	FullName       string  `json:"full_name"`
+	PhoneNumber    string  `json:"phone_number"`
+	PlaceID        string  `json:"place_id"`
+	Address        string  `json:"address"`
+	XCoord         float64 `json:"x_coord"`
+	YCoord         float64 `json:"y_coord"`
 }
 
 func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error) {
@@ -226,11 +220,10 @@ func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, e
 		arg.HashedPassword,
 		arg.FullName,
 		arg.PhoneNumber,
-		arg.AddressLine1,
-		arg.AddressLine2,
-		arg.ZipCode,
-		arg.City,
-		arg.State,
+		arg.PlaceID,
+		arg.Address,
+		arg.XCoord,
+		arg.YCoord,
 	)
 	var i User
 	err := row.Scan(
@@ -240,11 +233,11 @@ func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, e
 		&i.FullName,
 		&i.PhoneNumber,
 		&i.CreatedAt,
-		&i.AddressLine1,
-		&i.AddressLine2,
-		&i.ZipCode,
-		&i.City,
-		&i.State,
+		&i.PlaceID,
+		&i.ProfilePicture,
+		&i.XCoord,
+		&i.YCoord,
+		&i.Address,
 	)
 	return i, err
 }
