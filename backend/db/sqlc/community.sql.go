@@ -131,6 +131,67 @@ func (q *Queries) GetCommunity(ctx context.Context, id int64) (Community, error)
 	return i, err
 }
 
+const getCommunityByPlaceID = `-- name: GetCommunityByPlaceID :one
+SELECT id, name, admin, place_id, center_x_coord, center_y_coord, range, address, created_at FROM communities WHERE place_id = $1
+`
+
+func (q *Queries) GetCommunityByPlaceID(ctx context.Context, placeID string) (Community, error) {
+	row := q.db.QueryRowContext(ctx, getCommunityByPlaceID, placeID)
+	var i Community
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Admin,
+		&i.PlaceID,
+		&i.CenterXCoord,
+		&i.CenterYCoord,
+		&i.Range,
+		&i.Address,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
+const getUserCommunities = `-- name: GetUserCommunities :many
+SELECT communities.id, communities.name, communities.admin, communities.place_id, communities.center_x_coord, communities.center_y_coord, communities.range, communities.address, communities.created_at 
+FROM communities
+LEFT JOIN members ON members.community_id = communities.id
+WHERE members.user_id = $1
+`
+
+func (q *Queries) GetUserCommunities(ctx context.Context, userID int64) ([]Community, error) {
+	rows, err := q.db.QueryContext(ctx, getUserCommunities, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Community{}
+	for rows.Next() {
+		var i Community
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.Admin,
+			&i.PlaceID,
+			&i.CenterXCoord,
+			&i.CenterYCoord,
+			&i.Range,
+			&i.Address,
+			&i.CreatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const listCommunities = `-- name: ListCommunities :many
 SELECT id, name, admin, place_id, center_x_coord, center_y_coord, range, address, created_at FROM communities
 LIMIT $1

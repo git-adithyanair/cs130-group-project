@@ -20,6 +20,9 @@ INSERT INTO communities (
 -- name: GetCommunity :one
 SELECT * FROM communities WHERE id = $1;
 
+-- name: GetCommunityByPlaceID :one
+SELECT * FROM communities WHERE place_id = $1;
+
 -- name: GetCommunitiesByAdmin :many
 SELECT * FROM communities WHERE admin = $1;
 
@@ -48,3 +51,9 @@ RETURNING *;
 
 -- name: DeleteCommunity :exec
 DELETE FROM communities WHERE id = $1;
+
+-- name: GetUserCommunities :many
+SELECT communities.* 
+FROM communities
+LEFT JOIN members ON members.community_id = communities.id
+WHERE members.user_id = $1;
