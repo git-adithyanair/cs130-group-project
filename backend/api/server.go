@@ -44,11 +44,17 @@ func (server *Server) setupRouter() {
 		ctx.JSON(http.StatusOK, "ok")
 	})
 
+	// Routes that require auth middleware.
+	protectedRoutes := router.Group("/").Use(authMiddleware(server.tokenMaker))
+
+	// User routes.
 	router.POST("/user", server.RegisterUser)
 	router.POST("/user/login", server.LoginUser)
+	protectedRoutes.GET("/user/community", server.GetUserCommunities)
 
-	// Routes that require auth middleware.
-	// protectedRoutes := router.Group("/").Use(authMiddleware(server.tokenMaker))
+	// Community routes.
+	protectedRoutes.POST("/community", server.CreateCommunity)
+	protectedRoutes.GET("/community/:id", server.GetCommunity)
 
 	server.router = router
 }

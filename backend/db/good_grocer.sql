@@ -30,7 +30,7 @@ CREATE TABLE "users" (
 CREATE TABLE "communities" (
   "id" bigserial PRIMARY KEY,
   "name" varchar NOT NULL,
-  "admin" bigint UNIQUE NOT NULL,
+  "admin" bigint NOT NULL,
   "place_id" varchar NOT NULL,
   "center_x_coord" float NOT NULL,
   "center_y_coord" float NOT NULL,

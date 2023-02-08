@@ -16,5 +16,11 @@ migratedown:
 sqlc:
 	sqlc generate
 
+devup:
+	docker compose up
+
+devdown:
+	docker compose down && docker rmi backend-good-grocer-api
+
 server:
 	go run main.go

@@ -37,6 +37,7 @@ type Querier interface {
 	DeleteUser(ctx context.Context, id int64) error
 	GetCommunitiesByAdmin(ctx context.Context, admin int64) ([]Community, error)
 	GetCommunity(ctx context.Context, id int64) (Community, error)
+	GetCommunityByPlaceID(ctx context.Context, placeID string) (Community, error)
 	GetCommunityStore(ctx context.Context, arg GetCommunityStoreParams) (CommunityStore, error)
 	GetErrand(ctx context.Context, id int64) (Errand, error)
 	GetErrandsByCommunityId(ctx context.Context, arg GetErrandsByCommunityIdParams) ([]Errand, error)
@@ -57,6 +58,7 @@ type Querier interface {
 	GetUser(ctx context.Context, id int64) (User, error)
 	GetUserByEmail(ctx context.Context, email string) (User, error)
 	GetUserByPhoneNumber(ctx context.Context, phoneNumber string) (User, error)
+	GetUserCommunities(ctx context.Context, userID int64) ([]Community, error)
 	ListCommunities(ctx context.Context, arg ListCommunitiesParams) ([]Community, error)
 	ListCommunityStoresByCommunity(ctx context.Context, communityID int64) ([]CommunityStore, error)
 	ListCommunityStoresByStores(ctx context.Context, storeID int64) ([]CommunityStore, error)
