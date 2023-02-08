@@ -53,11 +53,7 @@ func (server *Server) CreateCommunity(ctx *gin.Context) {
 
 			community, err := server.queries.CreateCommunity(ctx, arg)
 			if err != nil {
-				if err == sql.ErrNoRows {
-					ctx.JSON(http.StatusNotFound, errorResponse(err))
-				} else {
-					ctx.JSON(http.StatusInternalServerError, errorResponse(err))
-				}
+				ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 				return
 			}
 
