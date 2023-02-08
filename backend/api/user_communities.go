@@ -16,8 +16,8 @@ func (server *Server) GetUserCommunities(ctx *gin.Context) {
 	if err != nil {
 		if err != sql.ErrNoRows {
 			ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+			return
 		}
-		return
 	}
 
 	ctx.JSON(http.StatusOK, communities)
