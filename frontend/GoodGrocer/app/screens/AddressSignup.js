@@ -4,32 +4,23 @@ import { SafeAreaView, StyleSheet, Text, Image, TextInput, View, Pressable } fro
 function AddressSignup({navigation}) {
     return (
         <SafeAreaView style={styles.container}>
+        <View>
         <Image source={require("../assets/logo.png")}/>
-        <Text>Address</Text>
-        <Text>Address line 1</Text>
+        <Text style={styles.titleText}>Address</Text>
+        <Text>Find your address</Text>
         <TextInput style={styles.input}/>
-        <Text>Address line 2</Text>
-        <TextInput style={styles.input}/>
-        <Text>City</Text>
-        <TextInput style={styles.input}/>
-        
-        <View style={styles.names}>
-            <Text>State</Text>
-            <Text>Zipcode                                     </Text>
-        <TextInput style={halfInputStyle}/>
-        <TextInput style={halfInputStyle}/>
+        <Text style={styles.titleText}>Add a picture</Text>
+        <View style={styles.defaultPic}>
+        <Image source={require("../assets/default-profile-pic.png")}/>
         </View>
-
-
         <Pressable onPress={() => navigation.navigate('Requests')}> 
         <Image source={require("../assets/signup2.png")}/>
         </Pressable>
+        </View>
         </SafeAreaView>
     );
 
 }
-
-
 
 const styles = StyleSheet.create({
   names: {
@@ -40,19 +31,23 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   input: {
     height: 40,
-    margin: 12,
+    marginTop: 12,
+    marginBottom: 12,
     borderWidth: 1,
     padding: 10,
   }, 
-  halfInput: {
-    width: "40%"
+  titleText: {
+    fontSize: 25
+  },
+  defaultPic:{
+    alignItems: 'center'
   }
 });
-const halfInputStyle = {...styles.input, ...styles.halfInput}
 
 
 export default AddressSignup;
