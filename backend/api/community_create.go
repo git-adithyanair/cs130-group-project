@@ -7,6 +7,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	db "github.com/git-adithyanair/cs130-group-project/db/sqlc"
+	api_error "github.com/git-adithyanair/cs130-group-project/errors"
 	"github.com/git-adithyanair/cs130-group-project/token"
 )
 
@@ -31,7 +32,7 @@ type CreateCommunityRequest struct {
 func (server *Server) CreateCommunity(ctx *gin.Context) {
 	var req CreateCommunityRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		ctx.JSON(http.StatusBadRequest, unknownErrorResponse(err))
 		return
 	}
 
@@ -53,7 +54,7 @@ func (server *Server) CreateCommunity(ctx *gin.Context) {
 
 			community, err := server.queries.CreateCommunity(ctx, arg)
 			if err != nil {
-				ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+				ctx.JSON(http.StatusInternalServerError, errorResponse(api_error.ErrCommunityCreateFail, err))
 				return
 			}
 
@@ -62,7 +63,7 @@ func (server *Server) CreateCommunity(ctx *gin.Context) {
 				UserID:      authPayload.UserID,
 			})
 			if err != nil {
-				ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+				ctx.JSON(http.StatusInternalServerError, unknownErrorResponse(err))
 				return
 			}
 
@@ -93,11 +94,11 @@ func (server *Server) CreateCommunity(ctx *gin.Context) {
 			ctx.JSON(http.StatusOK, community)
 
 		} else {
-			ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+			ctx.JSON(http.StatusInternalServerError, unknownErrorResponse(err))
 		}
 	}
 
-	ctx.JSON(http.StatusBadRequest, errorResponse(errors.New("community already exists")))
+	ctx.JSON(http.StatusBadRequest, errorResponse(api_error.ErrCommunityExists, errors.New("community already exists")))
 }
 
 func addCommunityStore(ctx *gin.Context, server *Server, communityID int64, storeID int64) {
