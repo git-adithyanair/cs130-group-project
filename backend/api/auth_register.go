@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	db "github.com/git-adithyanair/cs130-group-project/db/sqlc"
+	api_error "github.com/git-adithyanair/cs130-group-project/errors"
 	"github.com/git-adithyanair/cs130-group-project/util"
 )
 
@@ -22,13 +23,13 @@ type RegisterUserRequest struct {
 func (server *Server) RegisterUser(ctx *gin.Context) {
 	var req RegisterUserRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		ctx.JSON(http.StatusBadRequest, unknownErrorResponse(err))
 		return
 	}
 
 	hashedPassword, err := util.HashPassword(req.Password)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		ctx.JSON(http.StatusInternalServerError, unknownErrorResponse(err))
 		return
 	}
 
@@ -45,13 +46,13 @@ func (server *Server) RegisterUser(ctx *gin.Context) {
 
 	user, err := server.queries.CreateUser(ctx, arg)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		ctx.JSON(http.StatusInternalServerError, errorResponse(api_error.ErrRegisterFail, err))
 		return
 	}
 
 	token, err := server.tokenMaker.CreateToken(user.ID, user.Email)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		ctx.JSON(http.StatusInternalServerError, unknownErrorResponse(err))
 		return
 	}
 
