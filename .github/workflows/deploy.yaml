@@ -12,7 +12,10 @@ jobs:
     outputs:
       backend: ${{ steps.filter.outputs.backend }}
     steps:
-      - uses: dorny/paths-filter@v2
+      - name: Check out code
+        uses: actions/checkout@v3
+      - name: Check for changes
+        uses: dorny/paths-filter@v2
         id: filter
         with:
           filters: |
