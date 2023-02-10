@@ -45,6 +45,12 @@ func (server *Server) CreateRequest(ctx *gin.Context) {
 		return
 	}
 
+	if len(req.Items) == 0 {
+		err := errors.New("Request must contain at least one item.")
+		ctx.JSON(http.StatusNotFound, errorResponse(err))
+		return
+	}
+
 	arg := db.CreateRequestParams{
 		UserID:      authPayload.UserID,
 		CommunityID: sql.NullInt64{Int64: req.CommunityID, Valid: true},
