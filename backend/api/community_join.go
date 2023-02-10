@@ -2,10 +2,10 @@ package api
 
 import (
 	"database/sql"
-	"errors"
 	"net/http"
 
 	db "github.com/git-adithyanair/cs130-group-project/db/sqlc"
+	api_error "github.com/git-adithyanair/cs130-group-project/errors"
 	"github.com/git-adithyanair/cs130-group-project/token"
 
 	"github.com/gin-gonic/gin"
@@ -18,18 +18,18 @@ type JoinCommunityRequest struct {
 func (server *Server) JoinCommunity(ctx *gin.Context) {
 	var req JoinCommunityRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		ctx.JSON(http.StatusBadRequest, unknownErrorResponse(err))
 		return
 	}
 
 	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
 
-	if _, err := server.queries.GetCommunity(ctx, req.ID); err != nil {
+	community, err := server.queries.GetCommunity(ctx, req.ID)
+	if err != nil {
 		if err == sql.ErrNoRows {
-			err := errors.New("No community exists with given ID.")
-			ctx.JSON(http.StatusNotFound, errorResponse(err))
+			ctx.JSON(http.StatusNotFound, errorResponse(api_error.ErrNoCommunity, err))
 		} else {
-			ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+			ctx.JSON(http.StatusInternalServerError, unknownErrorResponse(err))
 		}
 		return
 	}
@@ -39,11 +39,11 @@ func (server *Server) JoinCommunity(ctx *gin.Context) {
 		CommunityID: req.ID,
 	}
 
-	member, err := server.queries.CreateMember(ctx, arg)
+	_, err = server.queries.CreateMember(ctx, arg)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		ctx.JSON(http.StatusInternalServerError, unknownErrorResponse(err))
 		return
 	}
 
-	ctx.JSON(http.StatusOK, member)
+	ctx.JSON(http.StatusOK, community)
 }
