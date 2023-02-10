@@ -13,6 +13,7 @@ const (
 	ErrNoStore               = "ERROR_NO_STORE"
 	ErrNoRequest             = "ERROR_NO_REQUEST"
 	ErrInvalidUserForRequest = "ERROR_INVALID_USER_FOR_REQUEST"
+	ErrNoMember              = "ERROR_NO_MEMBER"
 )
 
 var GetErrorMessage map[string]string = map[string]string{
@@ -28,4 +29,5 @@ var GetErrorMessage map[string]string = map[string]string{
 	ErrNoStore:               "Could not find this store.",
 	ErrNoRequest:             "Could not find this request.",
 	ErrInvalidUserForRequest: "Request does not belong to user.",
+	ErrNoMember:              "User does not exists in given community.",
 }
