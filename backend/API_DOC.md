@@ -32,14 +32,14 @@ Registers user with provided details.
 
 ```json
 {
-  "email": "[valid email]", // string
-  "password": "[string of 6 characters]", // string
-  "full_name": "[]", // string
-  "phone_number": "[numeric]", // string
-  "address": "[]", // string
-  "place_id": "[]", // string
-  "x_coord": "[]", // float
-  "y_coord": "[]" // float
+  "email": "[string, valid email]",
+  "password": "[string, min. 6 characters]",
+  "full_name": "[string]",
+  "phone_number": "[string, numeric]",
+  "address": "[string]",
+  "place_id": "[string]",
+  "x_coord": "[float]",
+  "y_coord": "[float]"
 }
 ```
 
@@ -47,12 +47,12 @@ Registers user with provided details.
 
 ```json
 {
-  "token": "[user token]", // string
+  "token": "[string, user token]",
   "user": {
-    "id": "[user id]", // int
-    "email": "[user email]", // string
-    "full_name": "[user full name]", // string
-    "created_at": "[user creation date]" // timestamptz
+    "id": "[string, user id]",
+    "email": "[string, user email]",
+    "full_name": "[string, user full name]",
+    "created_at": "[timestamptz, user creation date]"
   }
 }
 ```
@@ -71,8 +71,8 @@ Logs in user and returns auth token.
 
 ```json
 {
-  "email": "[valid email]", // string
-  "password": "[string of 6 characters]" // string
+  "email": "[string, valid email]",
+  "password": "[string, min. 6 characters]"
 }
 ```
 
@@ -80,12 +80,12 @@ Logs in user and returns auth token.
 
 ```json
 {
-  "token": "[user token]", // string
+  "token": "[string, user token]",
   "user": {
-    "id": "[user id]", // int
-    "email": "[user email]", // string
-    "full_name": "[user full name]", // string
-    "created_at": "[user creation date]" // timestamptz
+    "id": "[string, user id]",
+    "email": "[string, user email]",
+    "full_name": "[string, user full name]",
+    "created_at": "[timestamptz, user creation date]"
   }
 }
 ```
@@ -107,14 +107,26 @@ Gets all the communities the user is a member of.
 **Body Parameters**:
 
 ```json
-NONE
+{}
 ```
 
 **Success Response**:`200 OK`
 
 ```json
 {
-  "communities": db.Community[] // array of community objects
+  "communities": [
+    {
+      "id": "[int, community id]",
+      "name": "[string, community name]",
+      "admin": "[int, community user admin id]",
+      "place_id": "[string, community google maps place id]",
+      "center_x_coord": "[float, community address x coord]",
+      "center_y_coord": "[float, community address x coord]",
+      "range": "[int, community range of users]",
+      "address": "[string, community address]",
+      "created_at": "[timestamptz, community creation date]"
+    }
+  ]
 }
 ```
 

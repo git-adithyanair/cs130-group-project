@@ -18,8 +18,8 @@ Endpoint description here.
 
 ```json
 {
-  "field_1": "[field_1_conditions]", // TYPE
-  "field_2": "[field_2_conditions]" // TYPE
+  "field_1": "[TYPE, field_1_conditions]",
+  "field_2": "[TYPE, field_2_conditions]"
 }
 ```
 
@@ -27,6 +27,6 @@ Endpoint description here.
 
 ```json
 {
-  "field": "[description]" // TYPE
+  "field": "[TYPE, description]"
 }
 ```
