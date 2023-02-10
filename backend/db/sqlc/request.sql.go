@@ -14,27 +14,20 @@ const createRequest = `-- name: CreateRequest :one
 INSERT INTO requests (
     user_id, 
     community_id, 
-    errand_id, 
     store_id
 ) VALUES (
-    $1, $2, $3, $4
+    $1, $2, $3
 ) RETURNING id, created_at, user_id, community_id, status, errand_id, store_id
 `
 
 type CreateRequestParams struct {
 	UserID      int64         `json:"user_id"`
 	CommunityID sql.NullInt64 `json:"community_id"`
-	ErrandID    int64         `json:"errand_id"`
 	StoreID     sql.NullInt64 `json:"store_id"`
 }
 
 func (q *Queries) CreateRequest(ctx context.Context, arg CreateRequestParams) (Request, error) {
-	row := q.db.QueryRowContext(ctx, createRequest,
-		arg.UserID,
-		arg.CommunityID,
-		arg.ErrandID,
-		arg.StoreID,
-	)
+	row := q.db.QueryRowContext(ctx, createRequest, arg.UserID, arg.CommunityID, arg.StoreID)
 	var i Request
 	err := row.Scan(
 		&i.ID,
@@ -61,7 +54,7 @@ const deleteRequestsByErrand = `-- name: DeleteRequestsByErrand :exec
 DELETE FROM requests WHERE errand_id = $1
 `
 
-func (q *Queries) DeleteRequestsByErrand(ctx context.Context, errandID int64) error {
+func (q *Queries) DeleteRequestsByErrand(ctx context.Context, errandID sql.NullInt64) error {
 	_, err := q.db.ExecContext(ctx, deleteRequestsByErrand, errandID)
 	return err
 }
@@ -223,7 +216,7 @@ const getRequestsByErrandId = `-- name: GetRequestsByErrandId :many
 SELECT id, created_at, user_id, community_id, status, errand_id, store_id FROM requests WHERE errand_id = $1
 `
 
-func (q *Queries) GetRequestsByErrandId(ctx context.Context, errandID int64) ([]Request, error) {
+func (q *Queries) GetRequestsByErrandId(ctx context.Context, errandID sql.NullInt64) ([]Request, error) {
 	rows, err := q.db.QueryContext(ctx, getRequestsByErrandId, errandID)
 	if err != nil {
 		return nil, err
@@ -391,7 +384,7 @@ type UpdateRequestParams struct {
 	UserID      int64         `json:"user_id"`
 	CommunityID sql.NullInt64 `json:"community_id"`
 	Status      RequestStatus `json:"status"`
-	ErrandID    int64         `json:"errand_id"`
+	ErrandID    sql.NullInt64 `json:"errand_id"`
 	StoreID     sql.NullInt64 `json:"store_id"`
 }
 

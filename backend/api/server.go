@@ -56,6 +56,9 @@ func (server *Server) setupRouter() {
 	protectedRoutes.POST("/community", server.CreateCommunity)
 	protectedRoutes.GET("/community/:id", server.GetCommunity)
 
+	// Request routes.
+	protectedRoutes.POST("/request/create", server.CreateRequest)
+
 	server.router = router
 }
 

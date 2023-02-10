@@ -153,7 +153,7 @@ type Request struct {
 	UserID      int64         `json:"user_id"`
 	CommunityID sql.NullInt64 `json:"community_id"`
 	Status      RequestStatus `json:"status"`
-	ErrandID    int64         `json:"errand_id"`
+	ErrandID    sql.NullInt64 `json:"errand_id"`
 	StoreID     sql.NullInt64 `json:"store_id"`
 }
 

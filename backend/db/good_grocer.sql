@@ -81,7 +81,7 @@ CREATE TABLE "requests" (
   "user_id" bigint NOT NULL,
   "community_id" bigint,
   "status" request_status NOT NULL DEFAULT 'pending',
-  "errand_id" bigint NOT NULL,
+  "errand_id" bigint,
   "store_id" bigint
 );
 

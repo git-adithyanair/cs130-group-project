@@ -30,7 +30,7 @@ type Querier interface {
 	DeleteMembersByCommunity(ctx context.Context, communityID int64) error
 	DeleteMembersByUser(ctx context.Context, userID int64) error
 	DeleteRequest(ctx context.Context, id int64) error
-	DeleteRequestsByErrand(ctx context.Context, errandID int64) error
+	DeleteRequestsByErrand(ctx context.Context, errandID sql.NullInt64) error
 	DeleteRequestsByStore(ctx context.Context, storeID sql.NullInt64) error
 	DeleteRequestsByUser(ctx context.Context, userID int64) error
 	DeleteStore(ctx context.Context, id int64) error
@@ -50,7 +50,7 @@ type Querier interface {
 	GetPendingRequestsByStoreId(ctx context.Context, storeID sql.NullInt64) ([]Request, error)
 	GetRequest(ctx context.Context, id int64) (Request, error)
 	GetRequestsByCommunityId(ctx context.Context, arg GetRequestsByCommunityIdParams) ([]Request, error)
-	GetRequestsByErrandId(ctx context.Context, errandID int64) ([]Request, error)
+	GetRequestsByErrandId(ctx context.Context, errandID sql.NullInt64) ([]Request, error)
 	GetRequestsByStoreId(ctx context.Context, storeID sql.NullInt64) ([]Request, error)
 	GetRequestsByUserId(ctx context.Context, arg GetRequestsByUserIdParams) ([]Request, error)
 	GetStore(ctx context.Context, id int64) (Store, error)
