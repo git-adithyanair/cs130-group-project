@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	db "github.com/git-adithyanair/cs130-group-project/db/sqlc"
+	api_error "github.com/git-adithyanair/cs130-group-project/errors"
 	"github.com/git-adithyanair/cs130-group-project/token"
 
 	"github.com/gin-gonic/gin"
@@ -29,7 +30,7 @@ type CreateRequestRequest struct {
 func (server *Server) CreateRequest(ctx *gin.Context) {
 	var req CreateRequestRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		ctx.JSON(http.StatusBadRequest, unknownErrorResponse(err))
 		return
 	}
 
@@ -37,17 +38,15 @@ func (server *Server) CreateRequest(ctx *gin.Context) {
 
 	if _, err := server.queries.GetCommunity(ctx, req.CommunityID); err != nil {
 		if err == sql.ErrNoRows {
-			err := errors.New("No community exists with given ID.")
-			ctx.JSON(http.StatusNotFound, errorResponse(err))
+			ctx.JSON(http.StatusNotFound, errorResponse(api_error.ErrNoCommunity, err))
 		} else {
-			ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+			ctx.JSON(http.StatusInternalServerError, unknownErrorResponse(err))
 		}
 		return
 	}
 
 	if len(req.Items) == 0 {
-		err := errors.New("Request must contain at least one item.")
-		ctx.JSON(http.StatusNotFound, errorResponse(err))
+		ctx.JSON(http.StatusNotFound, errorResponse(api_error.ErrRequestNoItems, errors.New("invalid request, missing items")))
 		return
 	}
 
@@ -58,10 +57,9 @@ func (server *Server) CreateRequest(ctx *gin.Context) {
 	if req.StoreID != nil {
 		if _, err := server.queries.GetStore(ctx, *req.StoreID); err != nil {
 			if err == sql.ErrNoRows {
-				err := errors.New("No store exists with given ID.")
-				ctx.JSON(http.StatusNotFound, errorResponse(err))
+				ctx.JSON(http.StatusNotFound, errorResponse(api_error.ErrNoStore, err))
 			} else {
-				ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+				ctx.JSON(http.StatusInternalServerError, unknownErrorResponse(err))
 			}
 			return
 		}
@@ -75,7 +73,7 @@ func (server *Server) CreateRequest(ctx *gin.Context) {
 
 	request, err := server.queries.CreateRequest(ctx, arg)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		ctx.JSON(http.StatusInternalServerError, unknownErrorResponse(err))
 		return
 	}
 
@@ -91,11 +89,7 @@ func (server *Server) CreateRequest(ctx *gin.Context) {
 			ExtraNotes:     sql.NullString{String: item.ExtraNotes, Valid: len(item.ExtraNotes) > 0},
 		}
 
-		_, err := server.queries.CreateItem(ctx, arg)
-		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, errorResponse(err))
-			return
-		}
+		server.queries.CreateItem(ctx, arg)
 	}
 
 	ctx.JSON(http.StatusCreated, request)
