@@ -54,6 +54,7 @@ func (server *Server) CreateRequest(ctx *gin.Context) {
 		UserID:      authPayload.UserID,
 		CommunityID: sql.NullInt64{Int64: req.CommunityID, Valid: true},
 	}
+
 	if req.StoreID != nil {
 		if _, err := server.queries.GetStore(ctx, *req.StoreID); err != nil {
 			if err == sql.ErrNoRows {
@@ -64,11 +65,7 @@ func (server *Server) CreateRequest(ctx *gin.Context) {
 			return
 		}
 
-		arg = db.CreateRequestParams{
-			UserID:      authPayload.UserID,
-			CommunityID: sql.NullInt64{Int64: req.CommunityID, Valid: true},
-			StoreID:     sql.NullInt64{Int64: *req.StoreID, Valid: true},
-		}
+		arg.StoreID = sql.NullInt64{Int64: *req.StoreID, Valid: true}
 	}
 
 	request, err := server.queries.CreateRequest(ctx, arg)
