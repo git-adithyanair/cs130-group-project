@@ -2,10 +2,9 @@
 INSERT INTO requests (
     user_id, 
     community_id, 
-    errand_id, 
     store_id
 ) VALUES (
-    $1, $2, $3, $4
+    $1, $2, $3
 ) RETURNING *; 
 
 -- name: GetRequest :one
