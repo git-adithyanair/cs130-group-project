@@ -1,5 +1,7 @@
 import React from 'react';
-import { Pressable, SafeAreaView, StyleSheet, Text, Image, TextInput, View } from 'react-native';
+import TextInput from '../components/TextInput'
+import Button from '../components/Button'
+import { SafeAreaView, StyleSheet, Text, Image, View } from 'react-native';
 
 function Login({navigation}) {
     return (
@@ -8,12 +10,10 @@ function Login({navigation}) {
         <Image source={require("../assets/logo.png")}/>
         <Text style={styles.titleText}>Welcome Back</Text>
         <Text>Email or Phone Number</Text>
-        <TextInput style={styles.input}/>
+        <TextInput/>
         <Text>Password</Text> 
-        <TextInput style={styles.input}/>
-        <Pressable onPress={() => navigation.navigate('Requests')}> 
-        <Image source={require("../assets/signinbutton.png")}/>
-        </Pressable>
+        <TextInput/>
+        <Button title={"Sign In"} onPress={() => navigation.navigate('LoggedInHome')} textColor={"white"} backgroundColor={"#0070CA"} width={300} />
         </View>
         </SafeAreaView>
     );
@@ -27,13 +27,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     justifyContent: 'center',
     alignItems: 'center'
-  },
-  input: {
-    height: 40,
-    marginTop: 12,
-    marginBottom: 12,
-    borderWidth: 1,
-    padding: 10,
   },
   titleText: {
     fontSize: 25

@@ -1,5 +1,7 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Text, Image, TextInput, View, Pressable } from 'react-native';
+import TextInput from '../components/TextInput';
+import Button from '../components/Button';
+import { SafeAreaView, StyleSheet, Text, Image, View, Pressable } from 'react-native';
 
 function Signup({navigation}) {
     return (
@@ -8,16 +10,14 @@ function Signup({navigation}) {
         <Image source={require("../assets/logo.png")}/>
         <Text style={styles.titleText}>Signup</Text>
         <Text>Email</Text>
-        <TextInput style={styles.input}/>
+        <TextInput/>
         <Text>Phone Number</Text>
-        <TextInput style={styles.input}/>
+        <TextInput/>
         <Text>Name</Text>
-        <TextInput style={styles.input}/>
+        <TextInput/>
         <Text>Password</Text>
-        <TextInput style={styles.input}/>
-        <Pressable onPress={() => navigation.navigate('AddressSignup')}> 
-        <Image source={require("../assets/continueaddress.png")}/>
-        </Pressable>
+        <TextInput/>
+        <Button title={"Continue with Address"} onPress={() => navigation.navigate('AddressSignup')} textColor={"white"} backgroundColor={"#0070CA"} width={300} />
         </View>
         </SafeAreaView>
     );
@@ -33,13 +33,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  input: {
-    height: 40,
-    marginTop: 12,
-    marginBottom: 12, 
-    borderWidth: 1,
-    padding: 10,
-  }, 
   titleText: {
     fontSize: 25
   }
