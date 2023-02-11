@@ -1,5 +1,17 @@
 # GoodGrocer API Documentation
 
+## Table of Contents
+
+- [Errors](#errors)
+- [User Tokens](#user-tokens)
+- [Authentication](#authentication)
+  - [Register User](#register-user)
+  - [Login User](#login-user)
+- [User](#user)
+  - [User Commmunities](#user-commmunities)
+- [Community](#community)
+- [Request](#request)
+
 ## Errors
 
 All errors are returned in the following format:
@@ -16,6 +28,14 @@ See `errors/api_error.go` for a list of all errors.
 
 ---
 
+## User Tokens
+
+The user token needs to be added to the request header of all API calls that require authentication. The header key is `Authorization` and should be in the form of `Bearer <token>`.
+
+Examle: `Authorization: Bearer v2.local.6-C_cbq2lrWNlu1vSd9ud2Lt33aSHIbDp7_2_hhXCC3myunfw16IDEGCXGGu-HJI2ef8mQDCl7saj3bCLus8DkrWAIhk9iqa8YabEZAOz0iABhs7DRRIQDsXFnQfMKdXeAkwrisfgaYdzg1EUzuq93tDsvx0H2136S0.bnVsbA`
+
+---
+
 ## Authentication
 
 ### Register User
@@ -26,9 +46,9 @@ Registers user with provided details.
 
 **Method** : `POST`
 
-**Auth required** : NO
+**Auth Required** : NO
 
-**Body Parameters**:
+**Body Parameters** :
 
 ```json
 {
@@ -43,7 +63,7 @@ Registers user with provided details.
 }
 ```
 
-**Success Response**:`200 OK`
+**Success Response** : `200 OK`
 
 ```json
 {
@@ -65,9 +85,9 @@ Logs in user and returns auth token.
 
 **Method** : `POST`
 
-**Auth required** : NO
+**Auth Required** : NO
 
-**Body Parameters**:
+**Body Parameters** :
 
 ```json
 {
@@ -76,7 +96,7 @@ Logs in user and returns auth token.
 }
 ```
 
-**Success Response**:`200 OK`
+**Success Response** : `200 OK`
 
 ```json
 {
@@ -102,15 +122,15 @@ Gets all the communities the user is a member of.
 
 **Method** : `POST`
 
-**Auth required** : YES
+**Auth Required** : YES
 
-**Body Parameters**:
+**Body Parameters** :
 
 ```json
 {}
 ```
 
-**Success Response**:`200 OK`
+**Success Response** : `200 OK`
 
 ```json
 {

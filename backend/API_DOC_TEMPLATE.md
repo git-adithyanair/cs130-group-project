@@ -12,9 +12,9 @@ Endpoint description here.
 
 **Method** : `GET|POST|PUT|DELETE`
 
-**Auth required** : NO
+**Auth Required** : NO
 
-**Body Parameters**:
+**Body Parameters** :
 
 ```json
 {
@@ -23,10 +23,12 @@ Endpoint description here.
 }
 ```
 
-**Success Response**:`200 OK`
+**Success Response** : `200 OK`
 
 ```json
 {
   "field": "[TYPE, description]"
 }
 ```
+
+**Extra notes** : Any extra notes here.
