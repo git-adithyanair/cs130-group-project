@@ -14,6 +14,7 @@ const (
 	ErrNoRequest             = "ERROR_NO_REQUEST"
 	ErrInvalidUserForRequest = "ERROR_INVALID_USER_FOR_REQUEST"
 	ErrNoMember              = "ERROR_NO_MEMBER"
+	ErrNoItem                = "ERROR_NO_ITEM"
 )
 
 var GetErrorMessage map[string]string = map[string]string{
@@ -30,4 +31,5 @@ var GetErrorMessage map[string]string = map[string]string{
 	ErrNoRequest:             "Could not find this request.",
 	ErrInvalidUserForRequest: "Request does not belong to user.",
 	ErrNoMember:              "User does not exists in given community.",
+	ErrNoItem:                "Could not find this item.",
 }

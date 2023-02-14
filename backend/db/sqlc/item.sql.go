@@ -317,6 +317,36 @@ func (q *Queries) UpdateItemExtraNotes(ctx context.Context, arg UpdateItemExtraN
 	return i, err
 }
 
+const updateItemFound = `-- name: UpdateItemFound :one
+UPDATE items SET
+    found = $2
+WHERE id = $1
+RETURNING id, requested_by, request_id, name, quantity_type, quantity, preferred_brand, image, found, extra_notes
+`
+
+type UpdateItemFoundParams struct {
+	ID    int64        `json:"id"`
+	Found sql.NullBool `json:"found"`
+}
+
+func (q *Queries) UpdateItemFound(ctx context.Context, arg UpdateItemFoundParams) (Item, error) {
+	row := q.db.QueryRowContext(ctx, updateItemFound, arg.ID, arg.Found)
+	var i Item
+	err := row.Scan(
+		&i.ID,
+		&i.RequestedBy,
+		&i.RequestID,
+		&i.Name,
+		&i.QuantityType,
+		&i.Quantity,
+		&i.PreferredBrand,
+		&i.Image,
+		&i.Found,
+		&i.ExtraNotes,
+	)
+	return i, err
+}
+
 const updateItemImage = `-- name: UpdateItemImage :one
 UPDATE items SET
     image = $2
