@@ -368,6 +368,20 @@ func (q *Queries) ListRequests(ctx context.Context, arg ListRequestsParams) ([]R
 	return items, nil
 }
 
+const updateItemErrand = `-- name: UpdateItemErrand :exec
+UPDATE requests SET errand_id = $2 WHERE id = $1
+`
+
+type UpdateItemErrandParams struct {
+	ID       int64         `json:"id"`
+	ErrandID sql.NullInt64 `json:"errand_id"`
+}
+
+func (q *Queries) UpdateItemErrand(ctx context.Context, arg UpdateItemErrandParams) error {
+	_, err := q.db.ExecContext(ctx, updateItemErrand, arg.ID, arg.ErrandID)
+	return err
+}
+
 const updateRequest = `-- name: UpdateRequest :one
 UPDATE requests SET 
     user_id = $2, 

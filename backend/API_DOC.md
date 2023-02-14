@@ -155,6 +155,44 @@ Gets all the communities the user is a member of.
 ## Community
 
 ---
+## Errand 
+
+### Create Errand
+
+Endpoint to create and errand.
+
+**URL** : `http://api.good-grocer.click/errand`
+
+**Method** : `POST`
+
+**Auth Required** : NO
+
+**Body Parameters** :
+
+```json
+{
+  "community_id": "[int, community id]", 
+  "request_ids": "[int[], array of request ids]"
+}
+```
+
+**Success Response** : `200 OK`
+
+```json
+{
+  "id": "[int, id of errand]",
+  "user_id": "[int, id of user who is completing errand]",
+  "community_id": "[int, id of community that errand belongs to]",
+  "is_complete": "[bool, true if errand is complete, false otherwise]",
+  "created_at": "[date, when the errand was created]",
+  "completed_at": "[date, 0001-01-01T00:00:00Z if errand not complete, otherwise time when errand was completed]"
+}
+```
+
+**Extra notes** : 
+
+
+---
 
 ## Request
 
