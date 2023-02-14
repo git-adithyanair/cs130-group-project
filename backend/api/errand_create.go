@@ -63,11 +63,12 @@ func (server *Server) CreateErrand(ctx *gin.Context) {
 	}
 
 	for _, requestID := range req.RequestIDs {
-		arg := db.UpdateItemErrandParams{
+		arg := db.UpdateRequestErrandAndStatusParams{
 			ID:       requestID,
 			ErrandID: sql.NullInt64{Int64: errand.ID, Valid: true},
+			Status:   db.RequestStatusInProgress,
 		}
-		server.queries.UpdateItemErrand(ctx, arg)
+		server.queries.UpdateRequestErrandAndStatus(ctx, arg)
 	}
 
 	ctx.JSON(http.StatusCreated, errand)
