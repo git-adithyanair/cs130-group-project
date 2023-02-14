@@ -63,7 +63,7 @@ func (server *Server) setupRouter() {
 	protectedRoutes.GET("/request/items/:id", server.GetItemsByRequest)
 
 	// Item routes.
-	protectedRoutes.POST("/item/updateStatus", server.UpdateItemStatus)
+	protectedRoutes.POST("/item/update-status", server.UpdateItemStatus)
 
 	server.router = router
 }

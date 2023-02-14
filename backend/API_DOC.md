@@ -167,7 +167,7 @@ Gets all the communities the user is a member of.
 
 Updates the status of if an item is found or not. 
 
-**URL** : `http://api.good-grocer.click/item/updateStatus`
+**URL** : `http://api.good-grocer.click/item/update-status`
 
 **Method** : `POST`
 
@@ -188,8 +188,15 @@ Updates the status of if an item is found or not.
 {
   "item": {
     "id":  "[int, id of the item]", 
-    "requested_by":  "[int, id of user that requested item]"
-    ... 
+    "requested_by":  "[int, id of user that requested item]",
+    "request_id":  "[int, id of request]",
+    "name":  "[string, name of item]",
+    "quantity_type":  "[item_quantity_type, type of quantity (e.g. oz, lbs)]",
+    "quantity":  "[float, quantity associated with item type]",
+    "preferred_brand":  "[string, brand of item, not required]",
+    "image":  "[string, image for item, not required]",
+    "found":  "[bool, true if found, else false]",
+    "extra_notes":  "[string, notes for shopper]",
   }
 }
 ```
