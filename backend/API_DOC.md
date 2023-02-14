@@ -165,7 +165,7 @@ Endpoint to create and errand.
 
 **Method** : `POST`
 
-**Auth Required** : NO
+**Auth Required** : YES
 
 **Body Parameters** :
 
