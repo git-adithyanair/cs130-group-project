@@ -70,6 +70,12 @@ UPDATE items SET
 WHERE id = $1
 RETURNING *;
 
+-- name: UpdateItemFound :one
+UPDATE items SET
+    found = $2
+WHERE id = $1
+RETURNING *;
+
 -- name: DeleteItem :exec
 DELETE FROM items WHERE id = $1;
 

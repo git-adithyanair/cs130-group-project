@@ -62,6 +62,9 @@ func (server *Server) setupRouter() {
 	protectedRoutes.POST("/request", server.CreateRequest)
 	protectedRoutes.GET("/request/items/:id", server.GetItemsByRequest)
 
+	// Item routes.
+	protectedRoutes.POST("/item/updateStatus", server.UpdateItemStatus)
+
 	server.router = router
 }
 

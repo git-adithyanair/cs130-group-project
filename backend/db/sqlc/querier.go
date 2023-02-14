@@ -74,6 +74,7 @@ type Querier interface {
 	UpdateErrand(ctx context.Context, arg UpdateErrandParams) (Errand, error)
 	UpdateItem(ctx context.Context, arg UpdateItemParams) (Item, error)
 	UpdateItemExtraNotes(ctx context.Context, arg UpdateItemExtraNotesParams) (Item, error)
+	UpdateItemFound(ctx context.Context, arg UpdateItemFoundParams) (Item, error)
 	UpdateItemImage(ctx context.Context, arg UpdateItemImageParams) (Item, error)
 	UpdateItemName(ctx context.Context, arg UpdateItemNameParams) (Item, error)
 	UpdateItemPreferredBrand(ctx context.Context, arg UpdateItemPreferredBrandParams) (Item, error)
