@@ -47,5 +47,10 @@ UPDATE users SET
     y_coord = $5
 WHERE id = $1;
 
+-- name: UpdateUserProfilePicture :one
+UPDATE users SET profile_picture = $2 
+WHERE id = $1
+RETURNING *; 
+
 -- name: DeleteUser :exec
 DELETE FROM users WHERE id = $1;

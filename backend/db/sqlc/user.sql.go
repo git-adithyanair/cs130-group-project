@@ -269,3 +269,33 @@ func (q *Queries) UpdateUserLocation(ctx context.Context, arg UpdateUserLocation
 	)
 	return err
 }
+
+const updateUserProfilePicture = `-- name: UpdateUserProfilePicture :one
+UPDATE users SET profile_picture = $2 
+WHERE id = $1
+RETURNING id, email, hashed_password, full_name, phone_number, created_at, place_id, profile_picture, x_coord, y_coord, address
+`
+
+type UpdateUserProfilePictureParams struct {
+	ID             int64  `json:"id"`
+	ProfilePicture string `json:"profile_picture"`
+}
+
+func (q *Queries) UpdateUserProfilePicture(ctx context.Context, arg UpdateUserProfilePictureParams) (User, error) {
+	row := q.db.QueryRowContext(ctx, updateUserProfilePicture, arg.ID, arg.ProfilePicture)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Email,
+		&i.HashedPassword,
+		&i.FullName,
+		&i.PhoneNumber,
+		&i.CreatedAt,
+		&i.PlaceID,
+		&i.ProfilePicture,
+		&i.XCoord,
+		&i.YCoord,
+		&i.Address,
+	)
+	return i, err
+}
