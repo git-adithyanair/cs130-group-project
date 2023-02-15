@@ -51,8 +51,10 @@ UPDATE requests SET
 WHERE id = $1
 RETURNING *; 
 
--- name: UpdateRequestStatus :exec
-UPDATE requests SET status = $2 WHERE id = $1; 
+-- name: UpdateRequestStatus :one
+UPDATE requests SET status = $2 
+WHERE id = $1
+RETURNING *; 
 
 -- name: UpdateRequestErrandAndStatus :exec
 UPDATE requests SET 

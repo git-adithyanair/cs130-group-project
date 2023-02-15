@@ -195,6 +195,34 @@ Endpoint to create and errand.
 ---
 
 ## Request
+### Change Request Status
+
+Endpoint to change the status on a request.
+
+**URL** : `http://api.good-grocer.click/ENDPOINT_URL_HERE`
+
+**Method** : `GET|POST|PUT|DELETE`
+
+**Auth Required** : NO
+
+**Body Parameters** :
+
+```json
+{
+  "field_1": "[TYPE, field_1_conditions]",
+  "field_2": "[TYPE, field_2_conditions]"
+}
+```
+
+**Success Response** : `200 OK`
+
+```json
+{
+  "field": "[TYPE, description]"
+}
+```
+
+**Extra notes** : Any extra notes here.
 
 
 ---
