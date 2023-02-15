@@ -39,5 +39,13 @@ UPDATE users SET
 WHERE id = $1
 RETURNING *;
 
+-- name: UpdateUserLocation :exec
+UPDATE users SET
+    place_id = $2,
+    address = $3,
+    x_coord = $4,
+    y_coord = $5
+WHERE id = $1;
+
 -- name: DeleteUser :exec
 DELETE FROM users WHERE id = $1;
