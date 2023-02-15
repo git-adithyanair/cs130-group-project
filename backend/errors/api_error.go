@@ -15,6 +15,8 @@ const (
 	ErrInvalidUserForRequest = "ERROR_INVALID_USER_FOR_REQUEST"
 	ErrNoMember              = "ERROR_NO_MEMBER"
 	ErrNoItem                = "ERROR_NO_ITEM"
+	ErrErrandNoRequests      = "ERROR_ERRAND_NO_REQUESTS"
+	ErrWrongCommunity        = "ERROR_WRONG_COMMUNITY"
 )
 
 var GetErrorMessage map[string]string = map[string]string{
@@ -32,4 +34,6 @@ var GetErrorMessage map[string]string = map[string]string{
 	ErrInvalidUserForRequest: "Request does not belong to user.",
 	ErrNoMember:              "User does not exists in given community.",
 	ErrNoItem:                "Could not find this item.",
+	ErrErrandNoRequests:      "Errand must contain at least one request.",
+	ErrWrongCommunity:        "Request does not belong to the given community.",
 }

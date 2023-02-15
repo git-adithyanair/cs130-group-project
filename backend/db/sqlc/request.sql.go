@@ -410,6 +410,24 @@ func (q *Queries) UpdateRequest(ctx context.Context, arg UpdateRequestParams) (R
 	return i, err
 }
 
+const updateRequestErrandAndStatus = `-- name: UpdateRequestErrandAndStatus :exec
+UPDATE requests SET 
+    errand_id = $2,
+    status = $3
+WHERE id = $1
+`
+
+type UpdateRequestErrandAndStatusParams struct {
+	ID       int64         `json:"id"`
+	ErrandID sql.NullInt64 `json:"errand_id"`
+	Status   RequestStatus `json:"status"`
+}
+
+func (q *Queries) UpdateRequestErrandAndStatus(ctx context.Context, arg UpdateRequestErrandAndStatusParams) error {
+	_, err := q.db.ExecContext(ctx, updateRequestErrandAndStatus, arg.ID, arg.ErrandID, arg.Status)
+	return err
+}
+
 const updateRequestStatus = `-- name: UpdateRequestStatus :exec
 UPDATE requests SET status = $2 WHERE id = $1
 `

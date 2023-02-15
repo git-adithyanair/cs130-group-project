@@ -80,6 +80,7 @@ type Querier interface {
 	UpdateItemPreferredBrand(ctx context.Context, arg UpdateItemPreferredBrandParams) (Item, error)
 	UpdateItemQuantity(ctx context.Context, arg UpdateItemQuantityParams) (Item, error)
 	UpdateRequest(ctx context.Context, arg UpdateRequestParams) (Request, error)
+	UpdateRequestErrandAndStatus(ctx context.Context, arg UpdateRequestErrandAndStatusParams) error
 	UpdateRequestStatus(ctx context.Context, arg UpdateRequestStatusParams) error
 	UpdateStore(ctx context.Context, arg UpdateStoreParams) (Store, error)
 	UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error)
