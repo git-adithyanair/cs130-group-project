@@ -11,7 +11,7 @@ import (
 )
 
 type UpdateUserProfilePicRequest struct {
-	Image string `json:"image"`
+	Image string `json:"image" binding:"required,min=1"`
 }
 
 func (server *Server) UpdateUserProfilePic(ctx *gin.Context) {
