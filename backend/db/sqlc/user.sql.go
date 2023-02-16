@@ -241,3 +241,31 @@ func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, e
 	)
 	return i, err
 }
+
+const updateUserLocation = `-- name: UpdateUserLocation :exec
+UPDATE users SET
+    place_id = $2,
+    address = $3,
+    x_coord = $4,
+    y_coord = $5
+WHERE id = $1
+`
+
+type UpdateUserLocationParams struct {
+	ID      int64   `json:"id"`
+	PlaceID string  `json:"place_id"`
+	Address string  `json:"address"`
+	XCoord  float64 `json:"x_coord"`
+	YCoord  float64 `json:"y_coord"`
+}
+
+func (q *Queries) UpdateUserLocation(ctx context.Context, arg UpdateUserLocationParams) error {
+	_, err := q.db.ExecContext(ctx, updateUserLocation,
+		arg.ID,
+		arg.PlaceID,
+		arg.Address,
+		arg.XCoord,
+		arg.YCoord,
+	)
+	return err
+}

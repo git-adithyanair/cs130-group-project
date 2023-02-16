@@ -113,6 +113,35 @@ Logs in user and returns auth token.
 ---
 
 ## User
+### Update User Location
+
+Endpoint to update a user's home location.
+
+**URL** : `http://api.good-grocer.click/user/update-location`
+
+**Method** : `POST`
+
+**Auth Required** : YES
+
+**Body Parameters** :
+
+```json
+{
+  "address": "[string, full written address that is displayed to users]",
+  "place_id": "[string, place_id from the google response]",
+  "x_coord": "[float, x coordinate of location]",
+  "y_coord": "[float, y coordinate of location]"
+}
+```
+
+**Success Response** : `200 OK`
+
+```json
+{}
+```
+
+**Extra notes** : 
+
 
 ### User Commmunities
 
@@ -155,5 +184,123 @@ Gets all the communities the user is a member of.
 ## Community
 
 ---
+## Errand 
+
+### Create Errand
+
+Endpoint to create and errand.
+
+**URL** : `http://api.good-grocer.click/errand`
+
+**Method** : `POST`
+
+**Auth Required** : YES
+
+**Body Parameters** :
+
+```json
+{
+  "community_id": "[int, community id]", 
+  "request_ids": "[int[], array of request ids]"
+}
+```
+
+**Success Response** : `200 OK`
+
+```json
+{
+  "id": "[int, id of errand]",
+  "user_id": "[int, id of user who is completing errand]",
+  "community_id": "[int, id of community that errand belongs to]",
+  "is_complete": "[bool, true if errand is complete, false otherwise]",
+  "created_at": "[date, when the errand was created]",
+  "completed_at": "[date, 0001-01-01T00:00:00Z if errand not complete, otherwise time when errand was completed]"
+}
+```
+
+**Extra notes** : 
+
+
+---
 
 ## Request
+### Change Request Status
+
+Endpoint to change the status on a request.
+
+**URL** : `http://api.good-grocer.click/request/update-status`
+
+**Method** : `POST`
+
+**Auth Required** : YES
+
+**Body Parameters** :
+
+```json
+{
+  "id": "[int, required id of the request]",
+  "status": "[RequestStatus, the status of the request (pending, in_progress, completed)]"
+}
+```
+
+**Success Response** : `200 OK`
+
+```json
+{
+  "id": "[int, id of request]", 
+  "created_at": "[date, time when request was created]", 
+  "user_id": "[int, id of user who created the request]", 
+  "community_id": "[int, id of community that request belongs to]", 
+  "status": "[RequestStatus, the status of the request (pending, in_progress, completed)]", 
+  "errand_id": "[int, id of errand associated with request, could be null]", 
+  "store_id": "[int, id of store that request is associated with]", 
+
+}
+```
+
+**Extra notes** : 
+
+
+---
+
+## Item
+
+### Update Found Status
+
+Updates the status of if an item is found or not. 
+
+**URL** : `http://api.good-grocer.click/item/update-status`
+
+**Method** : `POST`
+
+**Auth Required** : YES
+
+**Body Parameters** :
+
+```json
+{
+  "id": "[int, required id of the item]",
+  "found": "[bool, true if found, false is not]"
+}
+```
+
+**Success Response** : `200 OK`
+
+```json
+{
+  "item": {
+    "id":  "[int, id of the item]", 
+    "requested_by":  "[int, id of user that requested item]",
+    "request_id":  "[int, id of request]",
+    "name":  "[string, name of item]",
+    "quantity_type":  "[item_quantity_type, type of quantity (e.g. oz, lbs)]",
+    "quantity":  "[float, quantity associated with item type]",
+    "preferred_brand":  "[string, brand of item, not required]",
+    "image":  "[string, image for item, not required]",
+    "found":  "[bool, true if found, else false]",
+    "extra_notes":  "[string, notes for shopper]",
+  }
+}
+```
+
+**Extra notes** : json in response returns data for item with 'found' field updated

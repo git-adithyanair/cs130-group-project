@@ -74,14 +74,17 @@ type Querier interface {
 	UpdateErrand(ctx context.Context, arg UpdateErrandParams) (Errand, error)
 	UpdateItem(ctx context.Context, arg UpdateItemParams) (Item, error)
 	UpdateItemExtraNotes(ctx context.Context, arg UpdateItemExtraNotesParams) (Item, error)
+	UpdateItemFound(ctx context.Context, arg UpdateItemFoundParams) (Item, error)
 	UpdateItemImage(ctx context.Context, arg UpdateItemImageParams) (Item, error)
 	UpdateItemName(ctx context.Context, arg UpdateItemNameParams) (Item, error)
 	UpdateItemPreferredBrand(ctx context.Context, arg UpdateItemPreferredBrandParams) (Item, error)
 	UpdateItemQuantity(ctx context.Context, arg UpdateItemQuantityParams) (Item, error)
 	UpdateRequest(ctx context.Context, arg UpdateRequestParams) (Request, error)
-	UpdateRequestStatus(ctx context.Context, arg UpdateRequestStatusParams) error
+	UpdateRequestErrandAndStatus(ctx context.Context, arg UpdateRequestErrandAndStatusParams) error
+	UpdateRequestStatus(ctx context.Context, arg UpdateRequestStatusParams) (Request, error)
 	UpdateStore(ctx context.Context, arg UpdateStoreParams) (Store, error)
 	UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error)
+	UpdateUserLocation(ctx context.Context, arg UpdateUserLocationParams) error
 }
 
 var _ Querier = (*Queries)(nil)

@@ -29,6 +29,10 @@ func main() {
 		log.Fatal("could not create server: ", err)
 	}
 
+	if config.Env == "dev" {
+		db.PopulateWithData(queries)
+	}
+
 	err = server.Start(config.ServerAddress)
 	if err != nil {
 		log.Fatal("could not start server: ", err)

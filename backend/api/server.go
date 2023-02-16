@@ -51,6 +51,7 @@ func (server *Server) setupRouter() {
 	router.POST("/user", server.RegisterUser)
 	router.POST("/user/login", server.LoginUser)
 	protectedRoutes.GET("/user/community", server.GetUserCommunities)
+	protectedRoutes.POST("/user/update-location", server.UpdateUserLocation)
 
 	// Community routes.
 	protectedRoutes.POST("/community", server.CreateCommunity)
@@ -58,9 +59,16 @@ func (server *Server) setupRouter() {
 	protectedRoutes.GET("/community/:id", server.GetCommunity)
 	protectedRoutes.GET("/community/requests", server.GetRequestsByCommunity)
 
+	// Errand routes.
+	protectedRoutes.POST("/errand", server.CreateErrand)
+
 	// Request routes.
 	protectedRoutes.POST("/request", server.CreateRequest)
 	protectedRoutes.GET("/request/items/:id", server.GetItemsByRequest)
+	protectedRoutes.POST("/request/update-status", server.UpdateRequestStatus)
+
+	// Item routes.
+	protectedRoutes.POST("/item/update-status", server.UpdateItemStatus)
 
 	server.router = router
 }
