@@ -1,5 +1,7 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Text, Image, TextInput, View, Pressable } from 'react-native';
+import TextInput from '../components/TextInput';
+import Button from '../components/Button'; 
+import { SafeAreaView, StyleSheet, Text, Image, View, Pressable } from 'react-native';
 
 function AddressSignup({navigation}) {
     return (
@@ -8,14 +10,12 @@ function AddressSignup({navigation}) {
         <Image source={require("../assets/logo.png")}/>
         <Text style={styles.titleText}>Address</Text>
         <Text>Find your address</Text>
-        <TextInput style={styles.input}/>
+        <TextInput/>
         <Text style={styles.titleText}>Add a picture</Text>
         <View style={styles.defaultPic}>
         <Image source={require("../assets/default-profile-pic.png")}/>
         </View>
-        <Pressable onPress={() => navigation.navigate('Requests')}> 
-        <Image source={require("../assets/signup2.png")}/>
-        </Pressable>
+        <Button title={"Sign Up"} onPress={() => navigation.navigate('LoggedInHome')} textColor={"white"} backgroundColor={"#0070CA"} width={300} />
         </View>
         </SafeAreaView>
     );
@@ -34,13 +34,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  input: {
-    height: 40,
-    marginTop: 12,
-    marginBottom: 12,
-    borderWidth: 1,
-    padding: 10,
-  }, 
   titleText: {
     fontSize: 25
   },
