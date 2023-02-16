@@ -11,7 +11,7 @@ import (
 
 type UpdateRequestStatusRequest struct {
 	ID     int64            `json:"id" binding:"required,min=1"`
-	Status db.RequestStatus `json:"status"`
+	Status db.RequestStatus `json:"status" binding:"required"`
 }
 
 func (server *Server) UpdateRequestStatus(ctx *gin.Context) {
