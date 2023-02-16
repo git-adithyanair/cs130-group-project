@@ -28,7 +28,7 @@ func (server *Server) UpdateUserProfilePic(ctx *gin.Context) {
 		ProfilePicture: req.Image,
 	}
 
-	user, err := server.queries.UpdateUserProfilePicture(ctx, arg)
+	_, err := server.queries.UpdateUserProfilePicture(ctx, arg)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			ctx.JSON(http.StatusNotFound, errorResponse(api_error.ErrNoUser, err))
@@ -38,5 +38,5 @@ func (server *Server) UpdateUserProfilePic(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, user)
+	ctx.JSON(http.StatusOK, nil)
 }
