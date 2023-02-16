@@ -84,6 +84,7 @@ type Querier interface {
 	UpdateRequestStatus(ctx context.Context, arg UpdateRequestStatusParams) error
 	UpdateStore(ctx context.Context, arg UpdateStoreParams) (Store, error)
 	UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error)
+	UpdateUserLocation(ctx context.Context, arg UpdateUserLocationParams) error
 }
 
 var _ Querier = (*Queries)(nil)

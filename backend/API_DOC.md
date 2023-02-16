@@ -113,6 +113,35 @@ Logs in user and returns auth token.
 ---
 
 ## User
+### Update User Location
+
+Endpoint to update a user's home location.
+
+**URL** : `http://api.good-grocer.click/user/update-location`
+
+**Method** : `POST`
+
+**Auth Required** : YES
+
+**Body Parameters** :
+
+```json
+{
+  "address": "[string, full written address that is displayed to users]",
+  "place_id": "[string, place_id from the google response]",
+  "x_coord": "[float, x coordinate of location]",
+  "y_coord": "[float, y coordinate of location]"
+}
+```
+
+**Success Response** : `200 OK`
+
+```json
+{}
+```
+
+**Extra notes** : 
+
 
 ### User Commmunities
 
