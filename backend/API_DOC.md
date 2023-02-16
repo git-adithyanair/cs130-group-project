@@ -140,7 +140,7 @@ Endpoint to update a user's home location.
 {}
 ```
 
-**Extra notes** : Any extra notes here.
+**Extra notes** : 
 
 
 ### User Commmunities
