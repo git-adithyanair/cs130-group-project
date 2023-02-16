@@ -31,5 +31,13 @@ UPDATE errands SET
 WHERE id = $1
 RETURNING *; 
 
+-- name: UpdateErrandStatus :one 
+UPDATE errands SET 
+    is_complete = $2,
+    completed_at = CASE WHEN $2 = TRUE THEN NOW() 
+                        ELSE completed_at END
+WHERE id = $1
+RETURNING *; 
+
 -- name: DeleteErrand :exec
 DELETE FROM errands WHERE id = $1; 
