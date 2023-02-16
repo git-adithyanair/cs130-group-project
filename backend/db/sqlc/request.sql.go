@@ -428,8 +428,10 @@ func (q *Queries) UpdateRequestErrandAndStatus(ctx context.Context, arg UpdateRe
 	return err
 }
 
-const updateRequestStatus = `-- name: UpdateRequestStatus :exec
-UPDATE requests SET status = $2 WHERE id = $1
+const updateRequestStatus = `-- name: UpdateRequestStatus :one
+UPDATE requests SET status = $2 
+WHERE id = $1
+RETURNING id, created_at, user_id, community_id, status, errand_id, store_id
 `
 
 type UpdateRequestStatusParams struct {
@@ -437,7 +439,17 @@ type UpdateRequestStatusParams struct {
 	Status RequestStatus `json:"status"`
 }
 
-func (q *Queries) UpdateRequestStatus(ctx context.Context, arg UpdateRequestStatusParams) error {
-	_, err := q.db.ExecContext(ctx, updateRequestStatus, arg.ID, arg.Status)
-	return err
+func (q *Queries) UpdateRequestStatus(ctx context.Context, arg UpdateRequestStatusParams) (Request, error) {
+	row := q.db.QueryRowContext(ctx, updateRequestStatus, arg.ID, arg.Status)
+	var i Request
+	err := row.Scan(
+		&i.ID,
+		&i.CreatedAt,
+		&i.UserID,
+		&i.CommunityID,
+		&i.Status,
+		&i.ErrandID,
+		&i.StoreID,
+	)
+	return i, err
 }

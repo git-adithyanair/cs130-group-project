@@ -224,6 +224,41 @@ Endpoint to create and errand.
 ---
 
 ## Request
+### Change Request Status
+
+Endpoint to change the status on a request.
+
+**URL** : `http://api.good-grocer.click/request/update-status`
+
+**Method** : `POST`
+
+**Auth Required** : YES
+
+**Body Parameters** :
+
+```json
+{
+  "id": "[int, required id of the request]",
+  "status": "[RequestStatus, the status of the request (pending, in_progress, completed)]"
+}
+```
+
+**Success Response** : `200 OK`
+
+```json
+{
+  "id": "[int, id of request]", 
+  "created_at": "[date, time when request was created]", 
+  "user_id": "[int, id of user who created the request]", 
+  "community_id": "[int, id of community that request belongs to]", 
+  "status": "[RequestStatus, the status of the request (pending, in_progress, completed)]", 
+  "errand_id": "[int, id of errand associated with request, could be null]", 
+  "store_id": "[int, id of store that request is associated with]", 
+
+}
+```
+
+**Extra notes** : 
 
 
 ---
