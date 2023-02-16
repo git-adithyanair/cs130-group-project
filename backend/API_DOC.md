@@ -209,7 +209,7 @@ Endpoint to change the status on a request.
 
 ```json
 {
-  "id": "[int, required id of the item]",
+  "id": "[int, required id of the request]",
   "status": "[RequestStatus, the status of the request (pending, in_progress, completed)]"
 }
 ```
@@ -229,7 +229,7 @@ Endpoint to change the status on a request.
 }
 ```
 
-**Extra notes** : Any extra notes here.
+**Extra notes** : 
 
 
 ---
