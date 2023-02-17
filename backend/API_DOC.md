@@ -143,6 +143,33 @@ Endpoint to update a user's home location.
 **Extra notes** : 
 
 
+### Update Profile Picture
+
+Endpoint to change user profile picture.
+
+**URL** : `http://api.good-grocer.click/update-profile-pic`
+
+**Method** : `POST`
+
+**Auth Required** : YES
+
+**Body Parameters** :
+
+```json
+{
+  "image": "[string, data for the image in string (base64) form]"
+}
+```
+
+**Success Response** : `200 OK`
+
+```json
+{}
+```
+
+**Extra notes** : Image data should start something like this: data:image/[IMAGE TYPE];base64
+
+
 ### User Commmunities
 
 Gets all the communities the user is a member of.
