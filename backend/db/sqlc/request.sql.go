@@ -326,6 +326,47 @@ func (q *Queries) GetRequestsByUserId(ctx context.Context, arg GetRequestsByUser
 	return items, nil
 }
 
+const getRequestsForUserByStatus = `-- name: GetRequestsForUserByStatus :many
+SELECT id, created_at, user_id, community_id, status, errand_id, store_id FROM requests
+WHERE user_id = $1 and status = $2
+`
+
+type GetRequestsForUserByStatusParams struct {
+	UserID int64         `json:"user_id"`
+	Status RequestStatus `json:"status"`
+}
+
+func (q *Queries) GetRequestsForUserByStatus(ctx context.Context, arg GetRequestsForUserByStatusParams) ([]Request, error) {
+	rows, err := q.db.QueryContext(ctx, getRequestsForUserByStatus, arg.UserID, arg.Status)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Request{}
+	for rows.Next() {
+		var i Request
+		if err := rows.Scan(
+			&i.ID,
+			&i.CreatedAt,
+			&i.UserID,
+			&i.CommunityID,
+			&i.Status,
+			&i.ErrandID,
+			&i.StoreID,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const listRequests = `-- name: ListRequests :many
 SELECT id, created_at, user_id, community_id, status, errand_id, store_id FROM requests
 LIMIT $1

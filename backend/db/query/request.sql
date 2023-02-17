@@ -36,6 +36,10 @@ WHERE store_id = $1 AND status = 'pending';
 -- name: GetRequestsByErrandId :many
 SELECT * FROM requests WHERE errand_id = $1; 
 
+-- name: GetRequestsForUserByStatus :many
+SELECT * FROM requests
+WHERE user_id = $1 and status = $2; 
+
 -- name: ListRequests :many
 SELECT * FROM requests
 LIMIT $1

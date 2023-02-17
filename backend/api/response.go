@@ -68,3 +68,13 @@ func newAuthUserResponse(token string, user db.User) authUserResponse {
 }
 
 // ========================================================================
+
+// ========================================================================
+// Type and function to return users requests stored by status.
+type userRequestsResponse struct {
+	Pending    []db.Request `json:"pending"`
+	InProgress []db.Request `json:"in_progress"`
+	Complete   []db.Request `json:"complete"`
+}
+
+// ========================================================================

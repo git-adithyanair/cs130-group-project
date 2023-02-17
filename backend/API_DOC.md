@@ -206,6 +206,43 @@ Gets all the communities the user is a member of.
 }
 ```
 
+### User Requests
+
+Endpoint to get users requests grouped by status.
+
+**URL** : `http://api.good-grocer.click/user/requests`
+
+**Method** : `GET`
+
+**Auth Required** : YES
+
+**Body Parameters** :
+
+```json
+{}
+```
+
+**Success Response** : `200 OK`
+
+```json
+{
+  "pending": [
+    {
+      "id": "[int, id of request]", 
+      "created_at": "[date, time when request was created]", 
+      "user_id": "[int, id of user who created the request]", 
+      "community_id": "[int, id of community that request belongs to]", 
+      "status": "[RequestStatus, the status of the request (pending, in_progress, completed)]", 
+      "errand_id": "[int, id of errand associated with request, could be null", 
+      "store_id": "[int, id of store that request is associated with]"
+    }
+  ], 
+  "in_progress": [], 
+  "complete": []
+}
+```
+
+
 ---
 
 ## Community
