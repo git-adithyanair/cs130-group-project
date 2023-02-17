@@ -6,7 +6,7 @@ import {
 
 
 const TextInput = (props) => {
-  return <RN_TextInput style={styles.input}> </RN_TextInput>; 
+  return <RN_TextInput style={styles.input} onChange={props.onChange} value={props.value} autoCapitalize='none'/>; 
 };
 
 
