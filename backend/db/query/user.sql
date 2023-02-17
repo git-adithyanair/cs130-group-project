@@ -21,6 +21,10 @@ SELECT * FROM users WHERE email = $1;
 -- name: GetUserByPhoneNumber :one
 SELECT * FROM users WHERE phone_number = $1;
 
+-- name: GetRequestsForUserByStatus :many
+SELECT * FROM requests
+WHERE user_id = $1 AND status = $2; 
+
 -- name: ListUsers :many
 SELECT * FROM users
 LIMIT $1

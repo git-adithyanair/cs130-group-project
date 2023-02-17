@@ -53,6 +53,7 @@ type Querier interface {
 	GetRequestsByErrandId(ctx context.Context, errandID sql.NullInt64) ([]Request, error)
 	GetRequestsByStoreId(ctx context.Context, storeID sql.NullInt64) ([]Request, error)
 	GetRequestsByUserId(ctx context.Context, arg GetRequestsByUserIdParams) ([]Request, error)
+	GetRequestsForUserByStatus(ctx context.Context, arg GetRequestsForUserByStatusParams) ([]Request, error)
 	GetStore(ctx context.Context, id int64) (Store, error)
 	GetStoreByPlaceId(ctx context.Context, placeID string) (Store, error)
 	GetUser(ctx context.Context, id int64) (User, error)

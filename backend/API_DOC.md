@@ -178,6 +178,40 @@ Gets all the communities the user is a member of.
   ]
 }
 ```
+### User Accepted Requests
+
+Endpoint to return all of a user's requests that are a part of a current incomplete errand (all requests that have been picked up by an errand and are in progress).
+
+**URL** : `http://api.good-grocer.click/user/accepted-requests`
+
+**Method** : `GET`
+
+**Auth Required** : YES
+
+**Body Parameters** :
+
+```json
+{}
+```
+
+**Success Response** : `200 OK`
+
+```json
+{
+  "requests": [
+    {
+      "id": "[int, id of request]", 
+      "created_at": "[date, time when request was created]", 
+      "user_id": "[int, id of user who created the request]", 
+      "community_id": "[int, id of community that request belongs to]", 
+      "status": "[RequestStatus, the status of the request (pending, in_progress, completed)]", 
+      "errand_id": "[int, id of errand associated with request, could be null]", 
+      "store_id": "[int, id of store that request is associated with]"
+    }
+  ]
+}
+```
+
 
 ---
 
