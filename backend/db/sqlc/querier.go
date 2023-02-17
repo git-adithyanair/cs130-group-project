@@ -72,6 +72,7 @@ type Querier interface {
 	UpdateCommunity(ctx context.Context, arg UpdateCommunityParams) (Community, error)
 	UpdateCommunityAdmin(ctx context.Context, arg UpdateCommunityAdminParams) (Community, error)
 	UpdateErrand(ctx context.Context, arg UpdateErrandParams) (Errand, error)
+	UpdateErrandStatus(ctx context.Context, arg UpdateErrandStatusParams) (Errand, error)
 	UpdateItem(ctx context.Context, arg UpdateItemParams) (Item, error)
 	UpdateItemExtraNotes(ctx context.Context, arg UpdateItemExtraNotesParams) (Item, error)
 	UpdateItemFound(ctx context.Context, arg UpdateItemFoundParams) (Item, error)

@@ -216,3 +216,31 @@ func (q *Queries) UpdateErrand(ctx context.Context, arg UpdateErrandParams) (Err
 	)
 	return i, err
 }
+
+const updateErrandStatus = `-- name: UpdateErrandStatus :one
+UPDATE errands SET 
+    is_complete = $2,
+    completed_at = CASE WHEN $2 = TRUE THEN NOW() 
+                        ELSE completed_at END
+WHERE id = $1
+RETURNING id, user_id, community_id, is_complete, created_at, completed_at
+`
+
+type UpdateErrandStatusParams struct {
+	ID         int64 `json:"id"`
+	IsComplete bool  `json:"is_complete"`
+}
+
+func (q *Queries) UpdateErrandStatus(ctx context.Context, arg UpdateErrandStatusParams) (Errand, error) {
+	row := q.db.QueryRowContext(ctx, updateErrandStatus, arg.ID, arg.IsComplete)
+	var i Errand
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.CommunityID,
+		&i.IsComplete,
+		&i.CreatedAt,
+		&i.CompletedAt,
+	)
+	return i, err
+}

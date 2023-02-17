@@ -17,6 +17,7 @@ const (
 	ErrNoItem                = "ERROR_NO_ITEM"
 	ErrErrandNoRequests      = "ERROR_ERRAND_NO_REQUESTS"
 	ErrWrongCommunity        = "ERROR_WRONG_COMMUNITY"
+	ErrNoErrand              = "ERROR_NO_ERRAND"
 )
 
 var GetErrorMessage map[string]string = map[string]string{
@@ -36,4 +37,5 @@ var GetErrorMessage map[string]string = map[string]string{
 	ErrNoItem:                "Could not find this item.",
 	ErrErrandNoRequests:      "Errand must contain at least one request.",
 	ErrWrongCommunity:        "Request does not belong to the given community.",
+	ErrNoErrand:              "Could not find this errand.",
 }
