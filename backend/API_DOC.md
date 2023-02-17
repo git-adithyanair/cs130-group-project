@@ -252,7 +252,7 @@ Endpoint to update errand status (is_complete field).
 }
 ```
 
-### Get all Request in and Errand
+### Get all Request in an Errand
 
 Endpoint that returns all data for requests given an errand id.
 
@@ -287,7 +287,7 @@ Endpoint that returns all data for requests given an errand id.
 }
 ```
 
-**Extra notes** : 
+**Extra notes** : id in uri is the id of the errand
 
 
 ---
