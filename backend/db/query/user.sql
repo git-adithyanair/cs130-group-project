@@ -51,5 +51,9 @@ WHERE id = $1;
 UPDATE users SET profile_picture = $2 
 WHERE id = $1;
 
+-- name: UpdateUserName :exec
+UPDATE users SET full_name = $2 
+WHERE id = $1;
+
 -- name: DeleteUser :exec
 DELETE FROM users WHERE id = $1;

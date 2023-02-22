@@ -87,6 +87,7 @@ type Querier interface {
 	UpdateStore(ctx context.Context, arg UpdateStoreParams) (Store, error)
 	UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error)
 	UpdateUserLocation(ctx context.Context, arg UpdateUserLocationParams) error
+	UpdateUserName(ctx context.Context, arg UpdateUserNameParams) error
 	UpdateUserProfilePicture(ctx context.Context, arg UpdateUserProfilePictureParams) error
 }
 
