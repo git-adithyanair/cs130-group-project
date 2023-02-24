@@ -54,6 +54,7 @@ func (server *Server) setupRouter() {
 	protectedRoutes.GET("/user/requests", server.GetUserRequest)
 	protectedRoutes.POST("/user/update-location", server.UpdateUserLocation)
 	protectedRoutes.POST("/user/update-profile-pic", server.UpdateUserProfilePic)
+	protectedRoutes.POST("/user/update-name", server.UpdateUserName)
 
 	// Community routes.
 	protectedRoutes.POST("/community", server.CreateCommunity)

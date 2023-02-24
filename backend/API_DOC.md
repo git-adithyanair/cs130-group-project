@@ -8,9 +8,18 @@
   - [Register User](#register-user)
   - [Login User](#login-user)
 - [User](#user)
+  - [Update User Location](#update-user-location)
+  - [Update Profile Picture](#update-profile-picture)
+  - [Update Name](#update-name)
   - [User Commmunities](#user-commmunities)
 - [Community](#community)
+- [Errand](#errand)
+  - [Create Errand](#create-errand)
+  - [Update Errand Status](#update-errand-status)
+  - [Get all Requests in an Errand](#get-all-request-in-an-errand)
 - [Request](#request)
+  - [Change Request Status](#change-request-status)
+  - [Item](#update-found-status)
 
 ## Errors
 
@@ -168,6 +177,34 @@ Endpoint to change user profile picture.
 ```
 
 **Extra notes** : Image data should start something like this: data:image/[IMAGE TYPE];base64
+
+
+
+
+
+### Update Name
+
+Endpoint to change user's full name.
+
+**URL** : `http://api.good-grocer.click/update-name`
+
+**Method** : `POST`
+
+**Auth Required** : YES
+
+**Body Parameters** :
+
+```json
+{
+  "name": "[string, full name of user]"
+}
+```
+
+**Success Response** : `200 OK`
+
+```json
+{}
+```
 
 
 ### User Commmunities

@@ -270,6 +270,21 @@ func (q *Queries) UpdateUserLocation(ctx context.Context, arg UpdateUserLocation
 	return err
 }
 
+const updateUserName = `-- name: UpdateUserName :exec
+UPDATE users SET full_name = $2 
+WHERE id = $1
+`
+
+type UpdateUserNameParams struct {
+	ID       int64  `json:"id"`
+	FullName string `json:"full_name"`
+}
+
+func (q *Queries) UpdateUserName(ctx context.Context, arg UpdateUserNameParams) error {
+	_, err := q.db.ExecContext(ctx, updateUserName, arg.ID, arg.FullName)
+	return err
+}
+
 const updateUserProfilePicture = `-- name: UpdateUserProfilePicture :exec
 UPDATE users SET profile_picture = $2 
 WHERE id = $1
