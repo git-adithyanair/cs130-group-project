@@ -49,8 +49,7 @@ func (server *Server) CreateErrand(ctx *gin.Context) {
 	}
 
 	for _, requestID := range req.RequestIDs {
-		request, err := server.queries.GetRequest(ctx, requestID)
-		if err != nil {
+		if _, err := server.queries.GetRequest(ctx, requestID); err != nil {
 			if err == sql.ErrNoRows {
 				ctx.JSON(http.StatusNotFound, errorResponse(api_error.ErrNoRequest, err))
 			} else {
@@ -58,9 +57,6 @@ func (server *Server) CreateErrand(ctx *gin.Context) {
 			}
 			return
 		}
-
-		requestUser, err := server.queries.GetUser(ctx, request.UserID)
-		util.NotifyUser(requestUser.PhoneNumber, fmt.Sprintf("Your request has been accepted by %s! Contact them at %s if you have any questions.", user.FullName, user.PhoneNumber))
 	}
 
 	arg := db.CreateErrandParams{
@@ -81,6 +77,10 @@ func (server *Server) CreateErrand(ctx *gin.Context) {
 			Status:   db.RequestStatusInProgress,
 		}
 		server.queries.UpdateRequestErrandAndStatus(ctx, arg)
+
+		request, _ := server.queries.GetRequest(ctx, requestID)
+		requestUser, _ := server.queries.GetUser(ctx, request.UserID)
+		util.NotifyUser(requestUser.PhoneNumber, fmt.Sprintf("Your request has been accepted by %s! Contact them at %s if you have any questions.", user.FullName, user.PhoneNumber))
 	}
 
 	ctx.JSON(http.StatusCreated, errand)
