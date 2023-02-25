@@ -3,11 +3,13 @@ package api
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"net/http"
 
 	db "github.com/git-adithyanair/cs130-group-project/db/sqlc"
 	api_error "github.com/git-adithyanair/cs130-group-project/errors"
 	"github.com/git-adithyanair/cs130-group-project/token"
+	"github.com/git-adithyanair/cs130-group-project/util"
 
 	"github.com/gin-gonic/gin"
 )
@@ -26,6 +28,12 @@ func (server *Server) CreateErrand(ctx *gin.Context) {
 
 	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
 
+	user, err := server.queries.GetUser(ctx, authPayload.UserID)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, unknownErrorResponse(err))
+		return
+	}
+
 	if _, err := server.queries.GetCommunity(ctx, req.CommunityID); err != nil {
 		if err == sql.ErrNoRows {
 			ctx.JSON(http.StatusNotFound, errorResponse(api_error.ErrNoCommunity, err))
@@ -41,7 +49,8 @@ func (server *Server) CreateErrand(ctx *gin.Context) {
 	}
 
 	for _, requestID := range req.RequestIDs {
-		if _, err := server.queries.GetRequest(ctx, requestID); err != nil {
+		request, err := server.queries.GetRequest(ctx, requestID)
+		if err != nil {
 			if err == sql.ErrNoRows {
 				ctx.JSON(http.StatusNotFound, errorResponse(api_error.ErrNoRequest, err))
 			} else {
@@ -49,6 +58,9 @@ func (server *Server) CreateErrand(ctx *gin.Context) {
 			}
 			return
 		}
+
+		requestUser, err := server.queries.GetUser(ctx, request.UserID)
+		util.NotifyUser(requestUser.PhoneNumber, fmt.Sprintf("Your request has been accepted by %s! Contact them at %s if you have any questions.", user.FullName, user.PhoneNumber))
 	}
 
 	arg := db.CreateErrandParams{
