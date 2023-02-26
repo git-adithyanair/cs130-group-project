@@ -1,18 +1,32 @@
 import React from "react";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from "@react-navigation/stack";
 import { Image, StyleSheet } from 'react-native'; 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Buy from '../screens/Buy'; 
 import Shop from '../screens/Shop';
 import JoinCommunity from '../screens/JoinCommunity';
+import YourCommunities from "../screens/YourCommunities";
+import {Dim, Colors} from "../Constants"
+
+const HomeStack = createStackNavigator();
+
+const HomeStackScreen = () => {
+  return (
+    <HomeStack.Navigator>
+      <HomeStack.Screen name="YourCommunities" component={YourCommunities} options={{title: "Your Communities"}}/>
+      <HomeStack.Screen name="JoinCommunity" component={JoinCommunity} />
+    </HomeStack.Navigator>
+  );
+}
 
 const Tab = createBottomTabNavigator(); 
 
 const tabBarPages = [
     {"name": "Shop",
     "component": Shop},
-    {"name": "JoinCommunity",
-    "component": JoinCommunity},
+    {"name": "Home",
+    "component": HomeStackScreen},
     {"name": "Buy",
     "component": Buy}
 ]
@@ -34,16 +48,16 @@ const TabBar = (props) => {
             } else if (route.name === 'Buy') {
               iconName = focused ? 'ios-pizza' : 'ios-pizza-outline';
             }
-            else if (route.name === 'JoinCommunity') {
+            else if (route.name === 'Home') {
                 return <Image source={{uri: props.imageUri}} style={styles.logo} />;
             }
             return <Ionicons name={iconName} size={size} color={'white'} />;
           },
         tabBarStyle: {
-          height: 80,
-          width: '100%', 
-          backgroundColor: '#7B886B',
-          color: 'white',
+          height: Dim.width * 0.15,
+          width: Dim.width, 
+          backgroundColor: Colors.darkGreen,
+          color: Colors.white,
           position: 'absolute',
           marginBottom: 0
       },
@@ -55,8 +69,8 @@ const TabBar = (props) => {
 
 const styles = StyleSheet.create({
     logo: {
-      width: 66,
-      height: 50
+      width: 35,
+      height: 35
     },
   });
 

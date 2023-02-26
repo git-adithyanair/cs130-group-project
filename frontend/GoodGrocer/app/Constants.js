@@ -10,6 +10,7 @@ export const Colors = {
   darkGreen: "#7B886B",
   lightGreen: "#C0C6B9",
   white: "#FFFFFF",
+  cream:"#F1ECEC"
 };
 
 export const Font = {
@@ -20,6 +21,11 @@ export const Font = {
   },
   s2: {
     size: 18,
+    family: "Inter_600SemiBold",
+    weight: "600",
+  },
+  s3: {
+    size: 13,
     family: "Inter_600SemiBold",
     weight: "600",
   },
