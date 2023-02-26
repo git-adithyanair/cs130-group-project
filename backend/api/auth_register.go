@@ -50,10 +50,7 @@ func (server *Server) RegisterUser(ctx *gin.Context) {
 		return
 	}
 
-	if err = util.NotifyUser(user.PhoneNumber, "Thank you for registering for GoodGrocer! You will recieve updates about your requests and errands through this number as you use the app!"); err != nil {
-		ctx.JSON(http.StatusInternalServerError, errorResponse(api_error.ErrTwilio, err))
-		return
-	}
+	util.NotifyUser(user.PhoneNumber, "Thank you for registering for GoodGrocer! You will recieve updates about your requests and errands through this number as you use the app!")
 
 	token, err := server.tokenMaker.CreateToken(user.ID, user.Email)
 	if err != nil {
