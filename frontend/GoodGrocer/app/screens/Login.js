@@ -30,6 +30,7 @@ const Login =  ({navigation}) => {
       }).then(response => response.json())
       .then(json => {
         if(json.token){
+          console.log(json.token)
           navigation.navigate("LoggedInHome")
         }
         else{

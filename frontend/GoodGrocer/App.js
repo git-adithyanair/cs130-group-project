@@ -2,7 +2,6 @@ import HomeScreen from './app/screens/HomeScreen';
 import Login from './app/screens/Login'
 import Signup from './app/screens/Signup'
 import AddressSignup from './app/screens/AddressSignup';
-import Testing from './app/screens/Testing';
 import LoggedInHome from './app/screens/LoggedInHome';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';

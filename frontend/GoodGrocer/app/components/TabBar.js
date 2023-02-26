@@ -4,15 +4,15 @@ import { Image, StyleSheet } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Buy from '../screens/Buy'; 
 import Shop from '../screens/Shop';
-import JoinCommunity from '../screens/JoinCommunity';
+import Profile from '../screens/Profile';
 
 const Tab = createBottomTabNavigator(); 
 
 const tabBarPages = [
     {"name": "Shop",
     "component": Shop},
-    {"name": "JoinCommunity",
-    "component": JoinCommunity},
+    {"name": "Profile",
+    "component": Profile},
     {"name": "Buy",
     "component": Buy}
 ]
@@ -34,7 +34,7 @@ const TabBar = (props) => {
             } else if (route.name === 'Buy') {
               iconName = focused ? 'ios-pizza' : 'ios-pizza-outline';
             }
-            else if (route.name === 'JoinCommunity') {
+            else if (route.name === 'Profile') {
                 return <Image source={{uri: props.imageUri}} style={styles.logo} />;
             }
             return <Ionicons name={iconName} size={size} color={'white'} />;
