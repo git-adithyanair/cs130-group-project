@@ -24,8 +24,10 @@
   - [Get all Requests in an Errand](#get-all-request-in-an-errand)
 - [Request](#request)
   - [Create Request](#create-request)
+  - [Get Items in Request](#get-items-in-request)
   - [Change Request Status](#change-request-status)
-  - [Item](#update-found-status)
+- [Item](#update-found-status)
+  - [Update Found Status](#update-found-status)
 
 ## Errors
 
@@ -303,9 +305,7 @@ Endpoint to get info for a specific community.
 **Body Parameters** :
 
 ```json
-{
- "id": "[int, required id of the community]",
-}
+{}
 ```
 
 **Success Response** : `200 OK`
@@ -323,6 +323,8 @@ Endpoint to get info for a specific community.
   "created_at": "[date, time when community was created]"
 }
 ```
+
+**Extra Notes**: id in uri should be integer id for the community
 
 ### Create Community
 
@@ -416,7 +418,7 @@ Endpoint to get all of the requests for a community.
 
 **Auth Required** : YES
 
-**Body Parameters** :
+**Query Parameters** :
 
 ```json
 {
@@ -596,6 +598,46 @@ Endpoint to create a request
   "store_id": "[int, id of store that request is associated with]"
 }
 ```
+
+### Get Items in Request
+
+Endpoint to get all items in a request.
+
+**URL** : `http://api.good-grocer.click/request/items/:id`
+
+**Method** : `GET`
+
+**Auth Required** : YES
+
+**Body Parameters** :
+
+```json
+{}
+```
+
+**Success Response** : `200 OK`
+
+```json
+{
+  "items": [
+    {
+      "id":  "[int, id of the item]", 
+      "requested_by":  "[int, id of user that requested item]",
+      "request_id":  "[int, id of request]",
+      "name":  "[string, name of item]",
+      "quantity_type":  "[item_quantity_type, type of quantity (e.g. oz, lbs)]",
+      "quantity":  "[float, quantity associated with item type]",
+      "preferred_brand":  "[string, brand of item, not required]",
+      "image":  "[string, image for item, not required]",
+      "found":  "[bool, true if found, else false]",
+      "extra_notes":  "[string, notes for shopper]",
+    }
+  ]
+
+}
+```
+
+**Extra notes** : id in uri should be id for request
 
 ### Change Request Status
 
