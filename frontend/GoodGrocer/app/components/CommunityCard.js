@@ -59,10 +59,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   info: {
-    color: Colors.darkGreen,
     fontSize: Font.s3.size,
     fontFamily: Font.s3.family,
     fontWeight: Font.s3.weight,
+    color: Colors.darkGreen,
   },
 });
 
