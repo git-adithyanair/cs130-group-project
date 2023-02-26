@@ -7,7 +7,7 @@ export const Dim = {
 };
 
 export const Colors = {
-  darkGreen: "#5C6651",
+  darkGreen: "#7B886B",
   lightGreen: "#C0C6B9",
   white: "#FFFFFF",
   cream:"#F1ECEC"

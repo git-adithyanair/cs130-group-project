@@ -20,7 +20,7 @@ const YourCommunities = (props, navigation) => {
     { communityName: "Beverly Hills", distance: 5, members: 10 },
   ];
   return (
-    <SafeAreaView style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+    <SafeAreaView style={styles.wrapper}>
       <FlatList
         horizontal={false}
         numColumns={2}
@@ -45,18 +45,35 @@ const YourCommunities = (props, navigation) => {
             }}
           />
         )}
+        ListFooterComponent={() => (
+          <View style={{ alignItems: "center" }}>
+            <Button
+              width={200}
+              appButtonContainer={{ backgroundColor: Colors.lightGreen }}
+              appButtonText={{ textTransform: "none" }}
+              title={"Join More!"}
+            ></Button>
+          </View>
+        )}
       ></FlatList>
-      <Button width={200} backgroundColor={Colors.lightGreen} title={"Join More!"}></Button>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: Colors.white,
+  },
   list: {
     flex: 1,
   },
   container: {
     width: Dim.width * 0.9,
+    paddingBottom: 80,
+    paddingTop: 10,
     alignSelf: "center",
   },
 });
