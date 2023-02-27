@@ -2,7 +2,10 @@ package api
 
 import (
 	"database/sql"
+	"fmt"
 	"net/http"
+
+	"github.com/git-adithyanair/cs130-group-project/util"
 
 	"github.com/gin-gonic/gin"
 	db "github.com/git-adithyanair/cs130-group-project/db/sqlc"
@@ -35,6 +38,22 @@ func (server *Server) UpdateItemStatus(ctx *gin.Context) {
 		}
 		return
 	}
+
+	user, err := server.queries.GetUser(ctx, item.RequestedBy)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			ctx.JSON(http.StatusNotFound, errorResponse(api_error.ErrNoUser, err))
+		} else {
+			ctx.JSON(http.StatusInternalServerError, unknownErrorResponse(err))
+		}
+		return
+	}
+
+	msg := fmt.Sprintf("Your item, %s, from your request has been found.", item.Name)
+	if !req.Found {
+		msg = fmt.Sprintf("Your item, %s, from your request cannot be found by the buyer.", item.Name)
+	}
+	util.NotifyUser(user.PhoneNumber, msg)
 
 	ctx.JSON(http.StatusOK, item)
 }
