@@ -22,5 +22,11 @@ devup:
 devdown:
 	docker compose down && docker rmi backend-good-grocer-api
 
+mock:
+	mockgen -destination db/mock/store.go -package mock_db github.com/git-adithyanair/cs130-group-project/db/sqlc DBStore
+
+test:
+	go test -v -cover ./...
+
 server:
 	go run main.go
