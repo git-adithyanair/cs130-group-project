@@ -32,7 +32,7 @@ func createRandomUserParam(id string, hashedPassword string) CreateUserParams {
 	}
 }
 
-func addRandomUsers(queries *Queries, count int) []User {
+func addRandomUsers(queries DBStore, count int) []User {
 	hashedPassword, err := util.HashPassword("password")
 	if err != nil {
 		log.Println("[DB POPULATE] could not hash password: ", err)
@@ -66,7 +66,7 @@ func createRandomCommunityParam(id string, admin int64) CreateCommunityParams {
 	}
 }
 
-func addRandomCommunities(queries *Queries, count int) []Community {
+func addRandomCommunities(queries DBStore, count int) []Community {
 
 	communities := []Community{}
 
@@ -93,7 +93,7 @@ func createRandomStoreParam(id string) CreateStoreParams {
 	}
 }
 
-func addRandomStores(queries *Queries, count int) []Store {
+func addRandomStores(queries DBStore, count int) []Store {
 
 	stores := []Store{}
 
@@ -117,7 +117,7 @@ func createCommunityStoreParam(communityID int64, storeID int64) CreateCommunity
 	}
 }
 
-func addRandomCommunityStores(queries *Queries, communitiesCount, storesCount int) []CommunityStore {
+func addRandomCommunityStores(queries DBStore, communitiesCount, storesCount int) []CommunityStore {
 
 	communityStores := []CommunityStore{}
 
@@ -143,7 +143,7 @@ func createMemberParam(communityID int64, userID int64) CreateMemberParams {
 	}
 }
 
-func addRandomMembers(queries *Queries, usersCount, communitiesCount int) []Member {
+func addRandomMembers(queries DBStore, usersCount, communitiesCount int) []Member {
 
 	members := []Member{}
 
@@ -181,7 +181,7 @@ func getUsersInCommunity(communityID int64, members []Member) []int64 {
 	return userIDs
 }
 
-func addRandomRequests(queries *Queries, communityStores []CommunityStore, members []Member) []Request {
+func addRandomRequests(queries DBStore, communityStores []CommunityStore, members []Member) []Request {
 
 	requests := []Request{}
 
@@ -230,7 +230,7 @@ func createRandomItemParam(requestID, requesterID int64) CreateItemParams {
 	}
 }
 
-func addRandomItems(queries *Queries, requests []Request) []Item {
+func addRandomItems(queries DBStore, requests []Request) []Item {
 
 	items := []Item{}
 
@@ -250,7 +250,7 @@ func addRandomItems(queries *Queries, requests []Request) []Item {
 	return items
 }
 
-func PopulateWithData(queries *Queries) {
+func PopulateWithData(queries DBStore) {
 
 	if numUsers <= 0 || numCommunities <= 0 || numStores <= 0 {
 		log.Fatal("[DB POPULATE] invalid number of users, communities, or stores")
