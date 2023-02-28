@@ -5,12 +5,10 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
 	"testing"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	mock_db "github.com/git-adithyanair/cs130-group-project/db/mock"
@@ -54,7 +52,7 @@ func EqCreateUserParams(arg db.CreateUserParams, password string) gomock.Matcher
 
 func TestRegisterUser(t *testing.T) {
 
-	user, rawPassword := randomUser(t)
+	user, rawPassword := createRandomUser(t)
 
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
@@ -201,37 +199,5 @@ func TestRegisterUser(t *testing.T) {
 		})
 
 	}
-
-}
-
-func randomUser(t *testing.T) (db.User, string) {
-	rawPassword := util.RandomString(10)
-	hashedPassword, err := util.HashPassword(rawPassword)
-	require.NoError(t, err)
-	return db.User{
-		Email:          util.RandomEmail(),
-		HashedPassword: hashedPassword,
-		FullName:       util.RandomFullName(),
-		PhoneNumber:    util.RandomPhoneNumber(),
-		PlaceID:        util.RandomPlaceID(),
-		XCoord:         util.RandomFloat(-180, 180),
-		YCoord:         util.RandomFloat(-90, 90),
-		Address:        util.RandomAddress(),
-	}, rawPassword
-}
-
-func requireBodyMatchUser(t *testing.T, body *bytes.Buffer, user db.User) {
-
-	data, err := io.ReadAll(body)
-	require.NoError(t, err)
-
-	var registerResponse authUserResponse
-	err = json.Unmarshal(data, &registerResponse)
-	require.NoError(t, err)
-
-	require.Equal(t, user.ID, registerResponse.User.ID)
-	require.Equal(t, user.Email, registerResponse.User.Email)
-	require.Equal(t, user.FullName, registerResponse.User.FullName)
-	require.WithinDuration(t, user.CreatedAt, registerResponse.User.CreatedAt, time.Second)
 
 }

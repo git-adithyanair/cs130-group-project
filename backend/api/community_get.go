@@ -9,7 +9,7 @@ import (
 )
 
 type GetCommunityRequest struct {
-	ID int64 `uri:"id" binding:"required"`
+	ID int64 `uri:"id" binding:"min=0"`
 }
 
 func (server *Server) GetCommunity(ctx *gin.Context) {
