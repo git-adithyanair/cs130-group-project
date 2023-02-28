@@ -35,8 +35,11 @@ func (server *Server) CreateErrand(ctx *gin.Context) {
 	}
 
 	_, err = server.queries.GetActiveErrand(ctx, authPayload.UserID)
-	if err == nil || err != sql.ErrNoRows {
+	if err == nil {
 		ctx.JSON(http.StatusExpectationFailed, errorResponse(api_error.ErrActiveErrorExists, errors.New("user has errand where is_complete is false")))
+		return
+	} else if err != sql.ErrNoRows {
+		ctx.JSON(http.StatusInternalServerError, unknownErrorResponse(err))
 		return
 	}
 

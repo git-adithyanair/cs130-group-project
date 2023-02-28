@@ -43,5 +43,5 @@ var GetErrorMessage map[string]string = map[string]string{
 	ErrNoErrand:              "Could not find this errand.",
 	ErrInvalidUserForErrand:  "Errand does not belong to user.",
 	ErrTwilio:                "Text message failed to send.",
-	ErrActiveErrorExists:     "User already has an active errand",
+	ErrActiveErrorExists:     "User already has an active errand.",
 }
