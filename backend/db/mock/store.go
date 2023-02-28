@@ -394,6 +394,21 @@ func (mr *MockDBStoreMockRecorder) DeleteUser(arg0, arg1 interface{}) *gomock.Ca
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteUser", reflect.TypeOf((*MockDBStore)(nil).DeleteUser), arg0, arg1)
 }
 
+// GetActiveErrand mocks base method.
+func (m *MockDBStore) GetActiveErrand(arg0 context.Context, arg1 int64) (db.Errand, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetActiveErrand", arg0, arg1)
+	ret0, _ := ret[0].(db.Errand)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetActiveErrand indicates an expected call of GetActiveErrand.
+func (mr *MockDBStoreMockRecorder) GetActiveErrand(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetActiveErrand", reflect.TypeOf((*MockDBStore)(nil).GetActiveErrand), arg0, arg1)
+}
+
 // GetCommunitiesByAdmin mocks base method.
 func (m *MockDBStore) GetCommunitiesByAdmin(arg0 context.Context, arg1 int64) ([]db.Community, error) {
 	m.ctrl.T.Helper()

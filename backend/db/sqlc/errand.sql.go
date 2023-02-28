@@ -46,6 +46,25 @@ func (q *Queries) DeleteErrand(ctx context.Context, id int64) error {
 	return err
 }
 
+const getActiveErrand = `-- name: GetActiveErrand :one
+SELECT id, user_id, community_id, is_complete, created_at, completed_at FROM errands 
+WHERE user_id = $1 AND is_complete = FALSE
+`
+
+func (q *Queries) GetActiveErrand(ctx context.Context, userID int64) (Errand, error) {
+	row := q.db.QueryRowContext(ctx, getActiveErrand, userID)
+	var i Errand
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.CommunityID,
+		&i.IsComplete,
+		&i.CreatedAt,
+		&i.CompletedAt,
+	)
+	return i, err
+}
+
 const getErrand = `-- name: GetErrand :one
 SELECT id, user_id, community_id, is_complete, created_at, completed_at FROM errands WHERE id = $1
 `
