@@ -27,7 +27,7 @@ const SearchBar = (props) => {
         placeholderTextColor={Colors.white}
         value={props.value}
         onChangeText={props.onChangeText}
-        editable={props.editable}
+        editable={true}
         platform="android"
         cancelIcon={null}
         searchIcon={null}

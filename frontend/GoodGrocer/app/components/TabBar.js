@@ -15,7 +15,7 @@ const HomeStackScreen = () => {
   return (
     <HomeStack.Navigator>
       <HomeStack.Screen name="YourCommunities" component={YourCommunities} options={{title: "Your Communities"}}/>
-      <HomeStack.Screen name="JoinCommunity" component={JoinCommunity} />
+      <HomeStack.Screen name="JoinCommunity" component={JoinCommunity} options={{title: "Join Community"}}/>
     </HomeStack.Navigator>
   );
 }

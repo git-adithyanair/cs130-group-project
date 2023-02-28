@@ -1,44 +1,83 @@
-import React from 'react';
-import { SafeAreaView, StyleSheet, Text, Image, TextInput, View, Pressable } from 'react-native';
-import Login from './Login'; 
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { React, useState } from "react";
+import { SafeAreaView, StyleSheet, FlatList, View, Text } from "react-native";
+import CommunityCard from "../components/CommunityCard";
+import SearchBar from "../components/SearchBar";
+import { Dim, Colors, Font } from "../Constants";
 
+const JoinCommunity = (props) => {
+  const data = [
+    { communityName: "Westwood", distance: 0.5, members: 10 },
+    { communityName: "Brentwood", distance: 2, members: 10 },
+    { communityName: "Beverly Hills", distance: 5, members: 10 },
+    { communityName: "Beverly Hills", distance: 5, members: 10 },
+    { communityName: "Beverly Hills", distance: 5, members: 10 },
+    { communityName: "Beverly Hills", distance: 5, members: 10 },
+    { communityName: "Beverly Hills", distance: 5, members: 10 },
+    { communityName: "Beverly Hills", distance: 5, members: 10 },
+    { communityName: "Beverly Hills", distance: 5, members: 10 },
+    { communityName: "Beverly Hills", distance: 5, members: 10 },
+    { communityName: "Beverly Hills", distance: 5, members: 10 },
+    { communityName: "Beverly Hills", distance: 5, members: 10 },
+  ];
 
+  const [communities, setCommunities] = useState(data);
+  const [community, setCommunity] = useState("")
 
-const Tab = createBottomTabNavigator(); 
-
-
-
-function JoinCommunity({navigation}) {
-    return (
-        <SafeAreaView style={styles.container}>
-          <View style={styles.content}>
-            <Image source={require("../assets/logo.png")}/>
-            <Text>Join Community -- Join a community on this page</Text>
-          </View>
-        </SafeAreaView>
-    );
-
-}
-
+  return (
+    <SafeAreaView style={styles.wrapper}>
+      <SearchBar
+        style={{ marginVertical: 10 }}
+        placeholder={"Search..."}
+      />
+      <FlatList
+        horizontal={false}
+        numColumns={2}
+        style={styles.list}
+        contentContainerStyle={styles.container}
+        columnWrapperStyle={{ justifyContent: "space-between" }}
+        showsVerticalScrollIndicator={false}
+        keyExtractor={(item) => Math.random().toString()}
+        data={data}
+        renderItem={(itemData) => (
+          <CommunityCard
+            communityName={itemData.item.communityName}
+            distanceFromUser={itemData.item.distance}
+            numberOfMembers={itemData.item.members}
+            joinCommunity={true}
+          />
+        )}
+        ItemSeparatorComponent={() => (
+          <View
+            style={{
+              height: 15,
+              width: Dim.width,
+            }}
+          />
+        )}
+        ListFooterComponent={() => (
+          <View style={{ height: Dim.width * 0.05 }}></View>
+        )}
+      ></FlatList>
+    </SafeAreaView>
+  );
+};
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-    },
-    content: {
-      alignItems: 'center'
-    },
-    listOfRequests: {
-      display: "flex",
-      flexDirection: "row",
-      paddingTop: 20
-    },
-    requestDetails:{
-      flexDirection: "column",
-      paddingLeft: 10
-    }
-  });
+  wrapper: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: Colors.white,
+  },
+  list: {
+    flex: 1,
+  },
+  container: {
+    width: Dim.width * 0.9,
+    paddingBottom: 80,
+    paddingTop: 10,
+    alignSelf: "center",
+  },
+});
 
 export default JoinCommunity;
