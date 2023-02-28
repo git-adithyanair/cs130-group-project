@@ -35,6 +35,7 @@ type Querier interface {
 	DeleteRequestsByUser(ctx context.Context, userID int64) error
 	DeleteStore(ctx context.Context, id int64) error
 	DeleteUser(ctx context.Context, id int64) error
+	GetActiveErrand(ctx context.Context, userID int64) (Errand, error)
 	GetCommunitiesByAdmin(ctx context.Context, admin int64) ([]Community, error)
 	GetCommunity(ctx context.Context, id int64) (Community, error)
 	GetCommunityByPlaceID(ctx context.Context, placeID string) (Community, error)

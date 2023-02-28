@@ -20,6 +20,7 @@ const (
 	ErrNoErrand              = "ERROR_NO_ERRAND"
 	ErrInvalidUserForErrand  = "ERROR_INVALID_USER_FOR_ERRAND"
 	ErrTwilio                = "ERROR_TWILIO"
+	ErrActiveErrorExists     = "ERROR_ACTIVE_ERROR_EXISTS"
 )
 
 var GetErrorMessage map[string]string = map[string]string{
@@ -42,4 +43,5 @@ var GetErrorMessage map[string]string = map[string]string{
 	ErrNoErrand:              "Could not find this errand.",
 	ErrInvalidUserForErrand:  "Errand does not belong to user.",
 	ErrTwilio:                "Text message failed to send.",
+	ErrActiveErrorExists:     "User already has an active errand.",
 }

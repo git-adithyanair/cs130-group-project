@@ -34,6 +34,15 @@ func (server *Server) CreateErrand(ctx *gin.Context) {
 		return
 	}
 
+	_, err = server.queries.GetActiveErrand(ctx, authPayload.UserID)
+	if err == nil {
+		ctx.JSON(http.StatusExpectationFailed, errorResponse(api_error.ErrActiveErrorExists, errors.New("user has errand where is_complete is false")))
+		return
+	} else if err != sql.ErrNoRows {
+		ctx.JSON(http.StatusInternalServerError, unknownErrorResponse(err))
+		return
+	}
+
 	if _, err := server.queries.GetCommunity(ctx, req.CommunityID); err != nil {
 		if err == sql.ErrNoRows {
 			ctx.JSON(http.StatusNotFound, errorResponse(api_error.ErrNoCommunity, err))
