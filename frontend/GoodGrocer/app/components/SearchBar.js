@@ -28,17 +28,19 @@ const SearchBar = (props) => {
         value={props.value}
         onChangeText={props.onChangeText}
         editable={true}
-        platform="android"
-        cancelIcon={null}
+        clearIcon={{color: Colors.white}}
         searchIcon={null}
         containerStyle={{
           paddingTop: 0,
           backgroundColor: "transparent",
           paddingBottom: 0,
           flex: 1,
+          borderBottomColor: "transparent",
+          borderTopColor: "transparent"
         }}
         inputContainerStyle={{
           borderRadius: BorderRadius,
+          backgroundColor: Colors.darkGreen
         }}
         inputStyle={{
           color: Colors.white,

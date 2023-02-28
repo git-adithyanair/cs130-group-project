@@ -21,13 +21,28 @@ const JoinCommunity = (props) => {
   ];
 
   const [communities, setCommunities] = useState(data);
-  const [community, setCommunity] = useState("")
+  const [community, setCommunity] = useState("");
+
+  const searchCommunities = (text) => {
+    setCommunity(text);
+    if (!text) {
+      setCommunities(data);
+    } else {
+      setCommunities(
+        data.filter((item) => {
+          return item.communityName.toLowerCase().startsWith(text.toLowerCase());
+        })
+      );
+    }
+  };
 
   return (
     <SafeAreaView style={styles.wrapper}>
       <SearchBar
         style={{ marginVertical: 10 }}
         placeholder={"Search..."}
+        value={community}
+        onChangeText={(text) => searchCommunities(text)}
       />
       <FlatList
         horizontal={false}
@@ -37,7 +52,7 @@ const JoinCommunity = (props) => {
         columnWrapperStyle={{ justifyContent: "space-between" }}
         showsVerticalScrollIndicator={false}
         keyExtractor={(item) => Math.random().toString()}
-        data={data}
+        data={communities}
         renderItem={(itemData) => (
           <CommunityCard
             communityName={itemData.item.communityName}
