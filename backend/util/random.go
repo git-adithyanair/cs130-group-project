@@ -66,7 +66,3 @@ func RandomRange() int32 {
 func RandomCoordinate() float64 {
 	return RandomFloat(-180, 180)
 }
-
-func RandomStoreName() string {
-	return RandomString(10)
-}
