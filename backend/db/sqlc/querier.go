@@ -57,6 +57,7 @@ type Querier interface {
 	GetRequestsForUserByStatus(ctx context.Context, arg GetRequestsForUserByStatusParams) ([]Request, error)
 	GetStore(ctx context.Context, id int64) (Store, error)
 	GetStoreByPlaceId(ctx context.Context, placeID string) (Store, error)
+	GetStoresByCommunity(ctx context.Context, communityID int64) ([]Store, error)
 	GetUser(ctx context.Context, id int64) (User, error)
 	GetUserByEmail(ctx context.Context, email string) (User, error)
 	GetUserByPhoneNumber(ctx context.Context, phoneNumber string) (User, error)

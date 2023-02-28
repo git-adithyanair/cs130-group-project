@@ -67,6 +67,11 @@ func (server *Server) CreateCommunity(ctx *gin.Context) {
 				return
 			}
 
+			if len(req.Stores) == 0 {
+				ctx.JSON(http.StatusBadRequest, errorResponse(api_error.ErrCommunityCreateFail, errors.New("communities need to have at least one store")))
+				return
+			}
+
 			for _, store := range req.Stores {
 
 				existingStore, err := server.queries.GetStoreByPlaceId(ctx, store.PlaceID)

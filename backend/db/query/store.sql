@@ -20,6 +20,12 @@ SELECT * FROM stores
 LIMIT $1
 OFFSET $2; 
 
+-- name: GetStoresByCommunity :many
+SELECT stores.* 
+FROM stores 
+LEFT JOIN community_stores ON community_stores.store_id = stores.id
+WHERE community_stores.community_id = $1; 
+
 -- name: UpdateStore :one
 UPDATE stores SET
     name = $2, 

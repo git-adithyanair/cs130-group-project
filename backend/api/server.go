@@ -62,6 +62,7 @@ func (server *Server) setupRouter() {
 	protectedRoutes.POST("/community/join", server.JoinCommunity)
 	protectedRoutes.GET("/community/:id", server.GetCommunity)
 	protectedRoutes.GET("/community/requests", server.GetRequestsByCommunity)
+	protectedRoutes.GET("/community/stores/:id", server.GetCommunityStores)
 
 	// Errand routes.
 	protectedRoutes.POST("/errand", server.CreateErrand)
