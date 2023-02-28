@@ -94,6 +94,43 @@ func (q *Queries) GetStoreByPlaceId(ctx context.Context, placeID string) (Store,
 	return i, err
 }
 
+const getStoresByCommunity = `-- name: GetStoresByCommunity :many
+SELECT stores.id, stores.name, stores.x_coord, stores.y_coord, stores.address, stores.place_id 
+FROM stores 
+LEFT JOIN community_stores ON community_stores.store_id = stores.id
+WHERE community_stores.community_id = $1
+`
+
+func (q *Queries) GetStoresByCommunity(ctx context.Context, communityID int64) ([]Store, error) {
+	rows, err := q.db.QueryContext(ctx, getStoresByCommunity, communityID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Store{}
+	for rows.Next() {
+		var i Store
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.XCoord,
+			&i.YCoord,
+			&i.Address,
+			&i.PlaceID,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const listStores = `-- name: ListStores :many
 SELECT id, name, x_coord, y_coord, address, place_id FROM stores
 LIMIT $1

@@ -15,6 +15,8 @@
   - [User Requests](#user-requests)
 - [Community](#community)
   - [Get Community](#get-community)
+  - [Get All Communities](#get-all-communities)
+  - [Get Community Stores](#get-community-stores)
   - [Create Community](#create-community)
   - [Join Community](#join-community)
   - [Get Community Requests](#get-community-requests)
@@ -342,6 +344,38 @@ Endpoint to get all communities.
 ["[json, list of all communities]"]
 ```
 
+### Get Community
+
+Endpoint to get all stores for a community.
+
+**URL** : `http://api.good-grocer.click/community/stores/:id`
+
+**Method** : `GET`
+
+**Auth Required** : YES
+
+**Body Parameters** :
+
+```json
+{}
+```
+
+**Success Response** : `200 OK`
+
+```json
+[
+  {
+    "id": "[int, id for store]",
+    "name": "[string, name of store]",
+    "place_id": "[string, place_id associated with google map's API location place_id]",
+    "x_coord": "[float, x coordinate of google maps location]",
+    "y_coord": "[float, y coordinate of google maps location]",
+    "address": "[string, full address of the store]"
+  },
+]
+```
+
+**Extra Notes**: id in uri should be integer id for the community
 ### Create Community
 
 Endpoint to create a community.

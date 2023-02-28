@@ -93,3 +93,13 @@ func requireBodyMatchCommunity(t *testing.T, body *bytes.Buffer, community db.Co
 	require.WithinDuration(t, community.CreatedAt, communityResponse.CreatedAt, time.Second)
 
 }
+
+func createRandomStore(t *testing.T, adminID int64) db.Store {
+	return db.Store{
+		Name:    util.RandomStoreName(),
+		PlaceID: util.RandomPlaceID(),
+		XCoord:  util.RandomCoordinate(),
+		YCoord:  util.RandomCoordinate(),
+		Address: util.RandomAddress(),
+	}
+}
