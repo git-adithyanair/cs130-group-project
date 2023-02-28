@@ -322,7 +322,7 @@ Endpoint to get info for a specific community.
 
 ### Get All Communities
 
-Endpoint description here.
+Endpoint to get all communities.
 
 **URL** : `http://api.good-grocer.click/community`
 
