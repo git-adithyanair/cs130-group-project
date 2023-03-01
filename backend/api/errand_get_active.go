@@ -4,6 +4,8 @@ import (
 	"database/sql"
 	"net/http"
 
+	api_error "github.com/git-adithyanair/cs130-group-project/errors"
+
 	"github.com/git-adithyanair/cs130-group-project/token"
 
 	"github.com/gin-gonic/gin"
@@ -29,9 +31,28 @@ func (server *Server) GetActiveErrand(ctx *gin.Context) {
 		return
 	}
 
+	requestRes := make([]activeErrandRequestResponse, len(requests))
+	for i, request := range requests {
+		items, err := server.queries.GetItemsByRequest(ctx, request.ID)
+		if err != nil {
+			if err == sql.ErrNoRows {
+				ctx.JSON(http.StatusNotFound, errorResponse(api_error.ErrNoItem, err))
+			} else {
+				ctx.JSON(http.StatusInternalServerError, unknownErrorResponse(err))
+			}
+			return
+		}
+
+		requestRes[i] = activeErrandRequestResponse{
+			Request: request,
+			Items:   items,
+		}
+	}
+
 	res := activeErrandResponse{
 		Errand:   activeErrand,
-		Requests: requests,
+		Requests: requestRes,
 	}
+
 	ctx.JSON(http.StatusOK, res)
 }

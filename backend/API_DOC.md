@@ -635,13 +635,29 @@ If there is an active errand:
   },
   "requests": [
     {
-      "id": "[int, id of request]",
-      "created_at": "[date, time when request was created]",
-      "user_id": "[int, id of user who created the request]",
-      "community_id": "[int, id of community that request belongs to]",
-      "status": "[RequestStatus, the status of the request (pending, in_progress, completed)]",
-      "errand_id": "[int, id of errand associated with request, could be null]",
-      "store_id": "[int, id of store that request is associated with]"
+      "request": {
+        "id": "[int, id of request]",
+        "created_at": "[date, time when request was created]",
+        "user_id": "[int, id of user who created the request]",
+        "community_id": "[int, id of community that request belongs to]",
+        "status": "[RequestStatus, the status of the request (pending, in_progress, completed)]",
+        "errand_id": "[int, id of errand associated with request, could be null]",
+        "store_id": "[int, id of store that request is associated with]"
+      }, 
+      "items": [
+        {
+          "id": "[int, id of the item]",
+          "requested_by": "[int, id of user that requested item]",
+          "request_id": "[int, id of request]",
+          "name": "[string, name of item]",
+          "quantity_type": "[item_quantity_type, type of quantity (e.g. oz, lbs)]",
+          "quantity": "[float, quantity associated with item type]",
+          "preferred_brand": "[string, brand of item, not required]",
+          "image": "[string, image for item, not required]",
+          "found": "[bool, true if found, else false]",
+          "extra_notes": "[string, notes for shopper]"
+        }, 
+      ]
     }
   ]
 }
