@@ -657,6 +657,20 @@ If there is an active errand:
           "found": "[bool, true if found, else false]",
           "extra_notes": "[string, notes for shopper]"
         }, 
+        "store": {
+          "id": "[int, id for store]",
+          "name": "[string, name of store]",
+          "place_id": "[string, place_id associated with google map's API location place_id]",
+          "x_coord": "[float, x coordinate of google maps location]",
+          "y_coord": "[float, y coordinate of google maps location]",
+          "address": "[string, full address of the store]"
+        },
+        "user": {
+          "id": "[string, user id]",
+          "email": "[string, user email]",
+          "full_name": "[string, user full name]",
+          "created_at": "[timestamptz, user creation date]"
+        }
       ]
     }
   ]
@@ -667,6 +681,8 @@ If there is no active errand:
 ```json
 {}
 ```
+
+**Extra Notes**: store could be null
 
 ---
 

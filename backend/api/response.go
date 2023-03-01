@@ -87,8 +87,10 @@ type activeErrandResponse struct {
 }
 
 type activeErrandRequestResponse struct {
-	Request db.Request `json:"request"`
-	Items   []db.Item  `json:"items"`
+	Request db.Request   `json:"request"`
+	Items   []db.Item    `json:"items"`
+	User    userResponse `json:"user"`
+	Store   *db.Store    `json:"store"`
 }
 
 // ========================================================================

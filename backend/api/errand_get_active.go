@@ -43,9 +43,34 @@ func (server *Server) GetActiveErrand(ctx *gin.Context) {
 			return
 		}
 
+		user, err := server.queries.GetUser(ctx, request.UserID)
+		if err != nil {
+			if err == sql.ErrNoRows {
+				ctx.JSON(http.StatusNotFound, errorResponse(api_error.ErrNoUser, err))
+			} else {
+				ctx.JSON(http.StatusInternalServerError, unknownErrorResponse(err))
+			}
+			return
+		}
+
 		requestRes[i] = activeErrandRequestResponse{
 			Request: request,
 			Items:   items,
+			User:    newUserResponse(user),
+		}
+
+		if request.StoreID.Valid {
+			store, err := server.queries.GetStore(ctx, request.StoreID.Int64)
+			if err != nil {
+				if err == sql.ErrNoRows {
+					ctx.JSON(http.StatusNotFound, errorResponse(api_error.ErrNoStore, err))
+				} else {
+					ctx.JSON(http.StatusInternalServerError, unknownErrorResponse(err))
+				}
+				return
+			}
+
+			requestRes[i].Store = &store
 		}
 	}
 
