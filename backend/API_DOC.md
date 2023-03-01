@@ -656,8 +656,9 @@ If there is an active errand:
           "image": "[string, image for item, not required]",
           "found": "[bool, true if found, else false]",
           "extra_notes": "[string, notes for shopper]"
-        }, 
-        "store": {
+        }
+      ],
+      "store": {
           "id": "[int, id for store]",
           "name": "[string, name of store]",
           "place_id": "[string, place_id associated with google map's API location place_id]",
@@ -671,7 +672,6 @@ If there is an active errand:
           "full_name": "[string, user full name]",
           "created_at": "[timestamptz, user creation date]"
         }
-      ]
     }
   ]
 }
