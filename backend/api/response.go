@@ -78,3 +78,12 @@ type userRequestsResponse struct {
 }
 
 // ========================================================================
+
+// ========================================================================
+// Type and function to return users active errand with its requests.
+type activeErrandResponse struct {
+	Errand   db.Errand    `json:"errand"`
+	Requests []db.Request `json:"requests"`
+}
+
+// ========================================================================

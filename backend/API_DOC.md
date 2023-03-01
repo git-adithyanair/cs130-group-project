@@ -24,6 +24,7 @@
   - [Create Errand](#create-errand)
   - [Update Errand Status](#update-errand-status)
   - [Get all Requests in an Errand](#get-all-request-in-an-errand)
+  - [Get Active Errand](#get-active-errand)
 - [Request](#request)
   - [Create Request](#create-request)
   - [Get Items in Request](#get-items-in-request)
@@ -600,7 +601,47 @@ Endpoint that returns all data for requests given an errand id.
 }
 ```
 
-**Extra notes** : id in uri is the id of the errand
+### Get Active Errand
+
+Endpoint returns a user's active errand and its requests if there is one
+
+**URL** : `http://api.good-grocer.click/errand/active/`
+
+**Method** : `GET`
+
+**Auth Required** : YES
+
+**Body Parameters** :
+
+```json
+{}
+```
+
+**Success Response** : `200 OK`
+
+```json
+{ 
+  "errand": {
+    "id": "[int, id of errand]",
+    "user_id": "[int, id of user who is completing errand]",
+    "community_id": "[int, id of community that errand belongs to]",
+    "is_complete": "[bool, true if errand is complete, false otherwise]",
+    "created_at": "[date, when the errand was created]",
+    "completed_at": "[date, 0001-01-01T00:00:00Z if errand not complete, otherwise time when errand was completed]"
+  },
+  "requests": [
+    {
+      "id": "[int, id of request]",
+      "created_at": "[date, time when request was created]",
+      "user_id": "[int, id of user who created the request]",
+      "community_id": "[int, id of community that request belongs to]",
+      "status": "[RequestStatus, the status of the request (pending, in_progress, completed)]",
+      "errand_id": "[int, id of errand associated with request, could be null]",
+      "store_id": "[int, id of store that request is associated with]"
+    }
+  ]
+}
+```
 
 ---
 
