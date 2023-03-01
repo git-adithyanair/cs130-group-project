@@ -68,6 +68,7 @@ func (server *Server) setupRouter() {
 	protectedRoutes.POST("/errand", server.CreateErrand)
 	protectedRoutes.POST("/errand/update-status", server.UpdateErrandStatus)
 	protectedRoutes.POST("/errand/requests/:id", server.GetRequestsByErrand)
+	protectedRoutes.GET("/errand/active", server.GetActiveErrand)
 
 	// Request routes.
 	protectedRoutes.POST("/request", server.CreateRequest)
