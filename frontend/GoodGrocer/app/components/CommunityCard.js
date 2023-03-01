@@ -1,11 +1,17 @@
-import React from "react";
+import { React, useState } from "react";
 import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
+import Button from "./Button";
 import { Entypo, Ionicons } from "@expo/vector-icons";
 import { Dim, Colors, Font, BorderRadius } from "../Constants";
 
 const CommunityCard = (props) => {
+  const [joined, setJoined] = useState(false);
   return (
-    <TouchableOpacity style={styles.main} onPress={props.onPressCommunity}>
+    <TouchableOpacity
+      style={styles.main}
+      onPress={props.onPressCommunity}
+      disabled={props.joinCommunity && !joined ? true : false}
+    >
       <View style={styles.mainView}>
         <Text style={styles.communityName}>{props.communityName}</Text>
         <View style={styles.mainInfoWrapper}>
@@ -17,7 +23,7 @@ const CommunityCard = (props) => {
             ></Entypo>
             <Text style={styles.info}>{props.distanceFromUser}mi</Text>
           </View>
-          <View style={{...styles.infoWrapper, paddingLeft: 20}}>
+          <View style={{ ...styles.infoWrapper, paddingLeft: 20 }}>
             <Ionicons
               name="people-sharp"
               color={Colors.lightGreen}
@@ -27,6 +33,24 @@ const CommunityCard = (props) => {
           </View>
         </View>
       </View>
+      {props.joinCommunity ? (
+        <Button
+          onPress={() => setJoined(true)}
+          disabled={joined ? true : false}
+          title={joined ? "joined!" : "join"}
+          appButtonContainer={{
+            width: "85%",
+            height: "27%",
+            alignSelf: "center",
+            backgroundColor: joined ? Colors.lightGreen : Colors.darkGreen,
+          }}
+          appButtonText={{
+            textTransform: "none",
+            color: joined ? Colors.darkGreen : Colors.white,
+            fontSize: Font.s3.size,
+          }}
+        ></Button>
+      ) : null}
     </TouchableOpacity>
   );
 };
@@ -51,7 +75,7 @@ const styles = StyleSheet.create({
   },
   mainInfoWrapper: {
     flexDirection: "row",
-    marginTop: 12
+    marginTop: 12,
   },
   infoWrapper: {
     flexDirection: "row",

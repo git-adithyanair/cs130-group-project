@@ -4,7 +4,7 @@ import { SafeAreaView, StyleSheet, FlatList, View } from "react-native";
 import CommunityCard from "../components/CommunityCard";
 import { Dim, Colors, Font } from "../Constants";
 
-const YourCommunities = (props, navigation) => {
+const YourCommunities = (props) => {
   const data = [
     { communityName: "Westwood", distance: 0.5, members: 10 },
     { communityName: "Brentwood", distance: 2, members: 10 },
@@ -52,6 +52,7 @@ const YourCommunities = (props, navigation) => {
               appButtonContainer={{ backgroundColor: Colors.lightGreen }}
               appButtonText={{ textTransform: "none" }}
               title={"Join More!"}
+              onPress={() => props.navigation.navigate("JoinCommunity")}
             ></Button>
           </View>
         )}
