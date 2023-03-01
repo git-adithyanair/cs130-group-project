@@ -601,6 +601,8 @@ Endpoint that returns all data for requests given an errand id.
 }
 ```
 
+**Extra notes** : id in uri is the id of the errand
+
 ### Get Active Errand
 
 Endpoint returns a user's active errand and its requests if there is one
