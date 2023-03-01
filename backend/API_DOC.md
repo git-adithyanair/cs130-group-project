@@ -345,7 +345,7 @@ Endpoint to get all communities.
 ["[json, list of all communities]"]
 ```
 
-### Get Community
+### Get Community Stores
 
 Endpoint to get all stores for a community.
 
