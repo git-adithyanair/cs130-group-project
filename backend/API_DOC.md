@@ -621,6 +621,8 @@ Endpoint returns a user's active errand and its requests if there is one
 
 **Success Response** : `200 OK`
 
+If there is an active errand: 
+
 ```json
 { 
   "errand": {
@@ -643,6 +645,11 @@ Endpoint returns a user's active errand and its requests if there is one
     }
   ]
 }
+```
+
+If there is no active errand: 
+```json
+{}
 ```
 
 ---
