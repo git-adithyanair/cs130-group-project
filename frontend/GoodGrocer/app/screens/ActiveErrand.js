@@ -26,6 +26,7 @@ const ActiveErrand = ({ navigation }) => {
       .then(({ data }) => {
         console.log(data);
         setData(data);
+        setCompleteErrandEnabled(checkRequestCompletion());
       })
       .catch((error) => {
         console.error(error);
