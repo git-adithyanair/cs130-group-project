@@ -372,11 +372,12 @@ Endpoint to get all stores for a community.
     "x_coord": "[float, x coordinate of google maps location]",
     "y_coord": "[float, y coordinate of google maps location]",
     "address": "[string, full address of the store]"
-  },
+  }
 ]
 ```
 
 **Extra Notes**: id in uri should be integer id for the community
+
 ### Create Community
 
 Endpoint to create a community.
@@ -482,9 +483,9 @@ Endpoint to get all of the requests for a community.
 **Success Response** : `200 OK`
 
 ```json
-{
-  "requests": [
-    {
+[
+  {
+    "request": {
       "id": "[int, id of request]",
       "created_at": "[date, time when request was created]",
       "user_id": "[int, id of user who created the request]",
@@ -492,9 +493,23 @@ Endpoint to get all of the requests for a community.
       "status": "[RequestStatus, the status of the request (pending, in_progress, completed)]",
       "errand_id": "[int, id of errand associated with request, could be null]",
       "store_id": "[int, id of store that request is associated with]"
+    },
+    "store": {
+      "id": "[int, id for store]",
+      "name": "[string, name of store]",
+      "place_id": "[string, place_id associated with google map's API location place_id]",
+      "x_coord": "[float, x coordinate of google maps location]",
+      "y_coord": "[float, y coordinate of google maps location]",
+      "address": "[string, full address of the store]"
+    },
+    "user": {
+      "id": "[string, user id]",
+      "email": "[string, user email]",
+      "full_name": "[string, user full name]",
+      "created_at": "[timestamptz, user creation date]"
     }
-  ]
-}
+  }
+]
 ```
 
 ---
@@ -621,10 +636,10 @@ Endpoint returns a user's active errand and its requests if there is one
 
 **Success Response** : `200 OK`
 
-If there is an active errand: 
+If there is an active errand:
 
 ```json
-{ 
+{
   "errand": {
     "id": "[int, id of errand]",
     "user_id": "[int, id of user who is completing errand]",
@@ -643,7 +658,7 @@ If there is an active errand:
         "status": "[RequestStatus, the status of the request (pending, in_progress, completed)]",
         "errand_id": "[int, id of errand associated with request, could be null]",
         "store_id": "[int, id of store that request is associated with]"
-      }, 
+      },
       "items": [
         {
           "id": "[int, id of the item]",
@@ -677,7 +692,8 @@ If there is an active errand:
 }
 ```
 
-If there is no active errand: 
+If there is no active errand:
+
 ```json
 {}
 ```

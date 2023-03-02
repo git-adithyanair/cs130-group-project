@@ -94,3 +94,13 @@ type activeErrandRequestResponse struct {
 }
 
 // ========================================================================
+
+// ========================================================================
+// Type and function to return info for a request and it's associated user and store
+type communityRequestsResponse struct {
+	Request db.Request   `json:"request"`
+	User    userResponse `json:"user"`
+	Store   *db.Store    `json:"store"`
+}
+
+// ========================================================================
