@@ -70,5 +70,37 @@ func (server *Server) GetRequestsByCommunity(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, requests)
+	requestRes := make([]communityRequestsResponse, len(requests))
+	for i, request := range requests {
+		user, err := server.queries.GetUser(ctx, request.UserID)
+		if err != nil {
+			if err == sql.ErrNoRows {
+				ctx.JSON(http.StatusNotFound, errorResponse(api_error.ErrNoUser, err))
+			} else {
+				ctx.JSON(http.StatusInternalServerError, unknownErrorResponse(err))
+			}
+			return
+		}
+
+		requestRes[i] = communityRequestsResponse{
+			Request: request,
+			User:    newUserResponse(user),
+		}
+
+		if request.StoreID.Valid {
+			store, err := server.queries.GetStore(ctx, request.StoreID.Int64)
+			if err != nil {
+				if err == sql.ErrNoRows {
+					ctx.JSON(http.StatusNotFound, errorResponse(api_error.ErrNoStore, err))
+				} else {
+					ctx.JSON(http.StatusInternalServerError, unknownErrorResponse(err))
+				}
+				return
+			}
+
+			requestRes[i].Store = &store
+		}
+	}
+
+	ctx.JSON(http.StatusOK, requestRes)
 }
