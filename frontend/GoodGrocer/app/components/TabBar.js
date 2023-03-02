@@ -8,8 +8,10 @@ import Shop from "../screens/Shop";
 import JoinCommunity from "../screens/JoinCommunity";
 import YourCommunities from "../screens/YourCommunities";
 import { Dim, Colors } from "../Constants";
+import ActiveErrand from "../screens/ActiveErrand";
 
 const HomeStack = createStackNavigator();
+const ErrandStack = createStackNavigator();
 
 const HomeStackScreen = () => {
   return (
@@ -28,12 +30,25 @@ const HomeStackScreen = () => {
   );
 };
 
+const ErrandStackScreen = () => {
+  return (
+    <ErrandStack.Navigator>
+      <ErrandStack.Screen
+        name="ActiveErrand"
+        component={ActiveErrand}
+        options={{ title: "", headerLeft: () => null }}
+      />
+    </ErrandStack.Navigator>
+  );
+};
+
 const Tab = createBottomTabNavigator();
 
 const tabBarPages = [
   { name: "Shop", component: Shop },
   { name: "Home", component: HomeStackScreen },
   { name: "Buy", component: Buy },
+  { name: "Errand", component: ErrandStackScreen },
 ];
 
 const TabBar = (props) => {
@@ -58,6 +73,8 @@ const TabBar = (props) => {
             return (
               <Image source={{ uri: props.imageUri }} style={styles.logo} />
             );
+          } else if (route.name === "Errand") {
+            iconName = focused ? "ios-list" : "ios-list-outline";
           }
           return <Ionicons name={iconName} size={size} color={"white"} />;
         },
