@@ -23,14 +23,14 @@ func main() {
 		log.Fatal("cannot connect to db: ", err)
 	}
 
-	queries := db.New(conn)
-	server, err := api.NewServer(config, queries)
+	store := db.NewStore(conn)
+	server, err := api.NewServer(config, store)
 	if err != nil {
 		log.Fatal("could not create server: ", err)
 	}
 
 	if config.Env == "dev" {
-		db.PopulateWithData(queries)
+		db.PopulateWithData(store)
 	}
 
 	err = server.Start(config.ServerAddress)

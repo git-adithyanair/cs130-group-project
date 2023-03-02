@@ -9,6 +9,10 @@ INSERT INTO errands (
 -- name: GetErrand :one
 SELECT * FROM errands WHERE id = $1; 
 
+-- name: GetActiveErrand :one
+SELECT * FROM errands 
+WHERE user_id = $1 AND is_complete = FALSE;
+
 -- name: GetErrandsByUserId :many
 SELECT * FROM errands WHERE user_id = $1; 
 

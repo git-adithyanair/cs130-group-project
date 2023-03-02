@@ -35,6 +35,7 @@ type Querier interface {
 	DeleteRequestsByUser(ctx context.Context, userID int64) error
 	DeleteStore(ctx context.Context, id int64) error
 	DeleteUser(ctx context.Context, id int64) error
+	GetActiveErrand(ctx context.Context, userID int64) (Errand, error)
 	GetCommunitiesByAdmin(ctx context.Context, admin int64) ([]Community, error)
 	GetCommunity(ctx context.Context, id int64) (Community, error)
 	GetCommunityByPlaceID(ctx context.Context, placeID string) (Community, error)
@@ -56,6 +57,7 @@ type Querier interface {
 	GetRequestsForUserByStatus(ctx context.Context, arg GetRequestsForUserByStatusParams) ([]Request, error)
 	GetStore(ctx context.Context, id int64) (Store, error)
 	GetStoreByPlaceId(ctx context.Context, placeID string) (Store, error)
+	GetStoresByCommunity(ctx context.Context, communityID int64) ([]Store, error)
 	GetUser(ctx context.Context, id int64) (User, error)
 	GetUserByEmail(ctx context.Context, email string) (User, error)
 	GetUserByPhoneNumber(ctx context.Context, phoneNumber string) (User, error)

@@ -11,13 +11,13 @@ import (
 
 type Server struct {
 	config     util.Config
-	queries    *db.Queries
+	queries    db.DBStore
 	router     *gin.Engine
 	tokenMaker token.Maker
 }
 
 // Initializes and returns a new Server instance.
-func NewServer(config util.Config, queries *db.Queries) (*Server, error) {
+func NewServer(config util.Config, store db.DBStore) (*Server, error) {
 
 	tokenMaker, err := token.NewPasetoMaker(config.TokenSymmetricKey)
 	if err != nil {
@@ -27,7 +27,7 @@ func NewServer(config util.Config, queries *db.Queries) (*Server, error) {
 	server := &Server{
 		config:     config,
 		tokenMaker: tokenMaker,
-		queries:    queries,
+		queries:    store,
 	}
 	server.setupRouter()
 
@@ -58,14 +58,17 @@ func (server *Server) setupRouter() {
 
 	// Community routes.
 	protectedRoutes.POST("/community", server.CreateCommunity)
+	protectedRoutes.GET("/community", server.GetAllCommunities)
 	protectedRoutes.POST("/community/join", server.JoinCommunity)
 	protectedRoutes.GET("/community/:id", server.GetCommunity)
 	protectedRoutes.GET("/community/requests", server.GetRequestsByCommunity)
+	protectedRoutes.GET("/community/stores/:id", server.GetCommunityStores)
 
 	// Errand routes.
 	protectedRoutes.POST("/errand", server.CreateErrand)
 	protectedRoutes.POST("/errand/update-status", server.UpdateErrandStatus)
 	protectedRoutes.POST("/errand/requests/:id", server.GetRequestsByErrand)
+	protectedRoutes.GET("/errand/active", server.GetActiveErrand)
 
 	// Request routes.
 	protectedRoutes.POST("/request", server.CreateRequest)

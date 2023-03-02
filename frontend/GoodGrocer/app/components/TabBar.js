@@ -1,64 +1,109 @@
 import React from "react";
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Image, StyleSheet } from 'react-native'; 
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import Buy from '../screens/Buy'; 
-import Shop from '../screens/Shop';
-import Profile from '../screens/Profile';
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createStackNavigator } from "@react-navigation/stack";
+import { Image, StyleSheet } from "react-native";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import Buy from "../screens/Buy";
+import Shop from "../screens/Shop";
+import JoinCommunity from "../screens/JoinCommunity";
+import YourCommunities from "../screens/YourCommunities";
+import { Dim, Colors } from "../Constants";
+import ActiveErrand from "../screens/ActiveErrand";
+import ActiveRequest from "../screens/ActiveRequest";
 
-const Tab = createBottomTabNavigator(); 
+const HomeStack = createStackNavigator();
+const ErrandStack = createStackNavigator();
+
+const HomeStackScreen = () => {
+  return (
+    <HomeStack.Navigator>
+      <HomeStack.Screen
+        name="YourCommunities"
+        component={YourCommunities}
+        options={{ title: "Your Communities" }}
+      />
+      <HomeStack.Screen
+        name="JoinCommunity"
+        component={JoinCommunity}
+        options={{ title: "Join Community" }}
+      />
+    </HomeStack.Navigator>
+  );
+};
+
+const ErrandStackScreen = () => {
+  return (
+    <ErrandStack.Navigator>
+      <ErrandStack.Screen
+        name="ActiveErrand"
+        component={ActiveErrand}
+        options={{ title: "" }}
+      />
+      <ErrandStack.Screen
+        name="ActiveRequest"
+        component={ActiveRequest}
+        options={{ title: "", headerTintColor: "green" }}
+      />
+    </ErrandStack.Navigator>
+  );
+};
+
+const Tab = createBottomTabNavigator();
 
 const tabBarPages = [
-    {"name": "Shop",
-    "component": Shop},
-    {"name": "Profile",
-    "component": Profile},
-    {"name": "Buy",
-    "component": Buy}
-]
+  { name: "Shop", component: Shop },
+  { name: "Home", component: HomeStackScreen },
+  { name: "Buy", component: Buy },
+  { name: "Errand", component: ErrandStackScreen },
+];
 
 const TabBar = (props) => {
-    const components = tabBarPages.map((page, index) => <Tab.Screen name={page.name} component={page.component} key={index}/>)
-    if(components.length === 0){
-        return null; 
-    }
-    return  <Tab.Navigator screenOptions={({ route }) => ({
+  const components = tabBarPages.map((page, index) => (
+    <Tab.Screen name={page.name} component={page.component} key={index} />
+  ));
+  if (components.length === 0) {
+    return null;
+  }
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
         headerShown: false,
         tabBarShowLabel: false,
         tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
-            if (route.name === 'Shop') {
-              iconName = focused
-                ? 'ios-cart'
-                : 'ios-cart-outline';
-            } else if (route.name === 'Buy') {
-              iconName = focused ? 'ios-pizza' : 'ios-pizza-outline';
-            }
-            else if (route.name === 'Profile') {
-                return <Image source={{uri: props.imageUri}} style={styles.logo} />;
-            }
-            return <Ionicons name={iconName} size={size} color={'white'} />;
-          },
+          let iconName;
+          if (route.name === "Shop") {
+            iconName = focused ? "ios-cart" : "ios-cart-outline";
+          } else if (route.name === "Buy") {
+            iconName = focused ? "ios-pizza" : "ios-pizza-outline";
+          } else if (route.name === "Home") {
+            return (
+              <Image source={{ uri: props.imageUri }} style={styles.logo} />
+            );
+          } else if (route.name === "Errand") {
+            iconName = focused ? "ios-list" : "ios-list-outline";
+          }
+          return <Ionicons name={iconName} size={size} color={"white"} />;
+        },
         tabBarStyle: {
-          height: 80,
-          width: '100%', 
-          backgroundColor: '#7B886B',
-          color: 'white',
-          position: 'absolute',
-          marginBottom: 0
-      },
-    })}>
-        {components}
-    </Tab.Navigator>; 
+          height: Dim.width * 0.15,
+          width: Dim.width,
+          backgroundColor: Colors.darkGreen,
+          color: Colors.white,
+          position: "absolute",
+          marginBottom: 0,
+        },
+      })}
+    >
+      {components}
+    </Tab.Navigator>
+  );
 };
 
-
 const styles = StyleSheet.create({
-    logo: {
-      width: 66,
-      height: 50
-    },
-  });
-
+  logo: {
+    width: 35,
+    height: 35,
+  },
+});
 
 export default TabBar;

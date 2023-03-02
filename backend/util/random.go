@@ -34,3 +34,35 @@ func RandomNumericString(length int) string {
 func RandomString(length int) string {
 	return randomString(length, alphabet)
 }
+
+func RandomFullName() string {
+	return RandomString(6) + " " + RandomString(6)
+}
+
+func RandomEmail() string {
+	return RandomString(10) + "@" + RandomString(5) + ".com"
+}
+
+func RandomPhoneNumber() string {
+	return RandomNumericString(10)
+}
+
+func RandomPlaceID() string {
+	return RandomString(5)
+}
+
+func RandomAddress() string {
+	return RandomString(10)
+}
+
+func RandomCommunityName() string {
+	return RandomString(10)
+}
+
+func RandomRange() int32 {
+	return int32(RandomInt(1, 10))
+}
+
+func RandomCoordinate() float64 {
+	return RandomFloat(-180, 180)
+}

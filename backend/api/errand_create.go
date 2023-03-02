@@ -3,11 +3,13 @@ package api
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"net/http"
 
 	db "github.com/git-adithyanair/cs130-group-project/db/sqlc"
 	api_error "github.com/git-adithyanair/cs130-group-project/errors"
 	"github.com/git-adithyanair/cs130-group-project/token"
+	"github.com/git-adithyanair/cs130-group-project/util"
 
 	"github.com/gin-gonic/gin"
 )
@@ -25,6 +27,21 @@ func (server *Server) CreateErrand(ctx *gin.Context) {
 	}
 
 	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+
+	user, err := server.queries.GetUser(ctx, authPayload.UserID)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, unknownErrorResponse(err))
+		return
+	}
+
+	_, err = server.queries.GetActiveErrand(ctx, authPayload.UserID)
+	if err == nil {
+		ctx.JSON(http.StatusExpectationFailed, errorResponse(api_error.ErrActiveErrorExists, errors.New("user has errand where is_complete is false")))
+		return
+	} else if err != sql.ErrNoRows {
+		ctx.JSON(http.StatusInternalServerError, unknownErrorResponse(err))
+		return
+	}
 
 	if _, err := server.queries.GetCommunity(ctx, req.CommunityID); err != nil {
 		if err == sql.ErrNoRows {
@@ -69,6 +86,10 @@ func (server *Server) CreateErrand(ctx *gin.Context) {
 			Status:   db.RequestStatusInProgress,
 		}
 		server.queries.UpdateRequestErrandAndStatus(ctx, arg)
+
+		request, _ := server.queries.GetRequest(ctx, requestID)
+		requestUser, _ := server.queries.GetUser(ctx, request.UserID)
+		util.NotifyUser(requestUser.PhoneNumber, fmt.Sprintf("Your request has been accepted by %s! Contact them at %s if you have any questions.", user.FullName, user.PhoneNumber))
 	}
 
 	ctx.JSON(http.StatusCreated, errand)

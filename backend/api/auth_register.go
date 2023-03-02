@@ -50,6 +50,8 @@ func (server *Server) RegisterUser(ctx *gin.Context) {
 		return
 	}
 
+	util.NotifyUser(user.PhoneNumber, "Thank you for registering for GoodGrocer! You will recieve updates about your requests and errands through this number as you use the app!")
+
 	token, err := server.tokenMaker.CreateToken(user.ID, user.Email)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, unknownErrorResponse(err))

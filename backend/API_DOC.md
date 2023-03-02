@@ -12,14 +12,25 @@
   - [Update Profile Picture](#update-profile-picture)
   - [Update Name](#update-name)
   - [User Commmunities](#user-commmunities)
+  - [User Requests](#user-requests)
 - [Community](#community)
+  - [Get Community](#get-community)
+  - [Get All Communities](#get-all-communities)
+  - [Get Community Stores](#get-community-stores)
+  - [Create Community](#create-community)
+  - [Join Community](#join-community)
+  - [Get Community Requests](#get-community-requests)
 - [Errand](#errand)
   - [Create Errand](#create-errand)
   - [Update Errand Status](#update-errand-status)
   - [Get all Requests in an Errand](#get-all-request-in-an-errand)
+  - [Get Active Errand](#get-active-errand)
 - [Request](#request)
+  - [Create Request](#create-request)
+  - [Get Items in Request](#get-items-in-request)
   - [Change Request Status](#change-request-status)
-  - [Item](#update-found-status)
+- [Item](#update-found-status)
+  - [Update Found Status](#update-found-status)
 
 ## Errors
 
@@ -122,6 +133,7 @@ Logs in user and returns auth token.
 ---
 
 ## User
+
 ### Update User Location
 
 Endpoint to update a user's home location.
@@ -149,8 +161,7 @@ Endpoint to update a user's home location.
 {}
 ```
 
-**Extra notes** : 
-
+**Extra notes** :
 
 ### Update Profile Picture
 
@@ -178,10 +189,6 @@ Endpoint to change user profile picture.
 
 **Extra notes** : Image data should start something like this: data:image/[IMAGE TYPE];base64
 
-
-
-
-
 ### Update Name
 
 Endpoint to change user's full name.
@@ -205,7 +212,6 @@ Endpoint to change user's full name.
 ```json
 {}
 ```
-
 
 ### User Commmunities
 
@@ -265,27 +271,235 @@ Endpoint to get users requests grouped by status.
 {
   "pending": [
     {
-      "id": "[int, id of request]", 
-      "created_at": "[date, time when request was created]", 
-      "user_id": "[int, id of user who created the request]", 
-      "community_id": "[int, id of community that request belongs to]", 
-      "status": "[RequestStatus, the status of the request (pending, in_progress, completed)]", 
-      "errand_id": "[int, id of errand associated with request, could be null", 
+      "id": "[int, id of request]",
+      "created_at": "[date, time when request was created]",
+      "user_id": "[int, id of user who created the request]",
+      "community_id": "[int, id of community that request belongs to]",
+      "status": "[RequestStatus, the status of the request (pending, in_progress, completed)]",
+      "errand_id": "[int, id of errand associated with request, could be null",
       "store_id": "[int, id of store that request is associated with]"
     }
-  ], 
-  "in_progress": [], 
+  ],
+  "in_progress": [],
   "complete": []
 }
 ```
-
 
 ---
 
 ## Community
 
+### Get Community
+
+Endpoint to get info for a specific community.
+
+**URL** : `http://api.good-grocer.click/community/:id`
+
+**Method** : `GET`
+
+**Auth Required** : YES
+
+**Body Parameters** :
+
+```json
+{}
+```
+
+**Success Response** : `200 OK`
+
+```json
+{
+  "id": "[int, id of the community]",
+  "name": "[string, name of community]",
+  "admin": "[int, id of the user who created the community]",
+  "place_id": "[string, place_id associated with google map's API location place_id]",
+  "center_x_coord": "[float, x coordinate of google maps location for center of community]",
+  "center_y_coord": "[float, y coordinate of google maps location for center of community]",
+  "range": "[int, range of community (in meters)]",
+  "address": "[string, full address of center of community]",
+  "created_at": "[date, time when community was created]"
+}
+```
+
+**Extra Notes**: id in uri should be integer id for the community
+
+### Get All Communities
+
+Endpoint to get all communities.
+
+**URL** : `http://api.good-grocer.click/community`
+
+**Method** : `GET`
+
+**Auth Required** : YES
+
+**Body Parameters** :
+
+```json
+{}
+```
+
+**Success Response** : `200 OK`
+
+```json
+["[json, list of all communities]"]
+```
+
+### Get Community Stores
+
+Endpoint to get all stores for a community.
+
+**URL** : `http://api.good-grocer.click/community/stores/:id`
+
+**Method** : `GET`
+
+**Auth Required** : YES
+
+**Body Parameters** :
+
+```json
+{}
+```
+
+**Success Response** : `200 OK`
+
+```json
+[
+  {
+    "id": "[int, id for store]",
+    "name": "[string, name of store]",
+    "place_id": "[string, place_id associated with google map's API location place_id]",
+    "x_coord": "[float, x coordinate of google maps location]",
+    "y_coord": "[float, y coordinate of google maps location]",
+    "address": "[string, full address of the store]"
+  },
+]
+```
+
+**Extra Notes**: id in uri should be integer id for the community
+### Create Community
+
+Endpoint to create a community.
+
+**URL** : `http://api.good-grocer.click/community`
+
+**Method** : `POST`
+
+**Auth Required** : YES
+
+**Body Parameters** :
+
+```json
+{
+  "name": "[string, name of community]",
+  "place_id": "[string, place_id associated with google map's API location place_id]",
+  "center_x_coord": "[float, x coordinate of google maps location for center of community]",
+  "center_y_coord": "[float, y coordinate of google maps location for center of community]",
+  "range": "[int, range of community (in meters)]",
+  "address": "[string, full address of center of community]",
+  "stores": [
+    {
+      "name": "[string, name of store]",
+      "place_id": "[string, place_id associated with google map's API location place_id]",
+      "x_coord": "[float, x coordinate of google maps location]",
+      "y_coord": "[float, y coordinate of google maps location]",
+      "address": "[string, full address of the store]"
+    }
+  ]
+}
+```
+
+**Success Response** : `200 OK`
+
+```json
+{
+  "id": "[int, id of the community]",
+  "name": "[string, name of community]",
+  "admin": "[int, id of the user who created the community]",
+  "place_id": "[string, place_id associated with google map's API location place_id]",
+  "center_x_coord": "[float, x coordinate of google maps location for center of community]",
+  "center_y_coord": "[float, y coordinate of google maps location for center of community]",
+  "range": "[int, range of community (in meters)]",
+  "address": "[string, full address of center of community]",
+  "created_at": "[date, time when community was created]"
+}
+```
+
+### Join Community
+
+Endpoint to join community.
+
+**URL** : `http://api.good-grocer.click/community/join`
+
+**Method** : `POST`
+
+**Auth Required** : YES
+
+**Body Parameters** :
+
+```json
+{
+  "id": "[int, required id of the community]"
+}
+```
+
+**Success Response** : `200 OK`
+
+```json
+{
+  "id": "[int, id of the community]",
+  "name": "[string, name of community]",
+  "admin": "[int, id of the user who created the community]",
+  "place_id": "[string, place_id associated with google map's API location place_id]",
+  "center_x_coord": "[float, x coordinate of google maps location for center of community]",
+  "center_y_coord": "[float, y coordinate of google maps location for center of community]",
+  "range": "[int, range of community (in meters)]",
+  "address": "[string, full address of center of community]",
+  "created_at": "[date, time when community was created]"
+}
+```
+
+### Get Community Requests
+
+Endpoint to get all of the requests for a community.
+
+**URL** : `http://api.good-grocer.click/community/requests`
+
+**Method** : `GET`
+
+**Auth Required** : YES
+
+**Query Parameters** :
+
+```json
+{
+  "id": "[int, required id of the community]",
+  "limit": "[int, optional limit of requests to return]",
+  "offset": "[int, optional offset for paging]"
+}
+```
+
+**Success Response** : `200 OK`
+
+```json
+{
+  "requests": [
+    {
+      "id": "[int, id of request]",
+      "created_at": "[date, time when request was created]",
+      "user_id": "[int, id of user who created the request]",
+      "community_id": "[int, id of community that request belongs to]",
+      "status": "[RequestStatus, the status of the request (pending, in_progress, completed)]",
+      "errand_id": "[int, id of errand associated with request, could be null]",
+      "store_id": "[int, id of store that request is associated with]"
+    }
+  ]
+}
+```
+
 ---
-## Errand 
+
+## Errand
 
 ### Create Errand
 
@@ -301,7 +515,7 @@ Endpoint to create and errand.
 
 ```json
 {
-  "community_id": "[int, community id]", 
+  "community_id": "[int, community id]",
   "request_ids": "[int[], array of request ids]"
 }
 ```
@@ -319,7 +533,7 @@ Endpoint to create and errand.
 }
 ```
 
-**Extra notes** : 
+**Extra notes** :
 
 ### Update Errand Status
 
@@ -335,7 +549,7 @@ Endpoint to update errand status (is_complete field).
 
 ```json
 {
- "id": "[int, required id of the errand]",
+  "id": "[int, required id of the errand]",
   "is_complete": "[bool, true if complete, false is not]"
 }
 ```
@@ -375,25 +589,187 @@ Endpoint that returns all data for requests given an errand id.
 {
   "requests": [
     {
-      "id": "[int, id of request]", 
-      "created_at": "[date, time when request was created]", 
-      "user_id": "[int, id of user who created the request]", 
-      "community_id": "[int, id of community that request belongs to]", 
-      "status": "[RequestStatus, the status of the request (pending, in_progress, completed)]", 
-      "errand_id": "[int, id of errand associated with request, could be null]", 
-      "store_id": "[int, id of store that request is associated with]", 
-    }, 
+      "id": "[int, id of request]",
+      "created_at": "[date, time when request was created]",
+      "user_id": "[int, id of user who created the request]",
+      "community_id": "[int, id of community that request belongs to]",
+      "status": "[RequestStatus, the status of the request (pending, in_progress, completed)]",
+      "errand_id": "[int, id of errand associated with request, could be null]",
+      "store_id": "[int, id of store that request is associated with]"
+    }
   ]
-  
 }
 ```
 
 **Extra notes** : id in uri is the id of the errand
 
+### Get Active Errand
+
+Endpoint returns a user's active errand and its requests if there is one
+
+**URL** : `http://api.good-grocer.click/errand/active/`
+
+**Method** : `GET`
+
+**Auth Required** : YES
+
+**Body Parameters** :
+
+```json
+{}
+```
+
+**Success Response** : `200 OK`
+
+If there is an active errand: 
+
+```json
+{ 
+  "errand": {
+    "id": "[int, id of errand]",
+    "user_id": "[int, id of user who is completing errand]",
+    "community_id": "[int, id of community that errand belongs to]",
+    "is_complete": "[bool, true if errand is complete, false otherwise]",
+    "created_at": "[date, when the errand was created]",
+    "completed_at": "[date, 0001-01-01T00:00:00Z if errand not complete, otherwise time when errand was completed]"
+  },
+  "requests": [
+    {
+      "request": {
+        "id": "[int, id of request]",
+        "created_at": "[date, time when request was created]",
+        "user_id": "[int, id of user who created the request]",
+        "community_id": "[int, id of community that request belongs to]",
+        "status": "[RequestStatus, the status of the request (pending, in_progress, completed)]",
+        "errand_id": "[int, id of errand associated with request, could be null]",
+        "store_id": "[int, id of store that request is associated with]"
+      }, 
+      "items": [
+        {
+          "id": "[int, id of the item]",
+          "requested_by": "[int, id of user that requested item]",
+          "request_id": "[int, id of request]",
+          "name": "[string, name of item]",
+          "quantity_type": "[item_quantity_type, type of quantity (e.g. oz, lbs)]",
+          "quantity": "[float, quantity associated with item type]",
+          "preferred_brand": "[string, brand of item, not required]",
+          "image": "[string, image for item, not required]",
+          "found": "[bool, true if found, else false]",
+          "extra_notes": "[string, notes for shopper]"
+        }
+      ],
+      "store": {
+        "id": "[int, id for store]",
+        "name": "[string, name of store]",
+        "place_id": "[string, place_id associated with google map's API location place_id]",
+        "x_coord": "[float, x coordinate of google maps location]",
+        "y_coord": "[float, y coordinate of google maps location]",
+        "address": "[string, full address of the store]"
+      },
+      "user": {
+        "id": "[string, user id]",
+        "email": "[string, user email]",
+        "full_name": "[string, user full name]",
+        "created_at": "[timestamptz, user creation date]"
+      }
+    }
+  ]
+}
+```
+
+If there is no active errand: 
+```json
+{}
+```
+
+**Extra Notes**: store could be null
 
 ---
 
 ## Request
+
+### Create Request
+
+Endpoint to create a request
+
+**URL** : `http://api.good-grocer.click/request`
+
+**Method** : `POST`
+
+**Auth Required** : YES
+
+**Body Parameters** :
+
+```json
+{
+  "community_id": "[int, required id of the community]",
+  "store_id": "[int, optional id of the store]",
+  "items": [
+    {
+      "name": "[string, name of item]",
+      "quantity_type": "[item_quantity_type, type of quantity (e.g. oz, lbs)]",
+      "quantity": "[float, quantity associated with item type]",
+      "preferred_brand": "[string, brand of item, not required]",
+      "image": "[string, image for item, not required]",
+      "extra_notes": "[string, notes for shopper]"
+    }
+  ]
+}
+```
+
+**Success Response** : `200 OK`
+
+```json
+{
+  "id": "[int, id of request]",
+  "created_at": "[date, time when request was created]",
+  "user_id": "[int, id of user who created the request]",
+  "community_id": "[int, id of community that request belongs to]",
+  "status": "[RequestStatus, the status of the request (pending, in_progress, completed)]",
+  "errand_id": "[int, id of errand associated with request, could be null]",
+  "store_id": "[int, id of store that request is associated with]"
+}
+```
+
+### Get Items in Request
+
+Endpoint to get all items in a request.
+
+**URL** : `http://api.good-grocer.click/request/items/:id`
+
+**Method** : `GET`
+
+**Auth Required** : YES
+
+**Body Parameters** :
+
+```json
+{}
+```
+
+**Success Response** : `200 OK`
+
+```json
+{
+  "items": [
+    {
+      "id": "[int, id of the item]",
+      "requested_by": "[int, id of user that requested item]",
+      "request_id": "[int, id of request]",
+      "name": "[string, name of item]",
+      "quantity_type": "[item_quantity_type, type of quantity (e.g. oz, lbs)]",
+      "quantity": "[float, quantity associated with item type]",
+      "preferred_brand": "[string, brand of item, not required]",
+      "image": "[string, image for item, not required]",
+      "found": "[bool, true if found, else false]",
+      "extra_notes": "[string, notes for shopper]"
+    }
+  ]
+}
+```
+
+**Extra notes** : id in uri should be id for request
+
 ### Change Request Status
 
 Endpoint to change the status on a request.
@@ -417,19 +793,17 @@ Endpoint to change the status on a request.
 
 ```json
 {
-  "id": "[int, id of request]", 
-  "created_at": "[date, time when request was created]", 
-  "user_id": "[int, id of user who created the request]", 
-  "community_id": "[int, id of community that request belongs to]", 
-  "status": "[RequestStatus, the status of the request (pending, in_progress, completed)]", 
-  "errand_id": "[int, id of errand associated with request, could be null]", 
-  "store_id": "[int, id of store that request is associated with]", 
-
+  "id": "[int, id of request]",
+  "created_at": "[date, time when request was created]",
+  "user_id": "[int, id of user who created the request]",
+  "community_id": "[int, id of community that request belongs to]",
+  "status": "[RequestStatus, the status of the request (pending, in_progress, completed)]",
+  "errand_id": "[int, id of errand associated with request, could be null]",
+  "store_id": "[int, id of store that request is associated with]"
 }
 ```
 
-**Extra notes** : 
-
+**Extra notes** :
 
 ---
 
@@ -437,7 +811,7 @@ Endpoint to change the status on a request.
 
 ### Update Found Status
 
-Updates the status of if an item is found or not. 
+Updates the status of if an item is found or not.
 
 **URL** : `http://api.good-grocer.click/item/update-status`
 
@@ -459,16 +833,16 @@ Updates the status of if an item is found or not.
 ```json
 {
   "item": {
-    "id":  "[int, id of the item]", 
-    "requested_by":  "[int, id of user that requested item]",
-    "request_id":  "[int, id of request]",
-    "name":  "[string, name of item]",
-    "quantity_type":  "[item_quantity_type, type of quantity (e.g. oz, lbs)]",
-    "quantity":  "[float, quantity associated with item type]",
-    "preferred_brand":  "[string, brand of item, not required]",
-    "image":  "[string, image for item, not required]",
-    "found":  "[bool, true if found, else false]",
-    "extra_notes":  "[string, notes for shopper]",
+    "id": "[int, id of the item]",
+    "requested_by": "[int, id of user that requested item]",
+    "request_id": "[int, id of request]",
+    "name": "[string, name of item]",
+    "quantity_type": "[item_quantity_type, type of quantity (e.g. oz, lbs)]",
+    "quantity": "[float, quantity associated with item type]",
+    "preferred_brand": "[string, brand of item, not required]",
+    "image": "[string, image for item, not required]",
+    "found": "[bool, true if found, else false]",
+    "extra_notes": "[string, notes for shopper]"
   }
 }
 ```
