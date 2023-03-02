@@ -9,6 +9,7 @@ import JoinCommunity from "../screens/JoinCommunity";
 import YourCommunities from "../screens/YourCommunities";
 import { Dim, Colors } from "../Constants";
 import ActiveErrand from "../screens/ActiveErrand";
+import ActiveRequest from "../screens/ActiveRequest";
 
 const HomeStack = createStackNavigator();
 const ErrandStack = createStackNavigator();
@@ -36,7 +37,12 @@ const ErrandStackScreen = () => {
       <ErrandStack.Screen
         name="ActiveErrand"
         component={ActiveErrand}
-        options={{ title: "", headerLeft: () => null }}
+        options={{ title: "" }}
+      />
+      <ErrandStack.Screen
+        name="ActiveRequest"
+        component={ActiveRequest}
+        options={{ title: "", headerTintColor: "green" }}
       />
     </ErrandStack.Navigator>
   );

@@ -26,7 +26,7 @@ const ActiveErrand = ({ navigation }) => {
       .then(({ data }) => {
         console.log(data);
         setData(data);
-        setCompleteErrandEnabled(checkRequestCompletion());
+        setCompleteErrandEnabled(checkRequestCompletion(data));
       })
       .catch((error) => {
         console.error(error);
@@ -55,15 +55,25 @@ const ActiveErrand = ({ navigation }) => {
       });
   };
 
-  const checkRequestCompletion = () => {
+  const checkRequestCompletion = (data) => {
     if (JSON.stringify(data) === "{}") {
       return false;
     }
     for (const request of data.requests) {
       for (const item of request.items) {
-        if (!item.found) {
+        if (!item.found.Valid) {
           return false;
         }
+      }
+    }
+    return true;
+  };
+
+  const requestComplete = (items) => {
+    for (const item of items) {
+      console.log(item.found);
+      if (!item.found.Valid) {
+        return false;
       }
     }
     return true;
@@ -75,10 +85,6 @@ const ActiveErrand = ({ navigation }) => {
     });
     return unsubscribe;
   }, [navigation]);
-
-  useEffect(() => {
-    setCompleteErrandEnabled(checkRequestCompletion());
-  }, []);
 
   return (
     <SafeAreaView style={styles.wrapper}>
@@ -92,7 +98,16 @@ const ActiveErrand = ({ navigation }) => {
             name={itemData.item.user.full_name}
             storeName={itemData.item.store.name}
             numItems={itemData.item.items.length}
-            onPress={() => console.log("navigate to items list")}
+            requestComplete={requestComplete(itemData.item.items)}
+            onPress={() =>
+              navigation.navigate("ActiveRequest", {
+                name: itemData.item.user.full_name,
+                profileImage:
+                  "https://i.pinimg.com/236x/10/f4/a9/10f4a952ddf8e6828ae6833b3088dfa0.jpg",
+                items: itemData.item.items,
+                store: itemData.item.store,
+              })
+            }
           />
         )}
         keyExtractor={(item) => item.id}
@@ -117,15 +132,19 @@ const ActiveErrand = ({ navigation }) => {
                 You currently do not have an active errand. To create an errand,
                 go to the home tab and select some requests!
               </Text>
-            ) : completeErrandEnabled === true ? (
+            ) : (
               <Button
                 width={Dim.width * 0.9}
-                appButtonContainer={{ backgroundColor: Colors.lightGreen }}
+                appButtonContainer={{
+                  backgroundColor: Colors.lightGreen,
+                  opacity: completeErrandEnabled ? 100 : 0,
+                }}
                 appButtonText={{ textTransform: "none" }}
                 title={"Complete Errand"}
                 onPress={completeErrand}
+                isDisabled={!completeErrandEnabled}
               ></Button>
-            ) : null}
+            )}
           </View>
         )}
       ></FlatList>
