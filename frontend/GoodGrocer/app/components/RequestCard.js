@@ -26,6 +26,9 @@ const RequestCard = (props) => {
               <Paragraph>Items: </Paragraph>
               <Text>{props.numItems}</Text>
             </Text>
+            {props.requestComplete ? (
+              <Text style={Styles.completeText}>Complete</Text>
+            ) : null}
           </Card.Content>
         </View>
       </Card>
@@ -50,6 +53,10 @@ const Styles = StyleSheet.create({
   },
   text: {
     marginTop: 30,
+  },
+  completeText: {
+    color: Colors.darkGreen,
+    fontWeight: "bold",
   },
 });
 
