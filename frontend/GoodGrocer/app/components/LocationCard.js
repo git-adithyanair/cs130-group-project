@@ -9,14 +9,14 @@ import {
 import { Title } from "react-native-paper";
 import { Dim, Colors } from "../Constants";
 
-const StoreCard = (props) => {
+const LocationCard = (props) => {
   const openMaps = () => {
     const scheme = Platform.select({
       ios: "maps:0,0?q=",
       android: "geo:0,0?q=",
     });
     const latLng = `${props.lat},${props.long}`;
-    const label = props.store;
+    const label = props.mapsLabel;
     const url = Platform.select({
       ios: `${scheme}${label}@${latLng}`,
       android: `${scheme}${latLng}(${label})`,
@@ -27,8 +27,8 @@ const StoreCard = (props) => {
   return (
     <TouchableOpacity onPress={openMaps}>
       <View style={Styles.container} noShadow={true}>
-        <Title>Store: {props.store}</Title>
-        <Text>Address: {props.address}</Text>
+        <Title>{props.title}</Title>
+        <Text>{props.address}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -48,4 +48,4 @@ const Styles = StyleSheet.create({
   },
 });
 
-export default StoreCard;
+export default LocationCard;

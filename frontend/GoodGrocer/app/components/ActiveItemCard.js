@@ -60,6 +60,7 @@ const ActiveItemCard = (props) => {
               width={Dim.width * 0.35}
               appButtonContainer={{ backgroundColor: Colors.cream }}
               appButtonText={{
+                textTransform: "none",
                 fontWeight: "normal",
                 fontSize: 16,
               }}
