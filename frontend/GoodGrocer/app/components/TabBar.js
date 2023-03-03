@@ -5,16 +5,16 @@ import { Image, StyleSheet } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import JoinCommunity from "../screens/JoinCommunity";
 import YourCommunities from "../screens/YourCommunities";
-import Profile from "../screens/Profile"; 
+import Profile from "../screens/Profile";
 import { Dim, Colors } from "../Constants";
 import ActiveErrand from "../screens/ActiveErrand";
 import ActiveRequest from "../screens/ActiveRequest";
-import RequestList from '../screens/RequestList';
-import RequestDetail from '../screens/RequestDetail';
+import RequestList from "../screens/RequestList";
+import RequestDetail from "../screens/RequestDetail";
 
 const HomeStack = createStackNavigator();
 const ErrandStack = createStackNavigator();
-const ProfileStack = createStackNavigator(); 
+const ProfileStack = createStackNavigator();
 
 const HomeStackScreen = () => {
   return (
@@ -46,10 +46,7 @@ const HomeStackScreen = () => {
 const ProfileStackScreen = () => {
   return (
     <ProfileStack.Navigator>
-      <ProfileStack.Screen
-        name="Profile"
-        component={Profile} 
-      />
+      <ProfileStack.Screen name="Profile" component={Profile} />
     </ProfileStack.Navigator>
   );
 };
@@ -70,7 +67,6 @@ const ErrandStackScreen = () => {
     </ErrandStack.Navigator>
   );
 };
-
 
 const Tab = createBottomTabNavigator();
 
@@ -95,8 +91,10 @@ const TabBar = (props) => {
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
           if (route.name === "Home") {
-            iconName = focused ? "ios-people-circle" : "ios-people-circle-outline";
-          }  else if (route.name === "MyProfile") {
+            iconName = focused
+              ? "ios-people-circle"
+              : "ios-people-circle-outline";
+          } else if (route.name === "MyProfile") {
             return (
               <Image source={{ uri: props.imageUri }} style={styles.logo} />
             );
