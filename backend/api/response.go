@@ -36,18 +36,20 @@ func authErrorResponse(err error) gin.H {
 // ========================================================================
 // Type and function to return only unprotected user information.
 type userResponse struct {
-	ID        int64     `json:"id"`
-	Email     string    `json:"email"`
-	FullName  string    `json:"full_name"`
-	CreatedAt time.Time `json:"created_at"`
+	ID             int64     `json:"id"`
+	Email          string    `json:"email"`
+	FullName       string    `json:"full_name"`
+	CreatedAt      time.Time `json:"created_at"`
+	ProfilePicture string    `json:"profile_picture"`
 }
 
 func newUserResponse(user db.User) userResponse {
 	return userResponse{
-		ID:        user.ID,
-		FullName:  user.FullName,
-		Email:     user.Email,
-		CreatedAt: user.CreatedAt,
+		ID:             user.ID,
+		FullName:       user.FullName,
+		Email:          user.Email,
+		CreatedAt:      user.CreatedAt,
+		ProfilePicture: user.ProfilePicture,
 	}
 }
 
@@ -83,24 +85,26 @@ type userRequestsResponse struct {
 // Type and function to return only detailed unprotected user information.
 // To be used during an errand for shopper to contact user.
 type userDetailedResponse struct {
-	ID          int64   `json:"id"`
-	Email       string  `json:"email"`
-	FullName    string  `json:"full_name"`
-	PhoneNumber string  `json:"phone_number"`
-	XCoord      float64 `json:"x_coord"`
-	YCoord      float64 `json:"y_cord"`
-	Address     string  `json:"address"`
+	ID             int64   `json:"id"`
+	Email          string  `json:"email"`
+	FullName       string  `json:"full_name"`
+	PhoneNumber    string  `json:"phone_number"`
+	XCoord         float64 `json:"x_coord"`
+	YCoord         float64 `json:"y_cord"`
+	Address        string  `json:"address"`
+	ProfilePicture string  `json:"profile_picture"`
 }
 
 func newUserDetailedResponse(user db.User) userDetailedResponse {
 	return userDetailedResponse{
-		ID:          user.ID,
-		FullName:    user.FullName,
-		Email:       user.Email,
-		PhoneNumber: user.PhoneNumber,
-		XCoord:      user.XCoord,
-		YCoord:      user.YCoord,
-		Address:     user.Address,
+		ID:             user.ID,
+		FullName:       user.FullName,
+		Email:          user.Email,
+		PhoneNumber:    user.PhoneNumber,
+		XCoord:         user.XCoord,
+		YCoord:         user.YCoord,
+		Address:        user.Address,
+		ProfilePicture: user.ProfilePicture,
 	}
 }
 

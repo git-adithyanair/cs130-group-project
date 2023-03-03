@@ -62,7 +62,7 @@ Examle: `Authorization: Bearer v2.local.6-C_cbq2lrWNlu1vSd9ud2Lt33aSHIbDp7_2_hhX
 
 Registers user with provided details.
 
-**URL** : `http://api.good-grocer.click/auth/register`
+**URL** : `http://api.good-grocer.click/user`
 
 **Method** : `POST`
 

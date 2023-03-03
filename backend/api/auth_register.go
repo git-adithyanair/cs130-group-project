@@ -10,14 +10,15 @@ import (
 )
 
 type RegisterUserRequest struct {
-	Email       string  `json:"email" binding:"required,email"`
-	Password    string  `json:"password" binding:"required,min=6"`
-	FullName    string  `json:"full_name" binding:"required"`
-	PhoneNumber string  `json:"phone_number" binding:"required,numeric"`
-	Address     string  `json:"address" binding:"required"`
-	PlaceID     string  `json:"place_id" binding:"required"`
-	XCoord      float64 `json:"x_coord" binding:"required,numeric"`
-	YCoord      float64 `json:"y_coord" binding:"required,numeric"`
+	Email          string  `json:"email" binding:"required,email"`
+	Password       string  `json:"password" binding:"required,min=6"`
+	FullName       string  `json:"full_name" binding:"required"`
+	PhoneNumber    string  `json:"phone_number" binding:"required,numeric"`
+	Address        string  `json:"address" binding:"required"`
+	PlaceID        string  `json:"place_id" binding:"required"`
+	XCoord         float64 `json:"x_coord" binding:"required,numeric"`
+	YCoord         float64 `json:"y_coord" binding:"required,numeric"`
+	ProfilePicture string  `json:"profile_picture" binding:"required"`
 }
 
 func (server *Server) RegisterUser(ctx *gin.Context) {
@@ -48,6 +49,13 @@ func (server *Server) RegisterUser(ctx *gin.Context) {
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(api_error.ErrRegisterFail, err))
 		return
+	}
+
+	if req.ProfilePicture != "DEFAULT" {
+		server.queries.UpdateUserProfilePicture(ctx, db.UpdateUserProfilePictureParams{
+			ID:             user.ID,
+			ProfilePicture: req.ProfilePicture,
+		})
 	}
 
 	util.NotifyUser(user.PhoneNumber, "Thank you for registering for GoodGrocer! You will recieve updates about your requests and errands through this number as you use the app!")
