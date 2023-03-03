@@ -13,13 +13,8 @@ const Login = ({ navigation }) => {
   const isFocused = useIsFocused();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [failedLogIn, setFailedLogIn] = useState(false);
 
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    setFailedLogIn(false);
-  }, [isFocused]);
 
   const login = useRequest({
     url: "/user/login",
@@ -29,32 +24,33 @@ const Login = ({ navigation }) => {
       password,
     },
     onSuccess: (data) => {
-      if (data.token) {
-        dispatch(setToken(data.token));
-      } else {
-        setFailedLogIn(true);
-      }
-      console.log(data);
-    },
-    onFail: () => {
-      setFailedLogIn(true);
+      dispatch(setToken(data.token));
     },
   });
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={{ paddingTop: 50 }}>
-        {/* <Image source={require("../assets/logo.png")} /> */}
         <Text style={styles.titleText}>Welcome Back</Text>
-        <Text>Email or Phone Number</Text>
-        <TextInput onChange={(email) => setEmail(email.nativeEvent.text)} />
+        <Text>Email</Text>
+        <TextInput
+          onChange={(email) => setEmail(email.nativeEvent.text)}
+          placeholder="Enter your email..."
+        />
         <Text>Password</Text>
         <TextInput
           onChange={(password) => setPassword(password.nativeEvent.text)}
+          placeholder="Enter your password..."
         />
         <Button
-          title={"Sign In"}
-          onPress={async () => await login.doRequest()}
+          title={"Log In"}
+          onPress={async () => {
+            if (!email || !password) {
+              Alert.alert("Oops!", "Please fill out all fields.");
+            } else {
+              await login.doRequest();
+            }
+          }}
           textColor={"white"}
           backgroundColor={"#0070CA"}
           width={300}

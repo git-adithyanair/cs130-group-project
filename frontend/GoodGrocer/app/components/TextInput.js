@@ -9,8 +9,8 @@ const TextInput = (props) => {
       onChange={props.onChange}
       value={props.value}
       autoCapitalize="none"
-      placeholder="Enter text here..."
-      placeholderTextColor={Colors.lightGreen}
+      placeholder={props.placeholder || "Enter text here..."}
+      placeholderTextColor={Colors.darkGreen}
     />
   );
 };
@@ -18,11 +18,11 @@ const TextInput = (props) => {
 const styles = StyleSheet.create({
   input: {
     height: 40,
-    marginTop: 12,
-    marginBottom: 12,
-    borderWidth: 1,
+    marginTop: 5,
+    marginBottom: 20,
     padding: 10,
     borderRadius: 10,
+    backgroundColor: Colors.lightGreen,
   },
 });
 
