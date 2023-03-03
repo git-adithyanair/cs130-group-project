@@ -1,8 +1,8 @@
 import React from "react";
 import { Dimensions } from "react-native";
 
-// export const API_URL = "http://api.good-grocer.click";
-export const API_URL = "http://localhost:8080";
+export const API_URL = "http://api.good-grocer.click";
+// export const API_URL = "http://localhost:8080";
 
 export const Dim = {
   height: Dimensions.get("window").height,
