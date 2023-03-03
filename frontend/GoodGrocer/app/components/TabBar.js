@@ -3,16 +3,18 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Image, StyleSheet } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import Buy from "../screens/Buy";
-import Shop from "../screens/Shop";
 import JoinCommunity from "../screens/JoinCommunity";
 import YourCommunities from "../screens/YourCommunities";
+import Profile from "../screens/Profile"; 
 import { Dim, Colors } from "../Constants";
 import ActiveErrand from "../screens/ActiveErrand";
 import ActiveRequest from "../screens/ActiveRequest";
+import RequestList from '../screens/RequestList';
+import RequestDetail from '../screens/RequestDetail';
 
 const HomeStack = createStackNavigator();
 const ErrandStack = createStackNavigator();
+const ProfileStack = createStackNavigator(); 
 
 const HomeStackScreen = () => {
   return (
@@ -23,11 +25,32 @@ const HomeStackScreen = () => {
         options={{ title: "Your Communities" }}
       />
       <HomeStack.Screen
+        name="RequestList"
+        component={RequestList}
+        options={{ title: "Community Requests" }}
+      />
+      <HomeStack.Screen
         name="JoinCommunity"
         component={JoinCommunity}
         options={{ title: "Join Community" }}
       />
+      <HomeStack.Screen
+        name="RequestDetail"
+        component={RequestDetail}
+        options={{ title: "Request Detail" }}
+      />
     </HomeStack.Navigator>
+  );
+};
+
+const ProfileStackScreen = () => {
+  return (
+    <ProfileStack.Navigator>
+      <ProfileStack.Screen
+        name="Profile"
+        component={Profile} 
+      />
+    </ProfileStack.Navigator>
   );
 };
 
@@ -48,12 +71,12 @@ const ErrandStackScreen = () => {
   );
 };
 
+
 const Tab = createBottomTabNavigator();
 
 const tabBarPages = [
-  { name: "Shop", component: Shop },
   { name: "Home", component: HomeStackScreen },
-  { name: "Buy", component: Buy },
+  { name: "MyProfile", component: ProfileStackScreen },
   { name: "Errand", component: ErrandStackScreen },
 ];
 
@@ -71,11 +94,9 @@ const TabBar = (props) => {
         tabBarShowLabel: false,
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
-          if (route.name === "Shop") {
-            iconName = focused ? "ios-cart" : "ios-cart-outline";
-          } else if (route.name === "Buy") {
-            iconName = focused ? "ios-pizza" : "ios-pizza-outline";
-          } else if (route.name === "Home") {
+          if (route.name === "Home") {
+            iconName = focused ? "ios-people-circle" : "ios-people-circle-outline";
+          }  else if (route.name === "MyProfile") {
             return (
               <Image source={{ uri: props.imageUri }} style={styles.logo} />
             );
