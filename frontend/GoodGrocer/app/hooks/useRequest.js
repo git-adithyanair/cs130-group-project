@@ -22,7 +22,7 @@ const useRequest = ({
       const response = await axios({
         method,
         url: API_URL + url,
-        data: { ...body, ...dynamicBody },
+        data: method === "get" ? null : { ...body, ...dynamicBody },
         headers: { ...headers, Authorization: `Bearer ${token}` },
         params,
       });
@@ -35,7 +35,6 @@ const useRequest = ({
       if (err.response && err.response.status === 401) {
         dispatch(setToken(""));
       }
-      console.log(err.response.data);
       const error = err.response
         ? {
             message: err.response.data.error,
