@@ -1,23 +1,35 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../components/Button";
-import { SafeAreaView, StyleSheet, FlatList, View } from "react-native";
+import { SafeAreaView, StyleSheet, FlatList, View, Text } from "react-native";
 import CommunityCard from "../components/CommunityCard";
 import { Dim, Colors, Font } from "../Constants";
 import useRequest from "../hooks/useRequest";
 
 const YourCommunities = (props) => {
-  const [communityData, setCommunityData] = useState([]); 
+  const [communityData, setCommunityData] = useState([]);
 
   const getCommunities = useRequest({
     url: "/user/community",
     method: "get",
     onSuccess: (data) => {
       data.forEach((community) => {
-        setCommunityData(oldArray => [...oldArray, {members: community.member_count, communityId: community.community.id, communityName: community.community.name, distance: Math.round((community.community.range/1609.344)*100)/100}])})
-    } 
+        setCommunityData((oldArray) => [
+          ...oldArray,
+          {
+            members: community.member_count,
+            communityId: community.community.id,
+            communityName: community.community.name,
+            distance:
+              Math.round((community.community.range / 1609.344) * 100) / 100,
+          },
+        ]);
+      });
+    },
   });
-  const func = async () => getCommunities.doRequest(); 
-  useEffect(()=> {func()},[]); 
+  const func = async () => getCommunities.doRequest();
+  useEffect(() => {
+    func();
+  }, []);
 
   return (
     <SafeAreaView style={styles.wrapper}>
@@ -35,7 +47,12 @@ const YourCommunities = (props) => {
             communityName={itemData.item.communityName}
             distanceFromUser={itemData.item.distance}
             numberOfMembers={itemData.item.members}
-            onPressCommunity={() => props.navigation.navigate("RequestList", {communityId: itemData.item.communityId, communityName: itemData.item.communityName})}
+            onPressCommunity={() =>
+              props.navigation.navigate("RequestList", {
+                communityId: itemData.item.communityId,
+                communityName: itemData.item.communityName,
+              })
+            }
           />
         )}
         ItemSeparatorComponent={() => (
@@ -52,9 +69,24 @@ const YourCommunities = (props) => {
               width={200}
               appButtonContainer={{ backgroundColor: Colors.lightGreen }}
               appButtonText={{ textTransform: "none" }}
-              title={"Join More!"}
+              title={"Join More"}
               onPress={() => props.navigation.navigate("JoinCommunity")}
             ></Button>
+          </View>
+        )}
+        ListEmptyComponent={() => (
+          <View
+            style={{ alignItems: "center", height: "100%", paddingTop: "50%" }}
+          >
+            <Text
+              style={{
+                fontFamily: Font.s1.family,
+                fontSize: Font.s1.size,
+                alignSelf: "center",
+              }}
+            >
+              Join a community to get started! 🧸
+            </Text>
           </View>
         )}
       ></FlatList>
