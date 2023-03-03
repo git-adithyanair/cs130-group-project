@@ -35,7 +35,7 @@ const Login = ({ navigation }) => {
         <Text>Email</Text>
         <TextInput
           onChange={(email) => setEmail(email.nativeEvent.text)}
-          placeholder="Enter your email or phone number..."
+          placeholder="Enter your email..."
         />
         <Text>Password</Text>
         <TextInput
