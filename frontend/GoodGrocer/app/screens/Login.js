@@ -32,7 +32,7 @@ const Login = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <View style={{ paddingTop: 50 }}>
         <Text style={styles.titleText}>Welcome Back</Text>
-        <Text>Email or Phone Number</Text>
+        <Text>Email</Text>
         <TextInput
           onChange={(email) => setEmail(email.nativeEvent.text)}
           placeholder="Enter your email or phone number..."
