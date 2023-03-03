@@ -85,6 +85,17 @@ func (q *Queries) GetMember(ctx context.Context, arg GetMemberParams) (Member, e
 	return i, err
 }
 
+const getMemberCountInCommunity = `-- name: GetMemberCountInCommunity :one
+SELECT COUNT(*) FROM members WHERE community_id = $1
+`
+
+func (q *Queries) GetMemberCountInCommunity(ctx context.Context, communityID int64) (int64, error) {
+	row := q.db.QueryRowContext(ctx, getMemberCountInCommunity, communityID)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
 const listMembersByCommunity = `-- name: ListMembersByCommunity :many
 SELECT user_id, community_id, joined_at FROM members WHERE community_id = $1
 `

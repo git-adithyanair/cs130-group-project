@@ -131,3 +131,12 @@ type communityRequestsResponse struct {
 }
 
 // ========================================================================
+
+// ========================================================================
+// Type and function to return info for a community along with the number of members
+type userCommunityResponse struct {
+	Community   db.Community `json:"community"`
+	MemberCount int64        `json:"member_count"`
+}
+
+// ========================================================================
