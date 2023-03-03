@@ -3,10 +3,11 @@ import TextInput from "../components/TextInput";
 import Button from "../components/Button";
 import { SafeAreaView, StyleSheet, Text, Image, View } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
-import { API_URL } from "../Constants";
+import { API_URL, Font } from "../Constants";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { setToken } from "../store/actions";
+import useRequest from "../hooks/useRequest";
 
 const Login = ({ navigation }) => {
   const isFocused = useIsFocused();
@@ -20,29 +21,30 @@ const Login = ({ navigation }) => {
     setFailedLogIn(false);
   }, [isFocused]);
 
-  const handleLogin = async () => {
-    axios
-      .post(`${API_URL}/user/login`, {
-        email,
-        password,
-      })
-      .then(({ data }) => {
-        if (data.token) {
-          dispatch(setToken(data.token));
-        } else {
-          setFailedLogIn(true);
-        }
-        console.log(data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
+  const login = useRequest({
+    url: "/user/login",
+    method: "post",
+    body: {
+      email,
+      password,
+    },
+    onSuccess: (data) => {
+      if (data.token) {
+        dispatch(setToken(data.token));
+      } else {
+        setFailedLogIn(true);
+      }
+      console.log(data);
+    },
+    onFail: () => {
+      setFailedLogIn(true);
+    },
+  });
 
   return (
     <SafeAreaView style={styles.container}>
-      <View>
-        <Image source={require("../assets/logo.png")} />
+      <View style={{ paddingTop: 50 }}>
+        {/* <Image source={require("../assets/logo.png")} /> */}
         <Text style={styles.titleText}>Welcome Back</Text>
         <Text>Email or Phone Number</Text>
         <TextInput onChange={(email) => setEmail(email.nativeEvent.text)} />
@@ -52,14 +54,12 @@ const Login = ({ navigation }) => {
         />
         <Button
           title={"Sign In"}
-          onPress={() => handleLogin()}
+          onPress={async () => await login.doRequest()}
           textColor={"white"}
           backgroundColor={"#0070CA"}
           width={300}
+          appButtonContainer={{ marginTop: 20 }}
         />
-        <Text style={styles.errorMessageText}>
-          {failedLogIn ? "Invalid Credentials" : ""}
-        </Text>
       </View>
     </SafeAreaView>
   );
@@ -69,16 +69,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    justifyContent: "center",
     alignItems: "center",
   },
   titleText: {
-    fontSize: 25,
-  },
-  errorMessageText: {
-    color: "red",
-    textAlign: "center",
-    paddingTop: 10,
+    marginVertical: 20,
+    fontFamily: Font.s1.family,
+    fontSize: 30,
+    fontWeight: Font.s1.weight,
   },
 });
 

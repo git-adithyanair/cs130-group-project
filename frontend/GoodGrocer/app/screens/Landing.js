@@ -6,7 +6,12 @@ function Landing({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <Image source={require("../assets/logo.png")} />
-      <Image source={require("../assets/slogan.png")} />
+      <Image
+        source={require("../assets/slogan.png")}
+        style={{
+          marginVertical: 20,
+        }}
+      />
       <Button
         title={"Login"}
         onPress={() => navigation.navigate("Login")}
