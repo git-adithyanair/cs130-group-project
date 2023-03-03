@@ -14,10 +14,7 @@ const YourCommunities = (props) => {
     onSuccess: (data) => {
       data.forEach((community) => {
         setCommunityData(oldArray => [...oldArray, {members: community.member_count, communityId: community.community.id, communityName: community.community.name, distance: Math.round((community.community.range/1609.344)*100)/100}])})
-    },
-    onFail: () => {
-      console.log("Error in getting user communities")
-    },
+    } 
   });
   const func = async () => getCommunities.doRequest(); 
   useEffect(()=> {func()},[]); 

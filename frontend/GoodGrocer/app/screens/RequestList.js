@@ -16,10 +16,7 @@ function RequestList(props) {
         data.forEach((request)=>{
           setCommunityRequestData(oldArray=> [...oldArray, {name: request.user.full_name, storeName: request.store ? request.store.name : "Any Store", id: request.request.id, numItems: -1, imageUri: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"}])
         })
-      },
-      onFail: () => {
-        console.log("Error in getting community requests")
-      },
+      }
     });
     const func = async () => getCommunityRequests.doRequest(); 
     useEffect(()=> {func()},[]); 

@@ -12,10 +12,7 @@ function RequestDetail(props) {
     onSuccess: (data) => {
       console.log(data)
      data.forEach((item)=>{setItems(oldArray=>[...oldArray, {itemName: item.name, numOfItem: item.quantity+item.quantity_type, id: item.id}])}); 
-    },
-    onFail: () => {
-      console.log("Error")
-    },
+    }
   });
   const func = async () => getItemsInRequest.doRequest(); 
   useEffect(()=> {func()},[]); 
