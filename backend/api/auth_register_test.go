@@ -68,14 +68,15 @@ func TestRegisterUser(t *testing.T) {
 		{
 			name: "OK",
 			body: gin.H{
-				"email":        user.Email,
-				"password":     rawPassword,
-				"full_name":    user.FullName,
-				"phone_number": user.PhoneNumber,
-				"address":      user.Address,
-				"place_id":     user.PlaceID,
-				"x_coord":      user.XCoord,
-				"y_coord":      user.YCoord,
+				"email":           user.Email,
+				"password":        rawPassword,
+				"full_name":       user.FullName,
+				"phone_number":    user.PhoneNumber,
+				"address":         user.Address,
+				"place_id":        user.PlaceID,
+				"x_coord":         user.XCoord,
+				"y_coord":         user.YCoord,
+				"profile_picture": "PROFILE_PICTURE",
 			},
 			buildStubs: func(store *mock_db.MockDBStore) {
 				arg := db.CreateUserParams{
@@ -91,6 +92,11 @@ func TestRegisterUser(t *testing.T) {
 					CreateUser(gomock.Any(), EqCreateUserParams(arg, rawPassword)).
 					Times(1).
 					Return(user, nil)
+				store.EXPECT().
+					UpdateUserProfilePicture(gomock.Any(), db.UpdateUserProfilePictureParams{
+						ID:             user.ID,
+						ProfilePicture: "PROFILE_PICTURE",
+					}).Times(1).Return(nil)
 			},
 			checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
 				require.Equal(t, http.StatusOK, recorder.Code)
@@ -101,14 +107,15 @@ func TestRegisterUser(t *testing.T) {
 		{
 			name: "InvalidEmail",
 			body: gin.H{
-				"email":        "invalid_email",
-				"password":     rawPassword,
-				"full_name":    user.FullName,
-				"phone_number": user.PhoneNumber,
-				"address":      user.Address,
-				"place_id":     user.PlaceID,
-				"x_coord":      user.XCoord,
-				"y_coord":      user.YCoord,
+				"email":           "invalid_email",
+				"password":        rawPassword,
+				"full_name":       user.FullName,
+				"phone_number":    user.PhoneNumber,
+				"address":         user.Address,
+				"place_id":        user.PlaceID,
+				"x_coord":         user.XCoord,
+				"y_coord":         user.YCoord,
+				"profile_picture": "DEFAULT",
 			},
 			buildStubs: func(store *mock_db.MockDBStore) {
 				store.EXPECT().
@@ -122,14 +129,15 @@ func TestRegisterUser(t *testing.T) {
 		{
 			name: "PasswordTooShort",
 			body: gin.H{
-				"email":        user.Email,
-				"password":     "short",
-				"full_name":    user.FullName,
-				"phone_number": user.PhoneNumber,
-				"address":      user.Address,
-				"place_id":     user.PlaceID,
-				"x_coord":      user.XCoord,
-				"y_coord":      user.YCoord,
+				"email":           user.Email,
+				"password":        "short",
+				"full_name":       user.FullName,
+				"phone_number":    user.PhoneNumber,
+				"address":         user.Address,
+				"place_id":        user.PlaceID,
+				"x_coord":         user.XCoord,
+				"y_coord":         user.YCoord,
+				"profile_picture": "DEFAULT",
 			},
 			buildStubs: func(store *mock_db.MockDBStore) {
 				store.EXPECT().
@@ -143,14 +151,15 @@ func TestRegisterUser(t *testing.T) {
 		{
 			name: "InternalServerError",
 			body: gin.H{
-				"email":        user.Email,
-				"password":     rawPassword,
-				"full_name":    user.FullName,
-				"phone_number": user.PhoneNumber,
-				"address":      user.Address,
-				"place_id":     user.PlaceID,
-				"x_coord":      user.XCoord,
-				"y_coord":      user.YCoord,
+				"email":           user.Email,
+				"password":        rawPassword,
+				"full_name":       user.FullName,
+				"phone_number":    user.PhoneNumber,
+				"address":         user.Address,
+				"place_id":        user.PlaceID,
+				"x_coord":         user.XCoord,
+				"y_coord":         user.YCoord,
+				"profile_picture": "DEFAULT",
 			},
 			buildStubs: func(store *mock_db.MockDBStore) {
 				arg := db.CreateUserParams{
