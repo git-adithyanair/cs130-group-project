@@ -15,14 +15,14 @@ function Landing({ navigation }) {
       <Button
         title={"Login"}
         onPress={() => navigation.navigate("Login")}
-        textColor={"black"}
+        textColor={"white"}
         backgroundColor={"#7B886B"}
         width={200}
       />
       <Button
-        title={"Signup"}
+        title={"Sign Up"}
         onPress={() => navigation.navigate("Signup")}
-        textColor={"black"}
+        textColor={"white"}
         backgroundColor={"#7B886B"}
         width={200}
       />

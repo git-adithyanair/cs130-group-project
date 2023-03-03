@@ -31,7 +31,6 @@ const useRequest = ({
       }
       return response.data;
     } catch (err) {
-      console.log(err);
       if (err.response && err.response.status === 401) {
         dispatch(setToken(""));
       }
@@ -50,6 +49,7 @@ const useRequest = ({
       if (onFail) {
         onFail(error);
       }
+      console.log(error);
     }
   };
 

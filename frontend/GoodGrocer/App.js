@@ -79,8 +79,16 @@ const App = () => {
             options={{ headerShown: false }}
           />
           <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="Signup" component={Signup} />
-          <Stack.Screen name="AddressSignup" component={AddressSignup} />
+          <Stack.Screen
+            name="Signup"
+            component={Signup}
+            options={{ headerTitle: "Sign Up" }}
+          />
+          <Stack.Screen
+            name="AddressSignup"
+            component={AddressSignup}
+            options={{ headerTitle: "Sign Up" }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     );
