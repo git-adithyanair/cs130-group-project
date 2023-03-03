@@ -1,16 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import TextInput from "../components/TextInput";
 import Button from "../components/Button";
-import { SafeAreaView, StyleSheet, Text, Image, View } from "react-native";
-import { useIsFocused } from "@react-navigation/native";
-import { API_URL, Font } from "../Constants";
-import axios from "axios";
+import { SafeAreaView, StyleSheet, Text, View, Alert } from "react-native";
+import { Font } from "../Constants";
 import { useDispatch } from "react-redux";
 import { setToken } from "../store/actions";
 import useRequest from "../hooks/useRequest";
 
 const Login = ({ navigation }) => {
-  const isFocused = useIsFocused();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
