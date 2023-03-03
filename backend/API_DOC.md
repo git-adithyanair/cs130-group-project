@@ -213,7 +213,7 @@ Endpoint to change user's full name.
 {}
 ```
 
-### User Commmunities
+### User Communities
 
 Gets all the communities the user is a member of.
 
@@ -508,6 +508,18 @@ Endpoint to get all of the requests for a community.
       "email": "[string, user email]",
       "full_name": "[string, user full name]",
       "created_at": "[timestamptz, user creation date]"
+    },
+    "items": {
+      "id": "[int, id of the item]",
+      "requested_by": "[int, id of user that requested item]",
+      "request_id": "[int, id of request]",
+      "name": "[string, name of item]",
+      "quantity_type": "[item_quantity_type, type of quantity (e.g. oz, lbs)]",
+      "quantity": "[float, quantity associated with item type]",
+      "preferred_brand": "[string, brand of item, not required]",
+      "image": "[string, image for item, not required]",
+      "found": "[bool, true if found, else false]",
+      "extra_notes": "[string, notes for shopper]"
     }
   },
   ...

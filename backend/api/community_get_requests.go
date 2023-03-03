@@ -82,9 +82,20 @@ func (server *Server) GetRequestsByCommunity(ctx *gin.Context) {
 			return
 		}
 
+		items, err := server.queries.GetItemsByRequest(ctx, request.ID)
+		if err != nil {
+			if err == sql.ErrNoRows {
+				ctx.JSON(http.StatusNotFound, errorResponse(api_error.ErrNoItem, err))
+			} else {
+				ctx.JSON(http.StatusInternalServerError, unknownErrorResponse(err))
+			}
+			return
+		}
+
 		requestRes[i] = communityRequestsResponse{
 			Request: request,
 			User:    newUserResponse(user),
+			Items:   items,
 		}
 
 		if request.StoreID.Valid {
