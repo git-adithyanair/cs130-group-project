@@ -132,6 +132,7 @@ type communityRequestsResponse struct {
 	Request db.Request   `json:"request"`
 	User    userResponse `json:"user"`
 	Store   *db.Store    `json:"store"`
+	Items   []db.Item    `json:"items"`
 }
 
 // ========================================================================
