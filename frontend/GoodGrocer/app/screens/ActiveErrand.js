@@ -71,7 +71,6 @@ const ActiveErrand = ({ navigation }) => {
 
   const requestComplete = (items) => {
     for (const item of items) {
-      console.log(item.found);
       if (!item.found.Valid) {
         return false;
       }
@@ -101,7 +100,7 @@ const ActiveErrand = ({ navigation }) => {
             requestComplete={requestComplete(itemData.item.items)}
             onPress={() =>
               navigation.navigate("ActiveRequest", {
-                name: itemData.item.user.full_name,
+                user: itemData.item.user,
                 profileImage:
                   "https://i.pinimg.com/236x/10/f4/a9/10f4a952ddf8e6828ae6833b3088dfa0.jpg",
                 items: itemData.item.items,

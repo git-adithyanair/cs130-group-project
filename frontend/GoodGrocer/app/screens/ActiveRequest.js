@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   SafeAreaView,
   StyleSheet,
@@ -10,12 +10,15 @@ import {
 import axios from "axios";
 import { Dim, Colors, Font, API_URL } from "../Constants";
 import ActiveItemCard from "../components/ActiveItemCard";
-import StoreCard from "../components/StoreCard";
+import LocationCard from "../components/LocationCard";
 import { useSelector } from "react-redux";
 
 const ActiveRequest = ({ route, navigation }) => {
-  const { name, profileImage, items, store } = route.params;
+  const { user, profileImage, items, store } = route.params;
   const token = useSelector((state) => state.user.token);
+  const [completedItems, setCompletedItems] = useState(
+    items.filter((item) => item.found.Valid).length
+  );
 
   const updateFound = async (found, id) => {
     axios
@@ -46,26 +49,43 @@ const ActiveRequest = ({ route, navigation }) => {
         renderItem={(itemData) => (
           <ActiveItemCard
             item={itemData.item}
-            onPressUpdateFound={(found) => updateFound(found, itemData.item.id)}
+            onPressUpdateFound={(found) => {
+              updateFound(found, itemData.item.id);
+              console.log(user);
+              setCompletedItems(completedItems + 1);
+            }}
           />
         )}
         keyExtractor={(item) => item.id}
         ListHeaderComponent={() => (
           <View style={{ alignItems: "center", paddingBottom: 20, flex: 1 }}>
-            <Text style={styles.title}>{name}'s Request</Text>
+            <Text style={styles.title}>{user.full_name}'s Request</Text>
             <Image
               source={{
                 uri: profileImage,
               }}
               style={styles.profilePic}
             />
-            {store != null ? (
-              <StoreCard
+            <Text style={styles.phoneNumberText}>
+              Phone number: {user.phone_number}
+            </Text>
+            {store != null && completedItems < items.length ? (
+              <LocationCard
                 style={{ flex: 1 }}
-                store={store.name}
+                title={"Store: " + store.name}
                 address={store.address}
                 lat={store.x_coord}
                 long={store.y_coord}
+                mapsLabel={store.name}
+              />
+            ) : completedItems == items.length ? (
+              <LocationCard
+                style={{ flex: 1 }}
+                title={user.full_name + "'s Address"}
+                address={user.address}
+                lat={user.x_coord}
+                long={user.y_coord}
+                mapsLabel={user.full_name + "'s Address"}
               />
             ) : null}
           </View>
@@ -119,6 +139,11 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 100 / 2,
     marginBottom: 20,
+  },
+  phoneNumberText: {
+    paddingBottom: 10,
+    fontWeight: "bold",
+    color: Colors.darkGreen,
   },
 });
 
