@@ -6,13 +6,13 @@ import { SafeAreaView, StyleSheet, Text, Image, View, Pressable } from 'react-na
 function Signup({navigation}) {
     const [email, setEmail] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
-    const [name, setName] = useState(''); 
-    const [password, setPassword] = useState(''); 
+    const [name, setName] = useState('');
+    const [password, setPassword] = useState('');
 
-   
+
     return (
         <SafeAreaView style={styles.container}>
-        <View> 
+        <View>
         <Image source={require("../assets/logo.png")}/>
         <Text style={styles.titleText}>Signup</Text>
         <Text>Email</Text>

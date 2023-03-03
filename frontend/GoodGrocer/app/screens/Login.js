@@ -5,10 +5,10 @@ import { SafeAreaView, StyleSheet, Text, Image, View } from 'react-native';
 import { useIsFocused } from "@react-navigation/native";
 
 const Login =  ({navigation}) => {
-    const isFocused = useIsFocused(); 
+    const isFocused = useIsFocused();
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState(''); 
-    const [failedLogIn, setFailedLogIn] = useState(false); 
+    const [password, setPassword] = useState('');
+    const [failedLogIn, setFailedLogIn] = useState(false);
 
     useEffect(() => {
       setFailedLogIn(false);
@@ -47,7 +47,7 @@ const Login =  ({navigation}) => {
         <Text style={styles.titleText}>Welcome Back</Text>
         <Text>Email or Phone Number</Text>
         <TextInput onChange={email=>setEmail(email.nativeEvent.text)}/>
-        <Text>Password</Text> 
+        <Text>Password</Text>
         <TextInput onChange={password => setPassword(password.nativeEvent.text)}/>
         <Button title={"Sign In"} onPress={() => handleLogin()} textColor={"white"} backgroundColor={"#0070CA"} width={300} />
         <Text style={styles.errorMessageText}>{failedLogIn ? "Invalid Credentials" : ""}</Text>

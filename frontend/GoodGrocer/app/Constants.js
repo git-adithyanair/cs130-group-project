@@ -10,7 +10,8 @@ export const Colors = {
   darkGreen: "#7B886B",
   lightGreen: "#C0C6B9",
   white: "#FFFFFF",
-  cream:"#F1ECEC"
+  cream:"#F1ECEC",
+  blue: "#0070CA",
 };
 
 export const Font = {

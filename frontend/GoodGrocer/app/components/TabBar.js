@@ -1,15 +1,18 @@
 import React from "react";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from "@react-navigation/stack";
-import { Image, StyleSheet } from 'react-native'; 
+import { Image, StyleSheet } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Buy from '../screens/Buy'; 
+import Buy from '../screens/Buy';
 import Shop from '../screens/Shop';
 import JoinCommunity from '../screens/JoinCommunity';
 import YourCommunities from "../screens/YourCommunities";
 import {Dim, Colors} from "../Constants"
+import CreateOrder from "../screens/CreateOrder";
+import OrderCreated from "../screens/OrderCreated";
 
 const HomeStack = createStackNavigator();
+const ShopStack = createStackNavigator();
 
 const HomeStackScreen = () => {
   return (
@@ -20,11 +23,20 @@ const HomeStackScreen = () => {
   );
 }
 
-const Tab = createBottomTabNavigator(); 
+const ShopStackScreen = () => {
+  return (
+    <ShopStack.Navigator>
+      <ShopStack.Screen name="CreateOrder" component={CreateOrder}/>
+      <ShopStack.Screen name="OrderCreated" component={OrderCreated}/>
+    </ShopStack.Navigator>
+  )
+}
+
+const Tab = createBottomTabNavigator();
 
 const tabBarPages = [
     {"name": "Shop",
-    "component": Shop},
+    "component": ShopStackScreen},
     {"name": "Home",
     "component": HomeStackScreen},
     {"name": "Buy",
@@ -34,7 +46,7 @@ const tabBarPages = [
 const TabBar = (props) => {
     const components = tabBarPages.map((page, index) => <Tab.Screen name={page.name} component={page.component} key={index}/>)
     if(components.length === 0){
-        return null; 
+        return null;
     }
     return  <Tab.Navigator screenOptions={({ route }) => ({
         headerShown: false,
@@ -55,7 +67,7 @@ const TabBar = (props) => {
           },
         tabBarStyle: {
           height: Dim.width * 0.15,
-          width: Dim.width, 
+          width: Dim.width,
           backgroundColor: Colors.darkGreen,
           color: Colors.white,
           position: 'absolute',
@@ -63,7 +75,7 @@ const TabBar = (props) => {
       },
     })}>
         {components}
-    </Tab.Navigator>; 
+    </Tab.Navigator>;
 };
 
 
