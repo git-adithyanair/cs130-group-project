@@ -20,6 +20,20 @@ func (server *Server) GetUserCommunities(ctx *gin.Context) {
 		}
 	}
 
-	ctx.JSON(http.StatusOK, communities)
+	res := make([]userCommunityResponse, len(communities))
+	for i, community := range communities {
+		memberCount, err := server.queries.GetMemberCountInCommunity(ctx, community.ID)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, unknownErrorResponse(err))
+			return
+		}
+
+		res[i] = userCommunityResponse{
+			Community:   community,
+			MemberCount: memberCount,
+		}
+	}
+
+	ctx.JSON(http.StatusOK, res)
 
 }

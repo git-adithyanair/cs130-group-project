@@ -12,6 +12,9 @@ SELECT * FROM members WHERE
     user_id = $1 AND
     community_id = $2;
 
+-- name: GetMemberCountInCommunity :one
+SELECT COUNT(*) FROM members WHERE community_id = $1; 
+
 -- name: ListMembersByCommunity :many
 SELECT * FROM members WHERE community_id = $1;
 

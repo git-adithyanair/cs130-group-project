@@ -232,9 +232,9 @@ Gets all the communities the user is a member of.
 **Success Response** : `200 OK`
 
 ```json
-{
-  "communities": [
-    {
+[
+  {
+    "community": {
       "id": "[int, community id]",
       "name": "[string, community name]",
       "admin": "[int, community user admin id]",
@@ -244,9 +244,10 @@ Gets all the communities the user is a member of.
       "range": "[int, community range of users]",
       "address": "[string, community address]",
       "created_at": "[timestamptz, community creation date]"
-    }
-  ]
-}
+    },
+    "member_count": "[int, number of members in the community]"
+  }
+]
 ```
 
 ### User Requests
