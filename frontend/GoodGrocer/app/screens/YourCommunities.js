@@ -1,24 +1,24 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import Button from "../components/Button";
 import { SafeAreaView, StyleSheet, FlatList, View } from "react-native";
 import CommunityCard from "../components/CommunityCard";
 import { Dim, Colors, Font } from "../Constants";
+import useRequest from "../hooks/useRequest";
 
 const YourCommunities = (props) => {
-  const data = [
-    { communityName: "Westwood", distance: 0.5, members: 10 },
-    { communityName: "Brentwood", distance: 2, members: 10 },
-    { communityName: "Beverly Hills", distance: 5, members: 10 },
-    { communityName: "Beverly Hills", distance: 5, members: 10 },
-    { communityName: "Beverly Hills", distance: 5, members: 10 },
-    { communityName: "Beverly Hills", distance: 5, members: 10 },
-    { communityName: "Beverly Hills", distance: 5, members: 10 },
-    { communityName: "Beverly Hills", distance: 5, members: 10 },
-    { communityName: "Beverly Hills", distance: 5, members: 10 },
-    { communityName: "Beverly Hills", distance: 5, members: 10 },
-    { communityName: "Beverly Hills", distance: 5, members: 10 },
-    { communityName: "Beverly Hills", distance: 5, members: 10 },
-  ];
+  const [communityData, setCommunityData] = useState([]); 
+
+  const getCommunities = useRequest({
+    url: "/user/community",
+    method: "get",
+    onSuccess: (data) => {
+      data.forEach((community) => {
+        setCommunityData(oldArray => [...oldArray, {members: community.member_count, communityId: community.community.id, communityName: community.community.name, distance: Math.round((community.community.range/1609.344)*100)/100}])})
+    } 
+  });
+  const func = async () => getCommunities.doRequest(); 
+  useEffect(()=> {func()},[]); 
+
   return (
     <SafeAreaView style={styles.wrapper}>
       <FlatList
@@ -29,12 +29,13 @@ const YourCommunities = (props) => {
         columnWrapperStyle={{ justifyContent: "space-between" }}
         showsVerticalScrollIndicator={false}
         keyExtractor={(item) => Math.random().toString()}
-        data={data}
+        data={communityData}
         renderItem={(itemData) => (
           <CommunityCard
             communityName={itemData.item.communityName}
             distanceFromUser={itemData.item.distance}
             numberOfMembers={itemData.item.members}
+            onPressCommunity={() => props.navigation.navigate("RequestList", {communityId: itemData.item.communityId, communityName: itemData.item.communityName})}
           />
         )}
         ItemSeparatorComponent={() => (
