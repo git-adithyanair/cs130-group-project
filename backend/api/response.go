@@ -80,6 +80,33 @@ type userRequestsResponse struct {
 // ========================================================================
 
 // ========================================================================
+// Type and function to return only detailed unprotected user information.
+// To be used during an errand for shopper to contact user.
+type userDetailedResponse struct {
+	ID          int64   `json:"id"`
+	Email       string  `json:"email"`
+	FullName    string  `json:"full_name"`
+	PhoneNumber string  `json:"phone_number"`
+	XCoord      float64 `json:"x_coord"`
+	YCoord      float64 `json:"y_cord"`
+	Address     string  `json:"address"`
+}
+
+func newUserDetailedResponse(user db.User) userDetailedResponse {
+	return userDetailedResponse{
+		ID:          user.ID,
+		FullName:    user.FullName,
+		Email:       user.Email,
+		PhoneNumber: user.PhoneNumber,
+		XCoord:      user.XCoord,
+		YCoord:      user.YCoord,
+		Address:     user.Address,
+	}
+}
+
+// ========================================================================
+
+// ========================================================================
 // Type and function to return users active errand with its requests.
 type activeErrandResponse struct {
 	Errand   db.Errand                     `json:"errand"`
@@ -87,10 +114,10 @@ type activeErrandResponse struct {
 }
 
 type activeErrandRequestResponse struct {
-	Request db.Request   `json:"request"`
-	Items   []db.Item    `json:"items"`
-	User    userResponse `json:"user"`
-	Store   *db.Store    `json:"store"`
+	Request db.Request           `json:"request"`
+	Items   []db.Item            `json:"items"`
+	User    userDetailedResponse `json:"user"`
+	Store   *db.Store            `json:"store"`
 }
 
 // ========================================================================

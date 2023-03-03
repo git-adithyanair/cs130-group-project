@@ -508,7 +508,8 @@ Endpoint to get all of the requests for a community.
       "full_name": "[string, user full name]",
       "created_at": "[timestamptz, user creation date]"
     }
-  }
+  },
+  ...
 ]
 ```
 
@@ -685,7 +686,10 @@ If there is an active errand:
         "id": "[string, user id]",
         "email": "[string, user email]",
         "full_name": "[string, user full name]",
-        "created_at": "[timestamptz, user creation date]"
+        "phone_number": "[string, user phone number]",
+        "x_coord": "[float, user address x coord]",
+        "y_coord": "[float, user address y coord]",
+        "address": "[string, user address]"
       }
     }
   ]

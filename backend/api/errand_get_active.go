@@ -56,7 +56,7 @@ func (server *Server) GetActiveErrand(ctx *gin.Context) {
 		requestRes[i] = activeErrandRequestResponse{
 			Request: request,
 			Items:   items,
-			User:    newUserResponse(user),
+			User:    newUserDetailedResponse(user),
 		}
 
 		if request.StoreID.Valid {
