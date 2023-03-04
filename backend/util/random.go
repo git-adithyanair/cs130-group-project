@@ -59,10 +59,22 @@ func RandomCommunityName() string {
 	return RandomString(10)
 }
 
+func RandomStoreName() string {
+	return RandomString(10)
+}
+
+func RandomItemName() string {
+	return RandomString(6)
+}
+
 func RandomRange() int32 {
 	return int32(RandomInt(1, 10))
 }
 
 func RandomCoordinate() float64 {
 	return RandomFloat(-180, 180)
+}
+
+func RandomID() int64 {
+	return int64(RandomInt(1, 100000))
 }

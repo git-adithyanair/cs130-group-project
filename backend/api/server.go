@@ -4,9 +4,11 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 	db "github.com/git-adithyanair/cs130-group-project/db/sqlc"
 	"github.com/git-adithyanair/cs130-group-project/token"
 	"github.com/git-adithyanair/cs130-group-project/util"
+	"github.com/go-playground/validator/v10"
 )
 
 type Server struct {
@@ -29,6 +31,11 @@ func NewServer(config util.Config, store db.DBStore) (*Server, error) {
 		tokenMaker: tokenMaker,
 		queries:    store,
 	}
+
+	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
+		v.RegisterValidation("item_quantity_type", validItemQuantityType)
+	}
+
 	server.setupRouter()
 
 	return server, nil

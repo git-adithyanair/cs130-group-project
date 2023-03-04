@@ -14,7 +14,7 @@ import (
 
 type CreateRequestRequestItem struct {
 	Name           string              `json:"name" binding:"required,min=1"`
-	QuantityType   db.ItemQuantityType `json:"quantity_type" binding:"required,min=2"`
+	QuantityType   db.ItemQuantityType `json:"quantity_type" binding:"required,min=2,quantity_type"`
 	Quantity       float64             `json:"quantity" binding:"required,min=1"`
 	PreferredBrand string              `json:"preferred_brand"`
 	Image          string              `json:"image"`
