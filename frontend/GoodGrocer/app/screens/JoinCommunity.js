@@ -1,27 +1,86 @@
-import { React, useState } from "react";
+import { React, useEffect, useState } from "react";
 import { SafeAreaView, StyleSheet, FlatList, View, Text } from "react-native";
 import CommunityCard from "../components/CommunityCard";
 import SearchBar from "../components/SearchBar";
 import { Dim, Colors, Font } from "../Constants";
+import useRequest from "../hooks/useRequest";
 
 const JoinCommunity = (props) => {
-  const data = [
-    { communityName: "Westwood", distance: 0.5, members: 10 },
-    { communityName: "Brentwood", distance: 2, members: 10 },
-    { communityName: "Beverly Hills", distance: 5, members: 10 },
-    { communityName: "Beverly Hills", distance: 5, members: 10 },
-    { communityName: "Beverly Hills", distance: 5, members: 10 },
-    { communityName: "Beverly Hills", distance: 5, members: 10 },
-    { communityName: "Beverly Hills", distance: 5, members: 10 },
-    { communityName: "Beverly Hills", distance: 5, members: 10 },
-    { communityName: "Beverly Hills", distance: 5, members: 10 },
-    { communityName: "Beverly Hills", distance: 5, members: 10 },
-    { communityName: "Beverly Hills", distance: 5, members: 10 },
-    { communityName: "Beverly Hills", distance: 5, members: 10 },
-  ];
-
-  const [communities, setCommunities] = useState(data);
+  let allCommunities = [];
+  let userCommunities = [];
+  const [communities, setCommunities] = useState([]);
   const [community, setCommunity] = useState("");
+
+  // const data = [
+  //   { communityName: "Westwood", distance: 0.5, members: 10 },
+  //   { communityName: "Brentwood", distance: 2, members: 10 },
+  //   { communityName: "Beverly Hills", distance: 5, members: 10 },
+  //   { communityName: "Beverly Hills", distance: 5, members: 10 },
+  //   { communityName: "Beverly Hills", distance: 5, members: 10 },
+  //   { communityName: "Beverly Hills", distance: 5, members: 10 },
+  //   { communityName: "Beverly Hills", distance: 5, members: 10 },
+  //   { communityName: "Beverly Hills", distance: 5, members: 10 },
+  //   { communityName: "Beverly Hills", distance: 5, members: 10 },
+  //   { communityName: "Beverly Hills", distance: 5, members: 10 },
+  //   { communityName: "Beverly Hills", distance: 5, members: 10 },
+  //   { communityName: "Beverly Hills", distance: 5, members: 10 },
+  // ];
+
+  const getAllCommunities = useRequest({
+    url: "/community",
+    method: "get",
+    onSuccess: (data) => {
+      allCommunities = data;
+      console.log("all communities", allCommunities);
+      // data.forEach((community) => {
+      //   setCommunityData((oldArray) => [
+      //     ...oldArray,
+      //     {
+      //       members: community.member_count,
+      //       communityId: community.community.id,
+      //       communityName: community.community.name,
+      //       distance:
+      //         Math.round((community.community.range / 1609.344) * 100) / 100,
+      //     },
+      //   ]);
+      // });
+    },
+  });
+
+  const getUserCommunities = useRequest({
+    url: "/user/community",
+    method: "get",
+    onSuccess: (data) => {
+      userCommunities = data;
+      console.log("user communities", userCommunities);
+      // data.forEach((community) => {
+      //   setCommunityData((oldArray) => [
+      //     ...oldArray,
+      //     {
+      //       members: community.member_count,
+      //       communityId: community.community.id,
+      //       communityName: community.community.name,
+      //       distance:
+      //         Math.round((community.community.range / 1609.344) * 100) / 100,
+      //     },
+      //   ]);
+      // });
+    },
+  });
+
+  const allComm = async () => await getAllCommunities.doRequest();
+  const userComm = async () => await getUserCommunities.doRequest();
+  
+  useEffect(() => {
+    allComm();
+    userComm();
+
+    allCommunities.filter((community) => {
+      !userCommunities.find((comm) => comm.place_id === community.place_id);
+    });
+
+    console.log("filtered communities", allCommunities);
+  }, []);
 
   const searchCommunities = (text) => {
     setCommunity(text);
@@ -30,7 +89,9 @@ const JoinCommunity = (props) => {
     } else {
       setCommunities(
         data.filter((item) => {
-          return item.communityName.toLowerCase().startsWith(text.toLowerCase());
+          return item.communityName
+            .toLowerCase()
+            .startsWith(text.toLowerCase());
         })
       );
     }
