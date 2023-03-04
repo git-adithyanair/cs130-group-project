@@ -128,6 +128,13 @@ func createRandomItem(
 	}
 }
 
+func createRandomMember(t *testing.T, userID int64, communityID int64) db.Member {
+	return db.Member{
+		UserID:      userID,
+		CommunityID: communityID,
+	}
+}
+
 func addAuthorization(
 	t *testing.T,
 	request *http.Request,
