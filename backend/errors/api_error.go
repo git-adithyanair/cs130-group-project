@@ -21,6 +21,8 @@ const (
 	ErrInvalidUserForErrand  = "ERROR_INVALID_USER_FOR_ERRAND"
 	ErrTwilio                = "ERROR_TWILIO"
 	ErrActiveErrorExists     = "ERROR_ACTIVE_ERROR_EXISTS"
+	ErrRequestHasErrand      = "ERROR_REQUEST_HAS_ERRAND"
+	ErrUserOwnsRequest       = "ERROR_USER_OWNS_REQUEST"
 )
 
 var GetErrorMessage map[string]string = map[string]string{
@@ -44,4 +46,6 @@ var GetErrorMessage map[string]string = map[string]string{
 	ErrInvalidUserForErrand:  "Errand does not belong to user.",
 	ErrTwilio:                "Text message failed to send.",
 	ErrActiveErrorExists:     "User already has an active errand.",
+	ErrRequestHasErrand:      "Request already belongs to another errand.",
+	ErrUserOwnsRequest:       "Cannot add request to errand, request belongs to the current user.",
 }

@@ -58,13 +58,20 @@ func (server *Server) CreateErrand(ctx *gin.Context) {
 	}
 
 	for _, requestID := range req.RequestIDs {
-		if _, err := server.queries.GetRequest(ctx, requestID); err != nil {
+		request, err := server.queries.GetRequest(ctx, requestID)
+		if err != nil {
 			if err == sql.ErrNoRows {
 				ctx.JSON(http.StatusNotFound, errorResponse(api_error.ErrNoRequest, err))
 			} else {
 				ctx.JSON(http.StatusInternalServerError, unknownErrorResponse(err))
 			}
 			return
+		}
+		if request.ErrandID.Valid {
+			ctx.JSON(http.StatusExpectationFailed, errorResponse(api_error.ErrRequestHasErrand, errors.New("invalid request, errand_id is not null")))
+		}
+		if request.UserID == authPayload.UserID {
+			ctx.JSON(http.StatusExpectationFailed, errorResponse(api_error.ErrUserOwnsRequest, errors.New("invalid request, user_id is equal to current user's id")))
 		}
 	}
 
