@@ -5,7 +5,7 @@ import { Colors } from "../Constants";
 const TextInput = (props) => {
   return (
     <RN_TextInput
-      style={styles.input}
+      style={{ ...styles.input, ...props.style }}
       onChange={props.onChange}
       value={props.value}
       autoCapitalize="none"
