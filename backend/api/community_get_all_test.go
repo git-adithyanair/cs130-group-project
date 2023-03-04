@@ -48,6 +48,12 @@ func TestGetAllCommmunities(t *testing.T) {
 					}).
 					Times(1).
 					Return(communities, nil)
+				for _, community := range communities {
+					store.EXPECT().
+						GetMemberCountInCommunity(gomock.Any(), gomock.Eq(community.ID)).
+						Times(1).
+						Return(int64(len(communities)), nil)
+				}
 			},
 			checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
 				require.Equal(t, http.StatusOK, recorder.Code)
@@ -60,7 +66,7 @@ func TestGetAllCommmunities(t *testing.T) {
 			},
 		},
 		{
-			name: "InternalServerError",
+			name: "ListCommunitiesError",
 			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
 				addAuthorization(t, request, tokenMaker, authorizationTypeBearer, user.ID, user.Email)
 			},
@@ -72,6 +78,28 @@ func TestGetAllCommmunities(t *testing.T) {
 					}).
 					Times(1).
 					Return([]db.Community{}, sql.ErrConnDone)
+			},
+			checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
+				require.Equal(t, http.StatusInternalServerError, recorder.Code)
+			},
+		},
+		{
+			name: "GetMemberCountError",
+			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
+				addAuthorization(t, request, tokenMaker, authorizationTypeBearer, user.ID, user.Email)
+			},
+			buildStubs: func(store *mock_db.MockDBStore) {
+				store.EXPECT().
+					ListCommunities(gomock.Any(), db.ListCommunitiesParams{
+						Limit:  100,
+						Offset: 0,
+					}).
+					Times(1).
+					Return(communities, nil)
+				store.EXPECT().
+					GetMemberCountInCommunity(gomock.Any(), gomock.Eq(communities[0].ID)).
+					Times(1).
+					Return(int64(0), sql.ErrConnDone)
 			},
 			checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
 				require.Equal(t, http.StatusInternalServerError, recorder.Code)
