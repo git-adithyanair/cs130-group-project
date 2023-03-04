@@ -343,7 +343,22 @@ Endpoint to get all communities.
 **Success Response** : `200 OK`
 
 ```json
-["[json, list of all communities]"]
+[
+  {
+    "community": {
+      "id": "[int, community id]",
+      "name": "[string, community name]",
+      "admin": "[int, community user admin id]",
+      "place_id": "[string, community google maps place id]",
+      "center_x_coord": "[float, community address x coord]",
+      "center_y_coord": "[float, community address x coord]",
+      "range": "[int, community range of users]",
+      "address": "[string, community address]",
+      "created_at": "[timestamptz, community creation date]"
+    },
+    "member_count": "[int, number of members in the community]"
+  }
+]
 ```
 
 ### Get Community Stores
