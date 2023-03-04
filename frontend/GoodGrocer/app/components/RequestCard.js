@@ -1,58 +1,79 @@
 import React from "react";
 import { Image, Text, View, StyleSheet, TouchableOpacity } from "react-native";
-import { Card, Button, Title, Paragraph } from "react-native-paper";
-import { Dim, Colors, Font, BorderRadius } from "../Constants";
+import { Ionicons } from "@expo/vector-icons";
+import { Dim, Colors, Font } from "../Constants";
 
 const RequestCard = (props) => {
   return (
-    <TouchableOpacity onPress={props.onPress}>
-      <Card style={Styles.container}>
-        <View style={Styles.user}>
-          <Card.Content>
-            <Image
-              source={{
-                uri: props.imageUri,
-              }}
-              style={Styles.image}
-            />
-            <Title>{props.name}</Title>
-          </Card.Content>
-          <Card.Content style={Styles.text}>
-            <Text>
-              <Paragraph>Store: </Paragraph>
-              <Text>{props.storeName}</Text>
-            </Text>
-            <Text>
-              <Paragraph>Items: </Paragraph>
-              <Text>{props.numItems}</Text>
-            </Text>
-            {props.requestComplete ? (
-              <Text style={Styles.completeText}>Complete</Text>
-            ) : null}
-          </Card.Content>
+    <View
+      style={{
+        ...styles.container,
+        backgroundColor: props.selected ? Colors.darkGreen : Colors.lightGreen,
+      }}
+    >
+      <TouchableOpacity
+        style={{
+          flexDirection: "row",
+          flex: 1,
+          marginRight: 30,
+        }}
+        onPress={props.onPress}
+      >
+        <View style={{ alignItems: "center" }}>
+          <Image
+            source={{
+              uri: props.imageUri,
+            }}
+            style={styles.image}
+          />
+          <Text>{props.name}</Text>
         </View>
-      </Card>
-    </TouchableOpacity>
+        <View
+          style={{
+            marginLeft: 20,
+            justifyContent: "center",
+          }}
+        >
+          <Text style={styles.storeText}>{props.storeName}</Text>
+          <Text style={styles.storeText}>{props.storeAddress}</Text>
+          <Text style={{ fontSize: 12 }}>{props.numItems} item(s) to get.</Text>
+        </View>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={{ alignSelf: "center", padding: 10 }}
+        onPress={props.onPressSelect}
+      >
+        <Ionicons
+          name={props.selected ? "remove-circle" : "add-circle"}
+          size={35}
+          color={props.selected ? Colors.lightGreen : Colors.darkGreen}
+        />
+      </TouchableOpacity>
+    </View>
   );
 };
 
-const Styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
-    backgroundColor: Colors.white,
     alignContent: "center",
     flexDirection: "row",
+    width: Dim.width * 0.9,
+    alignSelf: "center",
+    borderRadius: 10,
+    padding: 20,
+    marginTop: 15,
+    justifyContent: "space-between",
   },
-  user: {
-    flexDirection: "row",
-    marginTop: 20,
+  storeText: {
+    fontSize: 14,
+    fontWeight: Font.s3.weight,
+    marginBottom: 5,
   },
   image: {
-    width: 75,
-    height: 75,
-    borderRadius: 75 / 2,
-  },
-  text: {
-    marginTop: 30,
+    width: Dim.width * 0.15,
+    height: Dim.width * 0.15,
+    borderRadius: 100,
+    marginBottom: 10,
   },
   completeText: {
     color: Colors.darkGreen,
