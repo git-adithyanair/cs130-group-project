@@ -88,28 +88,4 @@ const styles = StyleSheet.create({
   },
 });
 
-const cards = testData.map((request) => (
-  <TouchableOpacity
-    style={styles.requestCard}
-    key={request.id}
-    onPress={() => setPage(1)}
-  >
-    <RequestCard
-      name={request.name}
-      storeName={request.storeName}
-      numItems={request.numItems}
-      imageUri={request.imageUri}
-    />
-  </TouchableOpacity>
-));
-return (
-  <SafeAreaView style={styles.container}>
-    <View style={styles.content}>
-      <Image source={require("../assets/logo.png")} />
-      <Text style={styles.titleText}>Requests in Westwood</Text>
-      <ScrollView style={styles.listOfRequests}>{cards}</ScrollView>
-    </View>
-  </SafeAreaView>
-);
-
 export default RequestList;
