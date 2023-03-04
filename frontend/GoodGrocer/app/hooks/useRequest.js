@@ -38,7 +38,7 @@ const useRequest = ({
         ? {
             message: err.response.data.error,
             httpCode: err.response.status,
-            internalCode: err.response.data.code,
+            internalCode: err.response.data.id,
           }
         : {
             message: "Couldn't connect to server! Please try again later.",
