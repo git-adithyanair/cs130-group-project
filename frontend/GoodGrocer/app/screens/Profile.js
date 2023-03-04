@@ -1,22 +1,40 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import {
   SafeAreaView,
   StyleSheet,
   Text,
   Image,
-  ScrollView,
   View,
   TouchableOpacity,
+  FlatList,
 } from "react-native";
-import RequestCard from "../components/RequestCard";
+import Button from "../components/Button";
+import { setToken } from "../store/actions";
+import { Colors, Dim } from "../Constants";
+import { Divider } from "react-native-elements";
 
 function Profile({ setPage }) {
+  const dispatch = useDispatch();
+  const sections = [
+    "Change Address",
+    "Change Name",
+    "Change Profile Picture",
+    "Join Community",
+    "Create Community",
+  ];
+
+  const handleNavigation = (section) => {
+    // handle navigation for pages here based on section name
+    console.log(section);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
         <Image source={require("../assets/logo.png")} />
         <View style={styles.listOfRequests}>
-          <View style={styles.leftColumn}>
+          <View>
             <Image
               style={styles.profileImage}
               source={{
@@ -25,31 +43,40 @@ function Profile({ setPage }) {
             />
           </View>
           <View style={styles.requestDetails}>
-            <View>
-              <Text style={styles.titleText}>Angela</Text>
-            </View>
-            <View>
-              <Text>Number of neighborhoods: 5</Text>
-            </View>
+            <Text style={styles.titleText}>Angela</Text>
+            <Text>Number of neighborhoods: 5</Text>
           </View>
         </View>
-        <View style={styles.listOfChanges}>
-          <View style={styles.changeItem}>
-            <Text style={styles.titleText}>Change Address</Text>
-          </View>
-          <View style={styles.changeItem}>
-            <Text style={styles.titleText}>Change Name</Text>
-          </View>
-          <View style={styles.changeItem}>
-            <Text style={styles.titleText}>Change Profile Picture</Text>
-          </View>
-          <View style={styles.changeItem}>
-            <Text style={styles.titleText}>Join Community</Text>
-          </View>
-          <View style={styles.changeItem}>
-            <Text style={styles.titleText}>Create Community</Text>
-          </View>
-        </View>
+        <FlatList
+          style={{ paddingVertical: 20 }}
+          data={sections}
+          scrollEnabled={false}
+          renderItem={(itemData) => (
+            <TouchableOpacity onPress={() => handleNavigation(itemData.item)}>
+              <Text
+                style={{
+                  fontSize: 18,
+                  fontWeight: "bold",
+                  paddingVertical: 25,
+                }}
+              >
+                {itemData.item}
+              </Text>
+            </TouchableOpacity>
+          )}
+          ItemSeparatorComponent={() => (
+            <Divider
+              orientation="horizontal"
+              style={{ width: Dim.width * 0.8 }}
+            ></Divider>
+          )}
+        ></FlatList>
+        <Button
+          title={"Sign out"}
+          width={200}
+          appButtonContainer={{ backgroundColor: Colors.lightGreen }}
+          onPress={() => dispatch(setToken(""))}
+        />
       </View>
     </SafeAreaView>
   );
@@ -70,32 +97,19 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   requestDetails: {
-    flexDirection: "column",
     paddingLeft: 10,
     alignItems: "center",
     marginTop: 10,
   },
   profileImage: {
     width: 80,
-    height: 75,
-    borderRadius: 20,
-  },
-  leftColumn: {
-    textAlign: "center",
+    height: 80,
+    borderRadius: 80 / 2,
   },
   titleText: {
     fontSize: 25,
-  },
-  listOfChanges: {
-    marginTop: 80,
-    height: "60%",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-between",
-  },
-  changeItem: {
-    borderTopWidth: 2,
-    width: 300,
+    textAlign: "left",
+    alignSelf: "flex-start",
   },
 });
 
