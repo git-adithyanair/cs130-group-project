@@ -87,6 +87,10 @@ func TestGetUserCommunities(t *testing.T) {
 					GetUserCommunities(gomock.Any(), user.ID).
 					Times(1).
 					Return(communities, nil)
+				store.EXPECT().
+					GetMemberCountInCommunity(gomock.Any(), gomock.Eq(communities[0].ID)).
+					Times(1).
+					Return(int64(0), sql.ErrConnDone)
 			},
 			checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
 				require.Equal(t, http.StatusInternalServerError, recorder.Code)
