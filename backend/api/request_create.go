@@ -22,7 +22,7 @@ type CreateRequestRequestItem struct {
 }
 
 type CreateRequestRequest struct {
-	CommunityID int64                      `json:"community_id" binding:"required"`
+	CommunityID int64                      `json:"community_id" binding:"required,min=1"`
 	StoreID     *int64                     `json:"store_id"`
 	Items       []CreateRequestRequestItem `json:"items" binding:"required"`
 }
