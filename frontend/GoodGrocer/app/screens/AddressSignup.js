@@ -11,16 +11,16 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import { useDispatch } from "react-redux";
 
-import TextInput from "../components/TextInput";
 import Button from "../components/Button";
 import { Colors, Dim, Font } from "../Constants";
 import useRequest from "../hooks/useRequest";
 import { setToken } from "../store/actions";
+import LocationFinderCard from "../components/LocationFinderCard";
 
 function AddressSignup({ route, navigation }) {
   const { email, name, phoneNumber, password } = route.params;
-  const [address, setAddress] = useState("");
   const [pictureUri, setPictureUri] = useState("");
+  const [locationData, setLocationData] = useState({});
 
   const dispatch = useDispatch();
 
@@ -32,10 +32,10 @@ function AddressSignup({ route, navigation }) {
       password,
       full_name: name,
       phone_number: phoneNumber,
-      address,
-      place_id: "test",
-      x_coord: 2.4933,
-      y_coord: 3.359,
+      address: locationData.address,
+      place_id: locationData.place_id,
+      x_coord: locationData.x_coord,
+      y_coord: locationData.y_coord,
       profile_picture: pictureUri || "DEFAULT",
     },
     onSuccess: (data) => {
@@ -76,12 +76,14 @@ function AddressSignup({ route, navigation }) {
     <SafeAreaView style={styles.container}>
       <View style={{ width: 300 }}>
         <Text style={styles.titleText}>Final steps!</Text>
-        <Text>Address</Text>
-        <TextInput
-          onChange={(address) => setAddress(address.nativeEvent.text)}
-          placeholder="Enter your address..."
+        <LocationFinderCard
+          searchLabel="Find your address"
+          width={Dim.width * 0.7}
+          onSelectLocation={(data) => {
+            setLocationData(data);
+          }}
         />
-        <View style={{ marginTop: 15 }}>
+        <View style={{ marginTop: 30 }}>
           {pictureUri ? (
             <ImageBackground
               style={{
@@ -124,8 +126,14 @@ function AddressSignup({ route, navigation }) {
         onPress={async () => await signup.doRequest()}
         textColor={"white"}
         backgroundColor={"#0070CA"}
-        width={300}
-        appButtonContainer={{ alignSelf: "center", marginBottom: 40 }}
+        width={Dim.width * 0.7}
+        appButtonContainer={{
+          backgroundColor:
+            JSON.stringify(locationData) === "{}" ? "#d3d3d3" : "#0070CA",
+          alignSelf: "center",
+          marginBottom: 40,
+        }}
+        disabled={JSON.stringify(locationData) === "{}"}
       />
     </SafeAreaView>
   );
