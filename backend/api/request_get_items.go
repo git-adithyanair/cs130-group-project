@@ -1,4 +1,4 @@
-//API not in use
+// API unused
 
 package api
 
