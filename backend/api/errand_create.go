@@ -69,9 +69,11 @@ func (server *Server) CreateErrand(ctx *gin.Context) {
 		}
 		if request.ErrandID.Valid {
 			ctx.JSON(http.StatusExpectationFailed, errorResponse(api_error.ErrRequestHasErrand, errors.New("invalid request, errand_id is not null")))
+			return
 		}
 		if request.UserID == authPayload.UserID {
 			ctx.JSON(http.StatusExpectationFailed, errorResponse(api_error.ErrUserOwnsRequest, errors.New("invalid request, user_id is equal to current user's id")))
+			return
 		}
 	}
 
