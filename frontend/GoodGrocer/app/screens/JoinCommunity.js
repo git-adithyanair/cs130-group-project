@@ -9,6 +9,7 @@ const JoinCommunity = (props) => {
   const [allCommunities, setAllCommunities] = useState([]);
   const [userCommunities, setUserCommunities] = useState([]);
   const [communities, setCommunities] = useState([]);
+  const [searchedCommunities, setSearchedCommunities] = useState([]);
   const [community, setCommunity] = useState("");
 
   const getAllCommunities = useRequest({
@@ -37,26 +38,28 @@ const JoinCommunity = (props) => {
 
   useEffect(() => {
     setCommunities(
-      allCommunities
-        .filter(
-          (community) =>
-            !userCommunities.find(
-              (comm) => comm.place_id === community.place_id
-            )
-        )
+      allCommunities.filter(
+        (community) =>
+          !userCommunities.find((comm) => comm.place_id === community.place_id)
+      )
+    );
+
+    setSearchedCommunities(
+      allCommunities.filter(
+        (community) =>
+          !userCommunities.find((comm) => comm.place_id === community.place_id)
+      )
     );
   }, [allCommunities, userCommunities]);
-
-  console.log(communities)
 
   const searchCommunities = (text) => {
     setCommunity(text);
     if (!text) {
-      setCommunities(data);
+      setSearchedCommunities(communities);
     } else {
-      setCommunities(
-        data.filter((item) => {
-          return item.communityName
+      setSearchedCommunities(
+        communities.filter((item) => {
+          return item.community.name
             .toLowerCase()
             .startsWith(text.toLowerCase());
         })
@@ -80,11 +83,19 @@ const JoinCommunity = (props) => {
         columnWrapperStyle={{ justifyContent: "space-between" }}
         showsVerticalScrollIndicator={false}
         keyExtractor={(item) => Math.random().toString()}
-        data={communities}
+        data={searchedCommunities}
         renderItem={(itemData) => (
           <CommunityCard
-            communityName={itemData.item.name}
-            distanceFromUser={Math.round((itemData.item.range / 1609.344) * 100)}
+            communityNameStyle={{
+              fontSize:
+                itemData.item.community.name.length > 10
+                  ? Font.s2.size
+                  : Font.s1.size,
+            }}
+            communityName={itemData.item.community.name}
+            distanceFromUser={
+              Math.round((itemData.item.community.range / 1609.344) * 100) / 100
+            }
             numberOfMembers={itemData.item.member_count}
             joinCommunity={true}
           />

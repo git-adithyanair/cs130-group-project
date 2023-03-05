@@ -1,6 +1,11 @@
 import React from "react";
-import { TouchableOpacity, StyleSheet, Text } from "react-native";
-import { Dim, Colors } from "../Constants";
+import {
+  TouchableOpacity,
+  StyleSheet,
+  Text,
+  ActivityIndicator,
+} from "react-native";
+import { Dim, Colors, Font } from "../Constants";
 
 const Button = (props) => {
   const styles = StyleSheet.create({});
@@ -20,18 +25,25 @@ const Button = (props) => {
         ...props.appButtonContainer,
       }}
     >
-      <Text
-        style={{
-          fontSize: 18,
-          color: props.textColor,
-          fontWeight: "bold",
-          alignSelf: "center",
-          textTransform: "uppercase",
-          ...props.appButtonText,
-        }}
-      >
-        {props.title}
-      </Text>
+      {props.loading ? (
+        <ActivityIndicator
+          color={Colors.white}
+          size={Font.s3.size}
+        />
+      ) : (
+        <Text
+          style={{
+            fontSize: 18,
+            color: props.textColor,
+            fontWeight: "bold",
+            alignSelf: "center",
+            textTransform: "uppercase",
+            ...props.appButtonText,
+          }}
+        >
+          {props.title}
+        </Text>
+      )}
     </TouchableOpacity>
   );
 };
