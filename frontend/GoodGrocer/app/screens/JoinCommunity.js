@@ -6,44 +6,16 @@ import { Dim, Colors, Font } from "../Constants";
 import useRequest from "../hooks/useRequest";
 
 const JoinCommunity = (props) => {
-  let allCommunities = [];
-  let userCommunities = [];
+  const [allCommunities, setAllCommunities] = useState([]);
+  const [userCommunities, setUserCommunities] = useState([]);
   const [communities, setCommunities] = useState([]);
   const [community, setCommunity] = useState("");
-
-  // const data = [
-  //   { communityName: "Westwood", distance: 0.5, members: 10 },
-  //   { communityName: "Brentwood", distance: 2, members: 10 },
-  //   { communityName: "Beverly Hills", distance: 5, members: 10 },
-  //   { communityName: "Beverly Hills", distance: 5, members: 10 },
-  //   { communityName: "Beverly Hills", distance: 5, members: 10 },
-  //   { communityName: "Beverly Hills", distance: 5, members: 10 },
-  //   { communityName: "Beverly Hills", distance: 5, members: 10 },
-  //   { communityName: "Beverly Hills", distance: 5, members: 10 },
-  //   { communityName: "Beverly Hills", distance: 5, members: 10 },
-  //   { communityName: "Beverly Hills", distance: 5, members: 10 },
-  //   { communityName: "Beverly Hills", distance: 5, members: 10 },
-  //   { communityName: "Beverly Hills", distance: 5, members: 10 },
-  // ];
 
   const getAllCommunities = useRequest({
     url: "/community",
     method: "get",
     onSuccess: (data) => {
-      allCommunities = data;
-      console.log("all communities", allCommunities);
-      // data.forEach((community) => {
-      //   setCommunityData((oldArray) => [
-      //     ...oldArray,
-      //     {
-      //       members: community.member_count,
-      //       communityId: community.community.id,
-      //       communityName: community.community.name,
-      //       distance:
-      //         Math.round((community.community.range / 1609.344) * 100) / 100,
-      //     },
-      //   ]);
-      // });
+      setAllCommunities(data);
     },
   });
 
@@ -51,36 +23,31 @@ const JoinCommunity = (props) => {
     url: "/user/community",
     method: "get",
     onSuccess: (data) => {
-      userCommunities = data;
-      console.log("user communities", userCommunities);
-      // data.forEach((community) => {
-      //   setCommunityData((oldArray) => [
-      //     ...oldArray,
-      //     {
-      //       members: community.member_count,
-      //       communityId: community.community.id,
-      //       communityName: community.community.name,
-      //       distance:
-      //         Math.round((community.community.range / 1609.344) * 100) / 100,
-      //     },
-      //   ]);
-      // });
+      setUserCommunities(data);
     },
   });
 
   const allComm = async () => await getAllCommunities.doRequest();
   const userComm = async () => await getUserCommunities.doRequest();
-  
+
   useEffect(() => {
     allComm();
     userComm();
-
-    allCommunities.filter((community) => {
-      !userCommunities.find((comm) => comm.place_id === community.place_id);
-    });
-
-    console.log("filtered communities", allCommunities);
   }, []);
+
+  useEffect(() => {
+    setCommunities(
+      allCommunities
+        .filter(
+          (community) =>
+            !userCommunities.find(
+              (comm) => comm.place_id === community.place_id
+            )
+        )
+    );
+  }, [allCommunities, userCommunities]);
+
+  console.log(communities)
 
   const searchCommunities = (text) => {
     setCommunity(text);
@@ -116,9 +83,9 @@ const JoinCommunity = (props) => {
         data={communities}
         renderItem={(itemData) => (
           <CommunityCard
-            communityName={itemData.item.communityName}
-            distanceFromUser={itemData.item.distance}
-            numberOfMembers={itemData.item.members}
+            communityName={itemData.item.name}
+            distanceFromUser={Math.round((itemData.item.range / 1609.344) * 100)}
+            numberOfMembers={itemData.item.member_count}
             joinCommunity={true}
           />
         )}
