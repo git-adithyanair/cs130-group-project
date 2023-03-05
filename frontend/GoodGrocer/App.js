@@ -62,7 +62,7 @@ const App = () => {
       </NavigationContainer>
     );
     // The token is empty, so the user is not logged in, so we show the login/signup pages.
-  } else if (token === "") {
+  } else {
     return (
       <NavigationContainer>
         <ErrorPopup
@@ -92,9 +92,6 @@ const App = () => {
         </Stack.Navigator>
       </NavigationContainer>
     );
-    // Otherwise, the app is starting up so we should show the loading page.
-  } else {
-    return <View />;
   }
 };
 
