@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Button from "../components/Button";
 import { Image, Text, View, StyleSheet } from "react-native";
-import { Card, Title } from "react-native-paper";
+import { Card } from "react-native-paper";
 import { Dim, Colors } from "../Constants";
 
 const ActiveItemCard = (props) => {
@@ -10,12 +10,11 @@ const ActiveItemCard = (props) => {
   );
 
   return (
-    <Card style={Styles.container}>
+    <Card style={Styles.container} elevation={0}>
       <Card.Content style={{ flexDirection: "row" }}>
         <View>
-          <Text>
-            <Title style={{ marginTop: 20, fontWeight: "bold" }}>Item: </Title>
-            <Title>{props.item.name}</Title>
+          <Text style={{ fontSize: 16, marginBottom: 10 }}>
+            {props.item.name}
           </Text>
           <Text>
             <Text style={{ marginTop: 20, fontWeight: "bold" }}>Amount: </Text>
@@ -41,11 +40,11 @@ const ActiveItemCard = (props) => {
             source={{
               uri: props.item.image.String,
             }}
-            style={{ flex: 1 }}
+            style={{ flex: 1, borderRadius: 10 }}
           />
         </View>
       </Card.Content>
-      <Card.Content>
+      <Card.Content style={{ marginTop: 10 }}>
         {found != null ? (
           <View>
             <Text style={Styles.itemFoundText}>
@@ -58,11 +57,15 @@ const ActiveItemCard = (props) => {
           >
             <Button
               width={Dim.width * 0.35}
-              appButtonContainer={{ backgroundColor: Colors.cream }}
+              appButtonContainer={{
+                backgroundColor: "#dce0de",
+                height: 35,
+                paddingVertical: 10,
+              }}
               appButtonText={{
                 textTransform: "none",
                 fontWeight: "normal",
-                fontSize: 16,
+                fontSize: 14,
               }}
               title={"Not Found"}
               onPress={() => {
@@ -73,11 +76,15 @@ const ActiveItemCard = (props) => {
             <Button
               width={Dim.width * 0.35}
               appButtonContainer={{
-                backgroundColor: Colors.lightGreen,
-                fontWeight: "normal",
-                fontSize: 16,
+                backgroundColor: "#606e66",
+                height: 35,
+                paddingVertical: 10,
               }}
-              appButtonText={{ textTransform: "none" }}
+              appButtonText={{
+                textTransform: "none",
+                color: "white",
+                fontSize: 14,
+              }}
               title={"Found"}
               onPress={() => {
                 setFound(true);
@@ -93,14 +100,14 @@ const ActiveItemCard = (props) => {
 
 const Styles = StyleSheet.create({
   container: {
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.lightGreen,
   },
   text: {
     marginTop: 30,
   },
   itemFoundText: {
     textAlign: "center",
-    color: Colors.darkGreen,
+    color: "#606e66",
     fontWeight: "bold",
     paddingTop: 20,
   },

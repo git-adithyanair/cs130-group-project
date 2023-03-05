@@ -6,6 +6,8 @@ import {
   Image,
   View,
   FlatList,
+  TouchableOpacity,
+  Linking,
 } from "react-native";
 import axios from "axios";
 import { Dim, Colors, Font, API_URL } from "../Constants";
@@ -40,6 +42,14 @@ const ActiveRequest = ({ route, navigation }) => {
       });
   };
 
+  const openSMS = () => {
+    const url =
+      Platform.OS === "android"
+        ? `sms:${user.phone_number}}`
+        : `sms:/open?addresses=${user.phone_number}`;
+    Linking.openURL(url);
+  };
+
   return (
     <SafeAreaView style={styles.wrapper}>
       <FlatList
@@ -66,9 +76,11 @@ const ActiveRequest = ({ route, navigation }) => {
               }}
               style={styles.profilePic}
             />
-            <Text style={styles.phoneNumberText}>
-              Phone number: {user.phone_number}
-            </Text>
+            <TouchableOpacity onPress={openSMS}>
+              <Text style={styles.phoneNumberText}>
+                Phone number: {user.phone_number}
+              </Text>
+            </TouchableOpacity>
             {store != null && completedItems < items.length ? (
               <LocationCard
                 style={{ flex: 1 }}

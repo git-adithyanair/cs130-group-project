@@ -139,7 +139,7 @@ const ActiveErrand = ({ navigation }) => {
                 appButtonText={{ textTransform: "none" }}
                 title={"Complete Errand"}
                 onPress={completeErrand}
-                isDisabled={!completeErrandEnabled}
+                disabled={!completeErrandEnabled}
               />
             )}
           </View>
