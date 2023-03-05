@@ -8,7 +8,9 @@ const RequestCard = (props) => {
     <View
       style={{
         ...styles.container,
-        backgroundColor: props.selected ? Colors.darkGreen : Colors.lightGreen,
+        backgroundColor: props.requestComplete
+          ? Colors.darkGreen
+          : Colors.lightGreen,
       }}
     >
       <TouchableOpacity
@@ -39,16 +41,13 @@ const RequestCard = (props) => {
           <Text style={{ fontSize: 12 }}>{props.numItems} item(s) to get.</Text>
         </View>
       </TouchableOpacity>
-      <TouchableOpacity
-        style={{ alignSelf: "center", padding: 10 }}
-        onPress={props.onPressSelect}
-      >
+      <View style={{ alignSelf: "center", padding: 10 }}>
         <Ionicons
-          name={props.selected ? "remove-circle" : "add-circle"}
+          name={props.requestComplete ? "checkmark-done-circle" : "basket"}
           size={35}
-          color={props.selected ? Colors.lightGreen : Colors.darkGreen}
+          color={props.requestComplete ? Colors.lightGreen : Colors.darkGreen}
         />
-      </TouchableOpacity>
+      </View>
     </View>
   );
 };

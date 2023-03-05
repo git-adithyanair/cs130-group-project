@@ -1,7 +1,6 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
-import { Image, StyleSheet } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import JoinCommunity from "../screens/JoinCommunity";
 import YourCommunities from "../screens/YourCommunities";
@@ -37,7 +36,7 @@ const HomeStackScreen = () => {
       <HomeStack.Screen
         name="RequestDetail"
         component={RequestDetail}
-        options={{ title: "Request Detail" }}
+        options={{ title: "Request Details" }}
       />
     </HomeStack.Navigator>
   );
@@ -57,7 +56,7 @@ const ErrandStackScreen = () => {
       <ErrandStack.Screen
         name="ActiveErrand"
         component={ActiveErrand}
-        options={{ title: "" }}
+        options={{ title: "Active Errand" }}
       />
       <ErrandStack.Screen
         name="ActiveRequest"
@@ -88,28 +87,24 @@ const TabBar = (props) => {
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarShowLabel: false,
-        tabBarIcon: ({ focused, color, size }) => {
+        tabBarIcon: ({ focused, size }) => {
           let iconName;
           if (route.name === "Home") {
             iconName = focused
               ? "ios-people-circle"
               : "ios-people-circle-outline";
           } else if (route.name === "MyProfile") {
-            return (
-              <Image source={{ uri: props.imageUri }} style={styles.logo} />
-            );
+            iconName = focused ? "person" : "person-outline";
           } else if (route.name === "Errand") {
             iconName = focused ? "ios-list" : "ios-list-outline";
           }
           return <Ionicons name={iconName} size={size} color={"white"} />;
         },
         tabBarStyle: {
-          height: Dim.width * 0.15,
+          height: Dim.height * 0.1,
           width: Dim.width,
           backgroundColor: Colors.darkGreen,
           color: Colors.white,
-          position: "absolute",
-          marginBottom: 0,
         },
       })}
     >
@@ -117,12 +112,5 @@ const TabBar = (props) => {
     </Tab.Navigator>
   );
 };
-
-const styles = StyleSheet.create({
-  logo: {
-    width: 35,
-    height: 35,
-  },
-});
 
 export default TabBar;

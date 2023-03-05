@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import axios from "axios";
 import { Dim, Colors, Font, API_URL } from "../Constants";
-import RequestCard from "../components/RequestCard";
+import ErrandRequestCard from "../components/ErrandRequestCard";
 import { useSelector } from "react-redux";
 
 const ActiveErrand = ({ navigation }) => {
@@ -24,7 +24,6 @@ const ActiveErrand = ({ navigation }) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then(({ data }) => {
-        console.log(data);
         setData(data);
         setCompleteErrandEnabled(checkRequestCompletion(data));
       })
@@ -34,7 +33,6 @@ const ActiveErrand = ({ navigation }) => {
   };
 
   const completeErrand = async () => {
-    console.log(data.errand.id);
     axios
       .post(
         `${API_URL}/errand/update-status`,
@@ -47,7 +45,6 @@ const ActiveErrand = ({ navigation }) => {
         }
       )
       .then(({ data }) => {
-        console.log(data);
         setData({});
       })
       .catch((error) => {
@@ -92,10 +89,11 @@ const ActiveErrand = ({ navigation }) => {
         style={styles.list}
         data={data.requests}
         renderItem={(itemData) => (
-          <RequestCard
+          <ErrandRequestCard
             imageUri="https://i.pinimg.com/236x/10/f4/a9/10f4a952ddf8e6828ae6833b3088dfa0.jpg"
             name={itemData.item.user.full_name}
             storeName={itemData.item.store.name}
+            storeAddress={itemData.item.store.address}
             numItems={itemData.item.items.length}
             requestComplete={requestComplete(itemData.item.items)}
             onPress={() =>
@@ -107,13 +105,13 @@ const ActiveErrand = ({ navigation }) => {
                 store: itemData.item.store,
               })
             }
+            key={itemData.item.id}
           />
         )}
         keyExtractor={(item) => item.id}
         ListHeaderComponent={() => (
           <View style={{ alignItems: "center" }}>
-            <Image source={require("../assets/logo.png")} />
-            <Text style={styles.title}>Current Errand</Text>
+            <Text style={styles.title}>Errand for {"COMMUNITY NAME HERE"}</Text>
           </View>
         )}
         ItemSeparatorComponent={() => (
@@ -142,7 +140,7 @@ const ActiveErrand = ({ navigation }) => {
                 title={"Complete Errand"}
                 onPress={completeErrand}
                 isDisabled={!completeErrandEnabled}
-              ></Button>
+              />
             )}
           </View>
         )}
@@ -163,11 +161,11 @@ const styles = StyleSheet.create({
     paddingBottom: 80,
   },
   title: {
-    paddingTop: 10,
-    paddingBottom: 20,
-    fontSize: Font.s1.size,
-    fontFamily: Font.s1.family,
-    fontWeight: Font.s1.weight,
+    marginTop: 10,
+    marginBottom: 20,
+    fontSize: Font.s2.size,
+    fontFamily: Font.s2.family,
+    fontWeight: Font.s2.weight,
   },
   content: {
     alignItems: "center",
