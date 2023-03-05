@@ -15,8 +15,17 @@ func (server *Server) GetUserRequest(ctx *gin.Context) {
 	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
 
 	pendingRequests := getRequestsForStatus(ctx, server, authPayload.UserID, db.RequestStatusPending)
+	if pendingRequests == nil {
+		return
+	}
 	inProgressRequests := getRequestsForStatus(ctx, server, authPayload.UserID, db.RequestStatusInProgress)
+	if inProgressRequests == nil {
+		return
+	}
 	completeRequests := getRequestsForStatus(ctx, server, authPayload.UserID, db.RequestStatusCompleted)
+	if completeRequests == nil {
+		return
+	}
 
 	response := userRequestsResponse{
 		Pending:    pendingRequests,
