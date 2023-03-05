@@ -128,6 +128,33 @@ func createRandomItem(
 	}
 }
 
+func createRandomItemWithUser(t *testing.T, requestedBy int64) db.Item {
+	preferredBrand := sql.NullString{String: util.RandomString(6), Valid: true}
+	image := sql.NullString{String: "", Valid: false}
+	extraNotes := sql.NullString{String: util.RandomString(20), Valid: true}
+	quantityTypes := []db.ItemQuantityType{
+		db.ItemQuantityTypeNumerical,
+		db.ItemQuantityTypeOz,
+		db.ItemQuantityTypeLbs,
+		db.ItemQuantityTypeFlOz,
+		db.ItemQuantityTypeGal,
+		db.ItemQuantityTypeLitres,
+	}
+
+	return db.Item{
+		ID:             util.RandomID(),
+		Name:           util.RandomItemName(),
+		RequestedBy:    requestedBy,
+		RequestID:      util.RandomID(),
+		QuantityType:   quantityTypes[util.RandomInt(0, len(quantityTypes)-1)],
+		Quantity:       util.RandomFloat(0, 10),
+		PreferredBrand: preferredBrand,
+		Image:          image,
+		Found:          sql.NullBool{Bool: false, Valid: false},
+		ExtraNotes:     extraNotes,
+	}
+}
+
 func createRandomMember(t *testing.T, userID int64, communityID int64) db.Member {
 	return db.Member{
 		UserID:      userID,
@@ -167,5 +194,27 @@ func requireBodyMatchCommunity(t *testing.T, body *bytes.Buffer, community db.Co
 	require.Equal(t, community.Address, communityResponse.Address)
 	require.Equal(t, community.Range, communityResponse.Range)
 	require.WithinDuration(t, community.CreatedAt, communityResponse.CreatedAt, time.Second)
+
+}
+
+func requireBodyMatchItemWithStatus(t *testing.T, body *bytes.Buffer, item db.Item, found bool) {
+
+	data, err := io.ReadAll(body)
+	require.NoError(t, err)
+
+	var itemResponse db.Item
+	err = json.Unmarshal(data, &itemResponse)
+	require.NoError(t, err)
+
+	require.Equal(t, item.ID, itemResponse.ID)
+	require.Equal(t, item.Name, itemResponse.Name)
+	require.Equal(t, item.RequestedBy, itemResponse.RequestedBy)
+	require.Equal(t, item.RequestID, itemResponse.RequestID)
+	require.Equal(t, item.QuantityType, itemResponse.QuantityType)
+	require.Equal(t, item.Quantity, itemResponse.Quantity)
+	require.Equal(t, item.PreferredBrand, itemResponse.PreferredBrand)
+	require.Equal(t, item.Image, itemResponse.Image)
+	require.Equal(t, item.ExtraNotes, itemResponse.ExtraNotes)
+	require.Equal(t, sql.NullBool{Bool: found, Valid: true}, itemResponse.Found)
 
 }
