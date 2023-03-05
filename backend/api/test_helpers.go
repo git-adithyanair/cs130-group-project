@@ -89,6 +89,21 @@ func createRandomRequest(t *testing.T, userID int64, communityID int64, storeID 
 	}
 }
 
+func createRandomRequestWithRandomStatus(t *testing.T, userID int64) db.Request {
+	requestStatus := []db.RequestStatus{
+		db.RequestStatusCompleted,
+		db.RequestStatusInProgress,
+		db.RequestStatusInProgress,
+	}
+	return db.Request{
+		ID:          util.RandomID(),
+		UserID:      userID,
+		CommunityID: sql.NullInt64{Int64: util.RandomID(), Valid: true},
+		StoreID:     sql.NullInt64{Int64: util.RandomID(), Valid: true},
+		Status:      requestStatus[util.RandomInt(0, len(requestStatus)-1)],
+	}
+}
+
 func createRandomItem(
 	t *testing.T,
 	requestedBy int64,
@@ -217,4 +232,18 @@ func requireBodyMatchItemWithStatus(t *testing.T, body *bytes.Buffer, item db.It
 	require.Equal(t, item.ExtraNotes, itemResponse.ExtraNotes)
 	require.Equal(t, sql.NullBool{Bool: found, Valid: true}, itemResponse.Found)
 
+}
+
+func requiredBodyMatchUserRequestsResponse(t *testing.T, body *bytes.Buffer, pending []db.Request, inProgress []db.Request, complete []db.Request) {
+
+	data, err := io.ReadAll(body)
+	require.NoError(t, err)
+
+	var userRequestsRespone userRequestsResponse
+	err = json.Unmarshal(data, &userRequestsRespone)
+	require.NoError(t, err)
+
+	require.Equal(t, len(pending), len(userRequestsRespone.Pending))
+	require.Equal(t, len(inProgress), len(userRequestsRespone.InProgress))
+	require.Equal(t, len(complete), len(userRequestsRespone.Complete))
 }
