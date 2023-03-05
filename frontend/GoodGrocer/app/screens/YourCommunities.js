@@ -101,7 +101,6 @@ const styles = StyleSheet.create({
   },
   container: {
     width: Dim.width * 0.9,
-    // paddingBottom: 80,
     paddingTop: 10,
     alignSelf: "center",
   },
