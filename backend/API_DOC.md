@@ -722,7 +722,8 @@ If there is an active errand:
         "address": "[string, user address]"
       }
     }
-  ]
+  ],
+  "community_name": "[string, name of the community the errand belongs to]"
 }
 ```
 
