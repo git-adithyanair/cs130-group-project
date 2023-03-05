@@ -1,4 +1,5 @@
-// API unused
+//API not in use
+
 package api
 
 import (
