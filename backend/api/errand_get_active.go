@@ -74,9 +74,20 @@ func (server *Server) GetActiveErrand(ctx *gin.Context) {
 		}
 	}
 
+	community, err := server.queries.GetCommunity(ctx, activeErrand.CommunityID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			ctx.JSON(http.StatusNotFound, errorResponse(api_error.ErrNoCommunity, err))
+		} else {
+			ctx.JSON(http.StatusInternalServerError, unknownErrorResponse(err))
+		}
+		return
+	}
+
 	res := activeErrandResponse{
-		Errand:   activeErrand,
-		Requests: requestRes,
+		Errand:        activeErrand,
+		Requests:      requestRes,
+		CommunityName: community.Name,
 	}
 
 	ctx.JSON(http.StatusOK, res)
