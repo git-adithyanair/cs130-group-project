@@ -17,24 +17,29 @@ const LocationFinderCard = (props) => {
   const [address, setAddress] = useState("");
   const [data, setData] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState({});
+  const [noResults, setNoResults] = useState(false);
 
   const search = async () => {
     axios
-      .get(
-        `https://maps.googleapis.com/maps/api/place/findplacefromtext/json`,
-        {
-          params: {
-            fields: "formatted_address,place_id,geometry,name",
-            input: address,
-            inputtype: "textquery",
-            key: GOOGLE_MAPS_API_KEY,
-          },
-        }
-      )
+      .get(`https://maps.googleapis.com/maps/api/place/textsearch/json`, {
+        params: {
+          fields: "formatted_address,place_id,geometry,name",
+          query: address,
+          key: GOOGLE_MAPS_API_KEY,
+        },
+      })
       .then(({ data }) => {
-        if (data.status != "INVALID_REQUEST") {
+        if (data.status == "ZERO_RESULTS") {
+          setData([]);
+          setSelectedLocation({});
+          props.onSelectLocation({});
+          setNoResults(true);
+        } else if (data.status != "INVALID_REQUEST") {
           console.log(data);
-          setData(data.candidates);
+          setData(data.results);
+          setSelectedLocation({});
+          props.onSelectLocation({});
+          setNoResults(false);
         }
       })
       .catch((error) => {
@@ -57,13 +62,20 @@ const LocationFinderCard = (props) => {
         }}
         textColor={"white"}
         width={props.width}
-        appButtonContainer={{ marginVertical: 30 }}
+        appButtonContainer={{ marginBottom: 20 }}
       />
-      <Text style={{ opacity: data.length === 0 ? 0 : 100 }}>
-        Select the correct address below:
+      <Text>
+        {noResults
+          ? "No results."
+          : data.length !== 0
+          ? "Select the correct address →"
+          : null}
       </Text>
       <FlatList
-        contentContainerStyle={{ marginTop: 10, width: props.width }}
+        horizontal
+        showsHorizontalScrollIndicator={true}
+        contentContainerStyle={{ marginTop: 10 }}
+        pagingEnabled={true}
         style={styles.list}
         data={data}
         renderItem={(itemData) => (
@@ -88,14 +100,7 @@ const LocationFinderCard = (props) => {
           />
         )}
         keyExtractor={() => Math.random().toString()}
-        ItemSeparatorComponent={() => (
-          <View
-            style={{
-              height: 15,
-              width: Dim.width,
-            }}
-          />
-        )}
+        ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
       ></FlatList>
     </View>
   );
@@ -123,7 +128,7 @@ const AddressCard = (props) => {
             style={{
               fontWeight: "bold",
               color: selected ? "black" : Colors.darkGreen,
-              fontSize: Font.s2.size,
+              // fontSize: Font.s2.size,
             }}
           >
             {props.name}
@@ -144,16 +149,17 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.cream,
     alignContent: "center",
     paddingVertical: 15,
-    paddingHorizontal: 40,
+    paddingHorizontal: 20,
     borderRadius: 10,
-    flex: 1,
+    width: Dim.width * 0.7 - 9,
   },
   addressContainerSelected: {
     backgroundColor: Colors.lightGreen,
     alignContent: "center",
     paddingVertical: 15,
-    paddingHorizontal: 40,
+    paddingHorizontal: 20,
     borderRadius: 10,
+    width: Dim.width * 0.7 - 9,
   },
 });
 
