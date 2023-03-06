@@ -262,7 +262,7 @@ func TestCreateCommunity(t *testing.T) {
 			},
 		},
 		{
-			name: "CreateMemberInternalServerError",
+			name: "BadRequestNoStores",
 			body: gin.H{
 				"name":           community.Name,
 				"center_x_coord": community.CenterXCoord,
@@ -305,7 +305,7 @@ func TestCreateCommunity(t *testing.T) {
 			},
 		},
 		{
-			name: "CreateMemberInternalServerError",
+			name: "GetCommunityByPlaceIDInternalServerError",
 			body: gin.H{
 				"name":           community.Name,
 				"center_x_coord": community.CenterXCoord,
