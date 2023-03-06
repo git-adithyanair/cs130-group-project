@@ -26,10 +26,18 @@ const YourCommunities = (props) => {
       });
     },
   });
+
   const func = async () => getCommunities.doRequest();
+
   useEffect(() => {
-    func();
-  }, []);
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      setCommunityData([])
+      func();
+    });
+
+    return unsubscribe;
+  }, [props.navigation]);
+
 
   return (
     <SafeAreaView style={styles.wrapper}>

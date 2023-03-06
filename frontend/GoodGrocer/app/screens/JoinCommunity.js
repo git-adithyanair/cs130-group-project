@@ -40,14 +40,14 @@ const JoinCommunity = (props) => {
     setCommunities(
       allCommunities.filter(
         (community) =>
-          !userCommunities.find((comm) => comm.place_id === community.place_id)
+          !userCommunities.find((comm) => comm.community.id === community.community.id)
       )
     );
 
     setSearchedCommunities(
       allCommunities.filter(
         (community) =>
-          !userCommunities.find((comm) => comm.place_id === community.place_id)
+          !userCommunities.find((comm) => comm.community.id === community.community.id)
       )
     );
   }, [allCommunities, userCommunities]);
@@ -98,6 +98,7 @@ const JoinCommunity = (props) => {
             }
             numberOfMembers={itemData.item.member_count}
             joinCommunity={true}
+            communityId={itemData.item.community.id}
           />
         )}
         ItemSeparatorComponent={() => (
@@ -110,6 +111,21 @@ const JoinCommunity = (props) => {
         )}
         ListFooterComponent={() => (
           <View style={{ height: Dim.width * 0.05 }}></View>
+        )}
+        ListEmptyComponent={() => (
+          <View
+            style={{ alignItems: "center", height: "100%", paddingTop: "50%" }}
+          >
+            <Text
+              style={{
+                fontFamily: Font.s1.family,
+                fontSize: Font.s1.size,
+                alignSelf: "center",
+              }}
+            >
+              No communities to join at the moment
+            </Text>
+          </View>
         )}
       ></FlatList>
     </SafeAreaView>

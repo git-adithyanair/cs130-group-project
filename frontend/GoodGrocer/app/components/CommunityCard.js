@@ -6,19 +6,20 @@ import { Dim, Colors, Font, BorderRadius } from "../Constants";
 import useRequest from "../hooks/useRequest";
 
 const CommunityCard = (props) => {
+  const id = props.communityId
   const [loading, setLoading] = useState(false);
   const [joined, setJoined] = useState(false);
 
   const joinCommunity = useRequest({
-    // url: "/community/join",
-    // method: "post",
-    // body: {
-    //   id: 
-    // },
-    // onSuccess: (data) => {
-    //   setLoading(false)
-    //   setJoined(true)
-    // }
+    url: "/community/join",
+    method: "post",
+    body: {
+      id: id
+    },
+    onSuccess: (data) => {
+      setLoading(false)
+      setJoined(true)
+    }
   })
 
   const handleJoined = async () => {
@@ -30,7 +31,7 @@ const CommunityCard = (props) => {
     <TouchableOpacity
       style={styles.main}
       onPress={props.onPressCommunity}
-      disabled={props.joinCommunity && !joined ? true : false}
+      disabled={props.joinCommunity ? true : false}
     >
       <View style={styles.mainView}>
         <Text
