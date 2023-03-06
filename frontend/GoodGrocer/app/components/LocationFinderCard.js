@@ -48,7 +48,7 @@ const LocationFinderCard = (props) => {
       <TextInput
         style={{ width: props.width }}
         onChange={(address) => setAddress(address.nativeEvent.text)}
-        placeholder="Enter your address..."
+        placeholder={props.placeholder ? props.placeholder : "Enter your address..."}
       />
       <Button
         title={"Search"}
@@ -57,7 +57,7 @@ const LocationFinderCard = (props) => {
         }}
         textColor={"white"}
         width={props.width}
-        appButtonContainer={{ marginVertical: 30 }}
+        appButtonContainer={{ marginVertical: 10 }}
       />
       <Text style={{ opacity: data.length === 0 ? 0 : 100 }}>
         Select the correct address below:
