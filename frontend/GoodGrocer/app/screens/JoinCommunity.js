@@ -1,36 +1,67 @@
-import { React, useState } from "react";
+import { React, useEffect, useState } from "react";
 import { SafeAreaView, StyleSheet, FlatList, View, Text } from "react-native";
 import CommunityCard from "../components/CommunityCard";
 import SearchBar from "../components/SearchBar";
 import { Dim, Colors, Font } from "../Constants";
+import useRequest from "../hooks/useRequest";
 
 const JoinCommunity = (props) => {
-  const data = [
-    { communityName: "Westwood", distance: 0.5, members: 10 },
-    { communityName: "Brentwood", distance: 2, members: 10 },
-    { communityName: "Beverly Hills", distance: 5, members: 10 },
-    { communityName: "Beverly Hills", distance: 5, members: 10 },
-    { communityName: "Beverly Hills", distance: 5, members: 10 },
-    { communityName: "Beverly Hills", distance: 5, members: 10 },
-    { communityName: "Beverly Hills", distance: 5, members: 10 },
-    { communityName: "Beverly Hills", distance: 5, members: 10 },
-    { communityName: "Beverly Hills", distance: 5, members: 10 },
-    { communityName: "Beverly Hills", distance: 5, members: 10 },
-    { communityName: "Beverly Hills", distance: 5, members: 10 },
-    { communityName: "Beverly Hills", distance: 5, members: 10 },
-  ];
-
-  const [communities, setCommunities] = useState(data);
+  const [allCommunities, setAllCommunities] = useState([]);
+  const [userCommunities, setUserCommunities] = useState([]);
+  const [communities, setCommunities] = useState([]);
+  const [searchedCommunities, setSearchedCommunities] = useState([]);
   const [community, setCommunity] = useState("");
+
+  const getAllCommunities = useRequest({
+    url: "/community",
+    method: "get",
+    onSuccess: (data) => {
+      setAllCommunities(data);
+    },
+  });
+
+  const getUserCommunities = useRequest({
+    url: "/user/community",
+    method: "get",
+    onSuccess: (data) => {
+      setUserCommunities(data);
+    },
+  });
+
+  const allComm = async () => await getAllCommunities.doRequest();
+  const userComm = async () => await getUserCommunities.doRequest();
+
+  useEffect(() => {
+    allComm();
+    userComm();
+  }, []);
+
+  useEffect(() => {
+    setCommunities(
+      allCommunities.filter(
+        (community) =>
+          !userCommunities.find((comm) => comm.community.id === community.community.id)
+      )
+    );
+
+    setSearchedCommunities(
+      allCommunities.filter(
+        (community) =>
+          !userCommunities.find((comm) => comm.community.id === community.community.id)
+      )
+    );
+  }, [allCommunities, userCommunities]);
 
   const searchCommunities = (text) => {
     setCommunity(text);
     if (!text) {
-      setCommunities(data);
+      setSearchedCommunities(communities);
     } else {
-      setCommunities(
-        data.filter((item) => {
-          return item.communityName.toLowerCase().startsWith(text.toLowerCase());
+      setSearchedCommunities(
+        communities.filter((item) => {
+          return item.community.name
+            .toLowerCase()
+            .startsWith(text.toLowerCase());
         })
       );
     }
@@ -52,13 +83,22 @@ const JoinCommunity = (props) => {
         columnWrapperStyle={{ justifyContent: "space-between" }}
         showsVerticalScrollIndicator={false}
         keyExtractor={(item) => Math.random().toString()}
-        data={communities}
+        data={searchedCommunities}
         renderItem={(itemData) => (
           <CommunityCard
-            communityName={itemData.item.communityName}
-            distanceFromUser={itemData.item.distance}
-            numberOfMembers={itemData.item.members}
+            communityNameStyle={{
+              fontSize:
+                itemData.item.community.name.length > 10
+                  ? Font.s2.size
+                  : Font.s1.size,
+            }}
+            communityName={itemData.item.community.name}
+            distanceFromUser={
+              Math.round((itemData.item.community.range / 1609.344) * 100) / 100
+            }
+            numberOfMembers={itemData.item.member_count}
             joinCommunity={true}
+            communityId={itemData.item.community.id}
           />
         )}
         ItemSeparatorComponent={() => (
@@ -71,6 +111,21 @@ const JoinCommunity = (props) => {
         )}
         ListFooterComponent={() => (
           <View style={{ height: Dim.width * 0.05 }}></View>
+        )}
+        ListEmptyComponent={() => (
+          <View
+            style={{ alignItems: "center", height: "100%", paddingTop: "50%" }}
+          >
+            <Text
+              style={{
+                fontFamily: Font.s1.family,
+                fontSize: Font.s1.size,
+                alignSelf: "center",
+              }}
+            >
+              No communities to join at the moment
+            </Text>
+          </View>
         )}
       ></FlatList>
     </SafeAreaView>

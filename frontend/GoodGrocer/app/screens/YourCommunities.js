@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Button from "../components/Button";
-import { SafeAreaView, StyleSheet, FlatList, View } from "react-native";
+import { SafeAreaView, StyleSheet, FlatList, View, Text } from "react-native";
 import CommunityCard from "../components/CommunityCard";
 import { Dim, Colors, Font } from "../Constants";
 import useRequest from "../hooks/useRequest";
@@ -30,9 +30,15 @@ const YourCommunities = (props) => {
   });
 
   const getUserCommunities = async () => getCommunities.doRequest();
+  
   useEffect(() => {
-    getUserCommunities();
-  }, []);
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      setCommunityData([])
+      getUserCommunities();
+    });
+
+    return unsubscribe;
+  }, [props.navigation]);
 
   if (loading) {
     return <Loading />;
@@ -84,7 +90,22 @@ const YourCommunities = (props) => {
             />
           </View>
         )}
-      />
+        ListEmptyComponent={() => (
+          <View
+            style={{ alignItems: "center", height: "100%", paddingTop: "50%" }}
+          >
+            <Text
+              style={{
+                fontFamily: Font.s1.family,
+                fontSize: Font.s1.size,
+                alignSelf: "center",
+              }}
+            >
+              Join a community to get started! 🧸
+            </Text>
+          </View>
+        )}
+      ></FlatList>
     </SafeAreaView>
   );
 };

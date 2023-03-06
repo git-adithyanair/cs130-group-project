@@ -3,17 +3,48 @@ import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 import Button from "./Button";
 import { Entypo, Ionicons } from "@expo/vector-icons";
 import { Dim, Colors, Font, BorderRadius } from "../Constants";
+import useRequest from "../hooks/useRequest";
 
 const CommunityCard = (props) => {
+  const id = props.communityId
+  const [loading, setLoading] = useState(false);
   const [joined, setJoined] = useState(false);
+
+  const joinCommunity = useRequest({
+    url: "/community/join",
+    method: "post",
+    body: {
+      id: id
+    },
+    onSuccess: (data) => {
+      setLoading(false)
+      setJoined(true)
+    }
+  })
+
+  const handleJoined = async () => {
+    setLoading(true)
+    await joinCommunity.doRequest();
+  }
+
   return (
     <TouchableOpacity
       style={styles.main}
       onPress={props.onPressCommunity}
-      disabled={props.joinCommunity && !joined ? true : false}
+      disabled={props.joinCommunity ? true : false}
     >
       <View style={styles.mainView}>
-        <Text style={styles.communityName}>{props.communityName}</Text>
+        <Text
+          style={{
+            color: Colors.darkGreen,
+            fontSize: Font.s1.size,
+            fontFamily: Font.s1.family,
+            fontWeight: Font.s1.weight,
+            ...props.communityNameStyle,
+          }}
+        >
+          {props.communityName}
+        </Text>
         <View style={styles.mainInfoWrapper}>
           <View style={styles.infoWrapper}>
             <Entypo
@@ -35,7 +66,7 @@ const CommunityCard = (props) => {
       </View>
       {props.joinCommunity ? (
         <Button
-          onPress={() => setJoined(true)}
+          onPress={() => handleJoined()}
           disabled={joined ? true : false}
           title={joined ? "joined!" : "join"}
           appButtonContainer={{
@@ -49,6 +80,7 @@ const CommunityCard = (props) => {
             color: joined ? Colors.darkGreen : Colors.white,
             fontSize: Font.s3.size,
           }}
+          loading={loading}
         ></Button>
       ) : null}
     </TouchableOpacity>
@@ -66,12 +98,6 @@ const styles = StyleSheet.create({
   mainView: {
     justifyContent: "center",
     paddingLeft: 15,
-  },
-  communityName: {
-    color: Colors.darkGreen,
-    fontSize: Font.s1.size,
-    fontFamily: Font.s1.family,
-    fontWeight: Font.s1.weight,
   },
   mainInfoWrapper: {
     flexDirection: "row",
