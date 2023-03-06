@@ -31,16 +31,14 @@ const LocationFinderCard = (props) => {
       .then(({ data }) => {
         if (data.status == "ZERO_RESULTS") {
           setData([]);
-          setSelectedLocation({});
-          props.onSelectLocation({});
           setNoResults(true);
         } else if (data.status != "INVALID_REQUEST") {
           console.log(data);
           setData(data.results);
-          setSelectedLocation({});
-          props.onSelectLocation({});
           setNoResults(false);
         }
+        setSelectedLocation({});
+        props.onSelectLocation({});
       })
       .catch((error) => {
         console.error(error);
