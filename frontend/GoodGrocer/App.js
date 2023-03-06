@@ -92,7 +92,6 @@ const App = () => {
         </Stack.Navigator>
       </NavigationContainer>
     );
-    // Otherwise, the app is starting up so we should show the loading page.
   }
 };
 

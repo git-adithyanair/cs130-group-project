@@ -5,7 +5,7 @@ import {
   Text,
   ActivityIndicator,
 } from "react-native";
-import { Dim, Colors, Font } from "../Constants";
+import { Dim, Colors } from "../Constants";
 
 const Button = (props) => {
   const styles = StyleSheet.create({});
@@ -21,15 +21,11 @@ const Button = (props) => {
         paddingVertical: 10,
         paddingHorizontal: 12,
         width: props.width,
-        marginTop: 10,
         ...props.appButtonContainer,
       }}
     >
       {props.loading ? (
-        <ActivityIndicator
-          color={Colors.white}
-          size={Font.s3.size}
-        />
+        <ActivityIndicator size="small" color="black" />
       ) : (
         <Text
           style={{

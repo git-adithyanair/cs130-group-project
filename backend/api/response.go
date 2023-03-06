@@ -113,8 +113,9 @@ func newUserDetailedResponse(user db.User) userDetailedResponse {
 // ========================================================================
 // Type and function to return users active errand with its requests.
 type activeErrandResponse struct {
-	Errand   db.Errand                     `json:"errand"`
-	Requests []activeErrandRequestResponse `json:"requests"`
+	Errand        db.Errand                     `json:"errand"`
+	Requests      []activeErrandRequestResponse `json:"requests"`
+	CommunityName string                        `json:"community_name"`
 }
 
 type activeErrandRequestResponse struct {

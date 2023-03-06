@@ -4,40 +4,45 @@ import { SafeAreaView, StyleSheet, FlatList, View, Text } from "react-native";
 import CommunityCard from "../components/CommunityCard";
 import { Dim, Colors, Font } from "../Constants";
 import useRequest from "../hooks/useRequest";
+import Loading from "./Loading";
 
 const YourCommunities = (props) => {
   const [communityData, setCommunityData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const getCommunities = useRequest({
     url: "/user/community",
     method: "get",
     onSuccess: (data) => {
+      let communities = [];
       data.forEach((community) => {
-        setCommunityData((oldArray) => [
-          ...oldArray,
-          {
-            members: community.member_count,
-            communityId: community.community.id,
-            communityName: community.community.name,
-            distance:
-              Math.round((community.community.range / 1609.344) * 100) / 100,
-          },
-        ]);
+        communities.push({
+          members: community.member_count,
+          communityId: community.community.id,
+          communityName: community.community.name,
+          distance:
+            Math.round((community.community.range / 1609.344) * 100) / 100,
+        });
       });
+      setCommunityData(communities);
+      setLoading(false);
     },
   });
 
-  const func = async () => getCommunities.doRequest();
-
+  const getUserCommunities = async () => getCommunities.doRequest();
+  
   useEffect(() => {
     const unsubscribe = props.navigation.addListener('focus', () => {
       setCommunityData([])
-      func();
+      getUserCommunities();
     });
 
     return unsubscribe;
   }, [props.navigation]);
 
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <SafeAreaView style={styles.wrapper}>
@@ -48,7 +53,7 @@ const YourCommunities = (props) => {
         contentContainerStyle={styles.container}
         columnWrapperStyle={{ justifyContent: "space-between" }}
         showsVerticalScrollIndicator={false}
-        keyExtractor={(item) => Math.random().toString()}
+        keyExtractor={(item) => item.communityId}
         data={communityData}
         renderItem={(itemData) => (
           <CommunityCard
@@ -75,11 +80,14 @@ const YourCommunities = (props) => {
           <View style={{ alignItems: "center" }}>
             <Button
               width={200}
-              appButtonContainer={{ backgroundColor: Colors.lightGreen }}
+              appButtonContainer={{
+                backgroundColor: Colors.lightGreen,
+                marginTop: 20,
+              }}
               appButtonText={{ textTransform: "none" }}
               title={"Join More"}
               onPress={() => props.navigation.navigate("JoinCommunity")}
-            ></Button>
+            />
           </View>
         )}
         ListEmptyComponent={() => (
@@ -114,7 +122,6 @@ const styles = StyleSheet.create({
   },
   container: {
     width: Dim.width * 0.9,
-    paddingBottom: 80,
     paddingTop: 10,
     alignSelf: "center",
   },

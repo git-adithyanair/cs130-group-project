@@ -89,6 +89,21 @@ func createRandomRequest(t *testing.T, userID int64, communityID int64, storeID 
 	}
 }
 
+func createRandomRequestWithRandomStatus(t *testing.T, userID int64) db.Request {
+	requestStatus := []db.RequestStatus{
+		db.RequestStatusCompleted,
+		db.RequestStatusInProgress,
+		db.RequestStatusInProgress,
+	}
+	return db.Request{
+		ID:          util.RandomID(),
+		UserID:      userID,
+		CommunityID: sql.NullInt64{Int64: util.RandomID(), Valid: true},
+		StoreID:     sql.NullInt64{Int64: util.RandomID(), Valid: true},
+		Status:      requestStatus[util.RandomInt(0, len(requestStatus)-1)],
+	}
+}
+
 func createRandomItem(
 	t *testing.T,
 	requestedBy int64,
@@ -121,6 +136,33 @@ func createRandomItem(
 		RequestID:      requestID,
 		QuantityType:   quantityType,
 		Quantity:       quantity,
+		PreferredBrand: preferredBrand,
+		Image:          image,
+		Found:          sql.NullBool{Bool: false, Valid: false},
+		ExtraNotes:     extraNotes,
+	}
+}
+
+func createRandomItemWithUser(t *testing.T, requestedBy int64) db.Item {
+	preferredBrand := sql.NullString{String: util.RandomString(6), Valid: true}
+	image := sql.NullString{String: "", Valid: false}
+	extraNotes := sql.NullString{String: util.RandomString(20), Valid: true}
+	quantityTypes := []db.ItemQuantityType{
+		db.ItemQuantityTypeNumerical,
+		db.ItemQuantityTypeOz,
+		db.ItemQuantityTypeLbs,
+		db.ItemQuantityTypeFlOz,
+		db.ItemQuantityTypeGal,
+		db.ItemQuantityTypeLitres,
+	}
+
+	return db.Item{
+		ID:             util.RandomID(),
+		Name:           util.RandomItemName(),
+		RequestedBy:    requestedBy,
+		RequestID:      util.RandomID(),
+		QuantityType:   quantityTypes[util.RandomInt(0, len(quantityTypes)-1)],
+		Quantity:       util.RandomFloat(0, 10),
 		PreferredBrand: preferredBrand,
 		Image:          image,
 		Found:          sql.NullBool{Bool: false, Valid: false},
@@ -168,4 +210,40 @@ func requireBodyMatchCommunity(t *testing.T, body *bytes.Buffer, community db.Co
 	require.Equal(t, community.Range, communityResponse.Range)
 	require.WithinDuration(t, community.CreatedAt, communityResponse.CreatedAt, time.Second)
 
+}
+
+func requireBodyMatchItemWithStatus(t *testing.T, body *bytes.Buffer, item db.Item, found bool) {
+
+	data, err := io.ReadAll(body)
+	require.NoError(t, err)
+
+	var itemResponse db.Item
+	err = json.Unmarshal(data, &itemResponse)
+	require.NoError(t, err)
+
+	require.Equal(t, item.ID, itemResponse.ID)
+	require.Equal(t, item.Name, itemResponse.Name)
+	require.Equal(t, item.RequestedBy, itemResponse.RequestedBy)
+	require.Equal(t, item.RequestID, itemResponse.RequestID)
+	require.Equal(t, item.QuantityType, itemResponse.QuantityType)
+	require.Equal(t, item.Quantity, itemResponse.Quantity)
+	require.Equal(t, item.PreferredBrand, itemResponse.PreferredBrand)
+	require.Equal(t, item.Image, itemResponse.Image)
+	require.Equal(t, item.ExtraNotes, itemResponse.ExtraNotes)
+	require.Equal(t, sql.NullBool{Bool: found, Valid: true}, itemResponse.Found)
+
+}
+
+func requiredBodyMatchUserRequestsResponse(t *testing.T, body *bytes.Buffer, pending []db.Request, inProgress []db.Request, complete []db.Request) {
+
+	data, err := io.ReadAll(body)
+	require.NoError(t, err)
+
+	var userRequestsRespone userRequestsResponse
+	err = json.Unmarshal(data, &userRequestsRespone)
+	require.NoError(t, err)
+
+	require.Equal(t, len(pending), len(userRequestsRespone.Pending))
+	require.Equal(t, len(inProgress), len(userRequestsRespone.InProgress))
+	require.Equal(t, len(complete), len(userRequestsRespone.Complete))
 }
