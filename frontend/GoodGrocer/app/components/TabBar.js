@@ -10,6 +10,8 @@ import ActiveErrand from "../screens/ActiveErrand";
 import ActiveRequest from "../screens/ActiveRequest";
 import RequestList from "../screens/RequestList";
 import RequestDetail from "../screens/RequestDetail";
+import CreateCommunity from "../screens/CreateCommunity";
+import AddStores from "../screens/AddStores";
 
 const HomeStack = createStackNavigator();
 const ErrandStack = createStackNavigator();
@@ -37,6 +39,16 @@ const HomeStackScreen = () => {
         name="RequestDetail"
         component={RequestDetail}
         options={{ title: "Request Details" }}
+      />
+      <HomeStack.Screen
+        name="CreateCommunity"
+        component={CreateCommunity}
+        options={{ title: "Create a Community" }}
+      />
+      <HomeStack.Screen
+        name="AddStores"
+        component={AddStores}
+        options={{ title: "Add Stores" }}
       />
     </HomeStack.Navigator>
   );

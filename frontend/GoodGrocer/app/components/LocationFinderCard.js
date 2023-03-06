@@ -51,7 +51,7 @@ const LocationFinderCard = (props) => {
       <TextInput
         style={{ width: props.width }}
         onChange={(address) => setAddress(address.nativeEvent.text)}
-        placeholder="Enter your address..."
+        placeholder={props.placeholder ? props.placeholder : "Enter your address..."}
       />
       <Button
         title={"Search"}
