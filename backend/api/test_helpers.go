@@ -177,6 +177,14 @@ func createRandomMember(t *testing.T, userID int64, communityID int64) db.Member
 	}
 }
 
+func createRandomErrand(t *testing.T, userID int64, communityID int64) db.Errand {
+	return db.Errand{
+		ID:          util.RandomID(),
+		UserID:      userID,
+		CommunityID: communityID,
+	}
+}
+
 func addAuthorization(
 	t *testing.T,
 	request *http.Request,
