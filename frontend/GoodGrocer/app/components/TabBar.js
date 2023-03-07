@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "react-native";
+import { TouchableOpacity, Text } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -20,7 +20,7 @@ const ProfileStack = createStackNavigator();
 
 const HomeStackScreen = () => {
   return (
-    <HomeStack.Navigator>
+    <HomeStack.Navigator screenOptions={{ headerTintColor: Colors.darkGreen }}>
       <HomeStack.Screen
         name="YourCommunities"
         component={YourCommunities}
@@ -31,7 +31,19 @@ const HomeStackScreen = () => {
         component={RequestList}
         options={{
           title: "Community Requests",
-          headerRight: () => <Button title={"Create"} onPress={() => {}} />,
+          headerRight: () => (
+            <TouchableOpacity style={{ marginRight: 16 }} onPress={() => {}}>
+              <Text
+                style={{
+                  color: Colors.darkGreen,
+                  fontSize: 16,
+                  fontWeight: "bold",
+                }}
+              >
+                Create
+              </Text>
+            </TouchableOpacity>
+          ),
         }}
       />
       <HomeStack.Screen
@@ -62,7 +74,9 @@ const HomeStackScreen = () => {
 
 const ProfileStackScreen = () => {
   return (
-    <ProfileStack.Navigator>
+    <ProfileStack.Navigator
+      screenOptions={{ headerTintColor: Colors.darkGreen }}
+    >
       <ProfileStack.Screen name="Profile" component={Profile} />
     </ProfileStack.Navigator>
   );
@@ -70,7 +84,9 @@ const ProfileStackScreen = () => {
 
 const ErrandStackScreen = () => {
   return (
-    <ErrandStack.Navigator>
+    <ErrandStack.Navigator
+      screenOptions={{ headerTintColor: Colors.darkGreen }}
+    >
       <ErrandStack.Screen
         name="ActiveErrand"
         component={ActiveErrand}
@@ -79,7 +95,7 @@ const ErrandStackScreen = () => {
       <ErrandStack.Screen
         name="ActiveRequest"
         component={ActiveRequest}
-        options={{ title: "", headerTintColor: "green" }}
+        options={{ title: "" }}
       />
     </ErrandStack.Navigator>
   );

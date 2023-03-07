@@ -1,74 +1,102 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   SafeAreaView,
   StyleSheet,
   Text,
   Image,
-  ScrollView,
   View,
+  FlatList,
 } from "react-native";
 import ItemCard from "../components/ItemCard";
-import useRequest from "../hooks/useRequest";
+import { Dim, Font, Colors } from "../Constants";
 
-function RequestDetail(props) {
-  const items = props.route.params.items;
+const RequestDetail = (props) => {
+  const { items, user } = props.route.params;
 
-  const itemList = items.map((item) => (
-    <View style={styles.itemCard} key={item.id}>
-      <ItemCard itemName={item.itemName} numOfItem={item.numOfItem} />
-    </View>
-  ));
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
-        <Image source={require("../assets/logo.png")} />
-        <Image
-          style={styles.profileImage}
-          source={{
-            uri: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png",
-          }}
-        />
-        <Text>Store: {props.route.params.storeName}</Text>
-        <Text>Item Count: {items.length}</Text>
-        <ScrollView style={styles.listOfItems}>{itemList}</ScrollView>
-      </View>
+    <SafeAreaView style={styles.wrapper}>
+      <FlatList
+        contentContainerStyle={styles.container}
+        style={styles.list}
+        data={items}
+        renderItem={({ item }) => (
+          <ItemCard
+            name={item.name}
+            quantity={item.quantity}
+            quantityType={item.quantity_type}
+            preferredBrand={
+              item.preferred_brand.Valid ? item.preferred_brand.String : null
+            }
+            extraNotes={item.extra_notes.Valid ? item.extra_notes : null}
+            imageUri={item.image.Valid ? item.image.String : null}
+          />
+        )}
+        keyExtractor={(item) => item.id}
+        ListHeaderComponent={() => (
+          <View style={{ alignItems: "center", paddingBottom: 20, flex: 1 }}>
+            <Text style={styles.title}>{user.name}'s Request</Text>
+            <Image
+              source={{
+                uri: user.profileImage,
+              }}
+              style={styles.profilePic}
+            />
+          </View>
+        )}
+        ItemSeparatorComponent={() => (
+          <View
+            style={{
+              height: 15,
+              width: Dim.width,
+            }}
+          />
+        )}
+      />
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  container: {
+  wrapper: {
     flex: 1,
     backgroundColor: "#fff",
   },
+  container: {
+    width: Dim.width * 0.9,
+    alignSelf: "center",
+    paddingTop: 10,
+    paddingBottom: 30,
+  },
+  title: {
+    paddingTop: 10,
+    paddingBottom: 20,
+    fontSize: Font.s1.size,
+    fontFamily: Font.s1.family,
+    fontWeight: Font.s1.weight,
+  },
   content: {
     alignItems: "center",
-    marginTop: 40,
   },
-  titleText: {
-    fontSize: 25,
+  list: {
+    flex: 1,
   },
-  subtitleText: {
-    fontSize: 14,
+  noErrandText: {
+    fontSize: Font.s2.size,
+    fontFamily: Font.s1.family,
+    fontWeight: Font.s3.weight,
+    color: Colors.darkGreen,
+    paddingHorizontal: 10,
   },
-  profileImage: {
-    width: 75,
-    height: 75,
-    borderRadius: 75 / 2,
-    marginTop: 15,
+  profilePic: {
+    width: 100,
+    height: 100,
+    borderRadius: 100 / 2,
+    marginBottom: 20,
   },
-  itemCard: {
-    marginTop: 20,
-  },
-  listOfItems: {
-    marginBottom: 270,
-    width: "75%",
-    marginTop: 15,
-  },
-  titleCard: {
-    display: "flex",
-    flexDirection: "row",
-    backgroundColor: "red",
+  phoneNumberText: {
+    paddingBottom: 10,
+    fontWeight: "bold",
+    color: Colors.darkGreen,
   },
 });
 
