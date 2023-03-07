@@ -48,6 +48,7 @@ type Querier interface {
 	GetItemsByUser(ctx context.Context, requestedBy int64) ([]Item, error)
 	GetMember(ctx context.Context, arg GetMemberParams) (Member, error)
 	GetMemberCountInCommunity(ctx context.Context, communityID int64) (int64, error)
+	GetNumberOfUserCommunities(ctx context.Context, userID int64) (int64, error)
 	GetPendingRequestsByCommunityId(ctx context.Context, communityID sql.NullInt64) ([]Request, error)
 	GetPendingRequestsByStoreId(ctx context.Context, storeID sql.NullInt64) ([]Request, error)
 	GetRequest(ctx context.Context, id int64) (Request, error)

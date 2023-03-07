@@ -152,6 +152,20 @@ func (q *Queries) GetCommunityByPlaceID(ctx context.Context, placeID string) (Co
 	return i, err
 }
 
+const getNumberOfUserCommunities = `-- name: GetNumberOfUserCommunities :one
+SELECT COUNT(communities.*)
+FROM communities
+LEFT JOIN members ON members.community_id = communities.id
+WHERE members.user_id = $1
+`
+
+func (q *Queries) GetNumberOfUserCommunities(ctx context.Context, userID int64) (int64, error) {
+	row := q.db.QueryRowContext(ctx, getNumberOfUserCommunities, userID)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
 const getUserCommunities = `-- name: GetUserCommunities :many
 SELECT communities.id, communities.name, communities.admin, communities.place_id, communities.center_x_coord, communities.center_y_coord, communities.range, communities.address, communities.created_at 
 FROM communities
