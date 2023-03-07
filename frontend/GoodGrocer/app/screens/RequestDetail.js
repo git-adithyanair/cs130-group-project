@@ -100,40 +100,4 @@ const styles = StyleSheet.create({
   },
 });
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: "#fff",
-//   },
-//   content: {
-//     alignItems: "center",
-//     marginTop: 40,
-//   },
-//   titleText: {
-//     fontSize: 25,
-//   },
-//   subtitleText: {
-//     fontSize: 14,
-//   },
-//   profileImage: {
-//     width: 75,
-//     height: 75,
-//     borderRadius: 75 / 2,
-//     marginTop: 15,
-//   },
-//   itemCard: {
-//     marginTop: 20,
-//   },
-//   listOfItems: {
-//     marginBottom: 270,
-//     width: "75%",
-//     marginTop: 15,
-//   },
-//   titleCard: {
-//     display: "flex",
-//     flexDirection: "row",
-//     backgroundColor: "red",
-//   },
-// });
-
 export default RequestDetail;
