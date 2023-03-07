@@ -2,6 +2,8 @@ import React from "react";
 import { TouchableOpacity, Text } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
+import { useNavigation, CommonActions } from '@react-navigation/native';
+import { navigate,TouchableOpacity } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import JoinCommunity from "../screens/JoinCommunity";
 import YourCommunities from "../screens/YourCommunities";
@@ -13,6 +15,8 @@ import RequestList from "../screens/RequestList";
 import RequestDetail from "../screens/RequestDetail";
 import CreateCommunity from "../screens/CreateCommunity";
 import AddStores from "../screens/AddStores";
+import Buy from "../screens/Buy";
+import OrderCreated from "../screens/OrderCreated"
 
 const HomeStack = createStackNavigator();
 const ErrandStack = createStackNavigator();
@@ -29,22 +33,15 @@ const HomeStackScreen = () => {
       <HomeStack.Screen
         name="RequestList"
         component={RequestList}
-        options={{
+        options={({ navigation }) => ({
           title: "Community Requests",
           headerRight: () => (
-            <TouchableOpacity style={{ marginRight: 16 }} onPress={() => {}}>
-              <Text
-                style={{
-                  color: Colors.darkGreen,
-                  fontSize: 16,
-                  fontWeight: "bold",
-                }}
-              >
-                Create
-              </Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("Buy")}>
+              <Ionicons name={"add-circle"} size={30} color={Colors.darkGreen}/>
             </TouchableOpacity>
           ),
-        }}
+        })}
       />
       <HomeStack.Screen
         name="JoinCommunity"
@@ -67,6 +64,16 @@ const HomeStackScreen = () => {
         name="AddStores"
         component={AddStores}
         options={{ title: "Add Stores" }}
+      />
+      <HomeStack.Screen
+        name="Buy"
+        component={Buy}
+        options={{ title: "Create Order" }}
+      />
+      <HomeStack.Screen
+        name="OrderCreated"
+        component={OrderCreated}
+        options={{ title: "Order Created" }}
       />
     </HomeStack.Navigator>
   );
