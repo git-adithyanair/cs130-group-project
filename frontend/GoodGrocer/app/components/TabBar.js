@@ -78,6 +78,18 @@ const ProfileStackScreen = () => {
       screenOptions={{ headerTintColor: Colors.darkGreen }}
     >
       <ProfileStack.Screen name="Profile" component={Profile} />
+      <ProfileStack.Screen
+        name="JoinCommunity"
+        component={JoinCommunity}
+        options={{
+          title: "Join Community",
+        }}
+      />
+      <ProfileStack.Screen
+        name="CreateCommunity"
+        component={CreateCommunity}
+        options={{ title: "Create a Community" }}
+      />
     </ProfileStack.Navigator>
   );
 };

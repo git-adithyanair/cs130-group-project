@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import {
   SafeAreaView,
@@ -13,71 +13,111 @@ import Button from "../components/Button";
 import { setToken } from "../store/actions";
 import { Colors, Dim } from "../Constants";
 import { Divider } from "react-native-elements";
+import useRequest from "../hooks/useRequest";
 
-function Profile({ setPage }) {
+function Profile({ navigation }) {
   const dispatch = useDispatch();
   const sections = [
+    "My Requests",
     "Change Address",
     "Change Name",
     "Change Profile Picture",
     "Join Community",
     "Create Community",
   ];
+  const [userData, setUserData] = useState({});
+
+  const getUserInfo = useRequest({
+    url: "/user",
+    method: "get",
+    onSuccess: (data) => {
+      setUserData(data);
+    },
+  });
+
+  const userInfo = async () => await getUserInfo.doRequest();
+
+  useEffect(() => {
+    userInfo();
+  }, []);
 
   const handleNavigation = (section) => {
-    // handle navigation for pages here based on section name
+    switch (section) {
+      case "Join Community":
+        navigation.navigate("JoinCommunity");
+        break;
+      case "Create Community":
+        navigation.navigate("CreateCommunity");
+        break;
+      default:
+        break;
+    }
     console.log(section);
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
-        <Image source={require("../assets/logo.png")} />
-        <View style={styles.listOfRequests}>
-          <View>
-            <Image
-              style={styles.profileImage}
-              source={{
-                uri: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png",
+      <FlatList
+        data={sections}
+        renderItem={(itemData) => (
+          <TouchableOpacity
+            onPress={() => handleNavigation(itemData.item)}
+            style={{ alignItems: "center" }}
+          >
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: "bold",
+                paddingVertical: 25,
+                alignContent: "center",
+                width: Dim.width * 0.8,
               }}
-            />
-          </View>
-          <View style={styles.requestDetails}>
-            <Text style={styles.titleText}>Angela</Text>
-            <Text>Number of neighborhoods: 5</Text>
-          </View>
-        </View>
-        <FlatList
-          style={{ paddingVertical: 20 }}
-          data={sections}
-          scrollEnabled={false}
-          renderItem={(itemData) => (
-            <TouchableOpacity onPress={() => handleNavigation(itemData.item)}>
-              <Text
-                style={{
-                  fontSize: 18,
-                  fontWeight: "bold",
-                  paddingVertical: 25,
-                }}
-              >
-                {itemData.item}
-              </Text>
-            </TouchableOpacity>
-          )}
-          ItemSeparatorComponent={() => (
+            >
+              {itemData.item}
+            </Text>
+          </TouchableOpacity>
+        )}
+        ItemSeparatorComponent={() => (
+          <View style={{ alignItems: "center" }}>
             <Divider
               orientation="horizontal"
               style={{ width: Dim.width * 0.8 }}
             ></Divider>
-          )}
-        ></FlatList>
-        <Button
-          title={"Sign out"}
-          width={200}
-          appButtonContainer={{ backgroundColor: Colors.lightGreen }}
-          onPress={() => dispatch(setToken(""))}
-        />
-      </View>
+          </View>
+        )}
+        ListHeaderComponent={() => (
+          <View style={styles.content}>
+            <Image
+              style={{ alignItems: "center" }}
+              source={require("../assets/logo.png")}
+            />
+            <View style={styles.listOfRequests}>
+              <View>
+                <Image
+                  style={styles.profileImage}
+                  source={{
+                    uri: userData.profile_picture,
+                  }}
+                />
+              </View>
+              <View style={styles.requestDetails}>
+                <Text style={styles.titleText}>{userData.full_name}</Text>
+                <Text>Number of communities: {userData.community_count}</Text>
+              </View>
+            </View>
+          </View>
+        )}
+        ListFooterComponent={() => (
+          <View style={{ alignItems: "center", paddingVertical: 10 }}>
+            <Button
+              title={"Sign out"}
+              width={200}
+              appButtonContainer={{ backgroundColor: Colors.lightGreen }}
+              onPress={() => dispatch(setToken(""))}
+            />
+          </View>
+        )}
+      ></FlatList>
     </SafeAreaView>
   );
 }
@@ -89,7 +129,7 @@ const styles = StyleSheet.create({
   },
   content: {
     alignItems: "center",
-    marginTop: 40,
+    marginTop: 20,
   },
   listOfRequests: {
     display: "flex",
