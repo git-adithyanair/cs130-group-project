@@ -16,6 +16,7 @@ import { useSelector } from "react-redux";
 const ActiveErrand = ({ navigation }) => {
   const [data, setData] = useState({});
   const [completeErrandEnabled, setCompleteErrandEnabled] = useState(true);
+  const [loading, setLoading] = useState(true);
   const token = useSelector((state) => state.user.token);
 
   const getData = async () => {
@@ -33,6 +34,7 @@ const ActiveErrand = ({ navigation }) => {
   };
 
   const completeErrand = async () => {
+    setLoading(true);
     axios
       .post(
         `${API_URL}/errand/update-status`,
@@ -45,9 +47,11 @@ const ActiveErrand = ({ navigation }) => {
         }
       )
       .then(({ data }) => {
+        setLoading(false);
         setData({});
       })
       .catch((error) => {
+        setLoading(false);
         console.error(error);
       });
   };
@@ -105,7 +109,6 @@ const ActiveErrand = ({ navigation }) => {
                 store: itemData.item.store,
               })
             }
-            key={itemData.item.id}
           />
         )}
         keyExtractor={(item) => item.id}

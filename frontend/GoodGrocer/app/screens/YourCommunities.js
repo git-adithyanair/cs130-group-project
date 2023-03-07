@@ -27,13 +27,14 @@ const YourCommunities = (props) => {
       setCommunityData(communities);
       setLoading(false);
     },
+    onFail: () => setLoading(false),
   });
 
   const getUserCommunities = async () => getCommunities.doRequest();
-  
+
   useEffect(() => {
-    const unsubscribe = props.navigation.addListener('focus', () => {
-      setCommunityData([])
+    const unsubscribe = props.navigation.addListener("focus", () => {
+      setCommunityData([]);
       getUserCommunities();
     });
 
@@ -82,7 +83,7 @@ const YourCommunities = (props) => {
               width={200}
               appButtonContainer={{
                 backgroundColor: Colors.lightGreen,
-                marginTop: 20
+                marginTop: 20,
               }}
               appButtonText={{ textTransform: "none" }}
               title={"Join More"}

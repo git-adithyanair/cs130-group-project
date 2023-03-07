@@ -10,6 +10,7 @@ import useRequest from "../hooks/useRequest";
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -21,8 +22,10 @@ const Login = ({ navigation }) => {
       password,
     },
     onSuccess: (data) => {
+      setLoading(false);
       dispatch(setToken(data.token));
     },
+    onFail: () => setLoading(false),
   });
 
   return (
@@ -46,6 +49,7 @@ const Login = ({ navigation }) => {
             if (!email || !password) {
               Alert.alert("Oops!", "Please fill out all fields.");
             } else {
+              setLoading(true);
               await login.doRequest();
             }
           }}
@@ -53,6 +57,7 @@ const Login = ({ navigation }) => {
           backgroundColor={"#0070CA"}
           width={300}
           appButtonContainer={{ marginTop: 20 }}
+          loading={loading}
         />
       </View>
     </SafeAreaView>

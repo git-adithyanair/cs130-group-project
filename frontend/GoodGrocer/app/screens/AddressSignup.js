@@ -21,6 +21,7 @@ function AddressSignup({ route, navigation }) {
   const { email, name, phoneNumber, password } = route.params;
   const [pictureUri, setPictureUri] = useState("");
   const [locationData, setLocationData] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -39,8 +40,10 @@ function AddressSignup({ route, navigation }) {
       profile_picture: pictureUri || "DEFAULT",
     },
     onSuccess: (data) => {
+      setLoading(false);
       dispatch(setToken(data.token));
     },
+    onFail: () => setLoading(false),
   });
 
   const pickImage = async () => {
@@ -123,7 +126,10 @@ function AddressSignup({ route, navigation }) {
       </View>
       <Button
         title={"Sign Up"}
-        onPress={async () => await signup.doRequest()}
+        onPress={async () => {
+          setLoading(true);
+          await signup.doRequest();
+        }}
         textColor={"white"}
         backgroundColor={"#0070CA"}
         width={Dim.width * 0.7}
@@ -134,6 +140,7 @@ function AddressSignup({ route, navigation }) {
           marginBottom: 40,
         }}
         disabled={JSON.stringify(locationData) === "{}"}
+        loading={loading}
       />
     </SafeAreaView>
   );
