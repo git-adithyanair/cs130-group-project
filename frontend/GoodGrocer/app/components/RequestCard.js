@@ -36,19 +36,26 @@ const RequestCard = (props) => {
         >
           <Text style={styles.storeText}>{props.storeName}</Text>
           <Text style={styles.storeText}>{props.storeAddress}</Text>
+          {props.isUserRequest ? (
+            <Text style={{ fontSize: 12, marginBottom: 5 }}>
+              Community: {props.communityName}
+            </Text>
+          ) : null}
           <Text style={{ fontSize: 12 }}>{props.numItems} item(s) to get.</Text>
         </View>
       </TouchableOpacity>
-      <TouchableOpacity
-        style={{ alignSelf: "center", padding: 10 }}
-        onPress={props.onPressSelect}
-      >
-        <Ionicons
-          name={props.selected ? "remove-circle" : "add-circle"}
-          size={35}
-          color={props.selected ? Colors.lightGreen : Colors.darkGreen}
-        />
-      </TouchableOpacity>
+      {!props.isUserRequest ? (
+        <TouchableOpacity
+          style={{ alignSelf: "center", padding: 10 }}
+          onPress={props.onPressSelect}
+        >
+          <Ionicons
+            name={props.selected ? "remove-circle" : "add-circle"}
+            size={35}
+            color={props.selected ? Colors.lightGreen : Colors.darkGreen}
+          />
+        </TouchableOpacity>
+      ) : null}
     </View>
   );
 };
