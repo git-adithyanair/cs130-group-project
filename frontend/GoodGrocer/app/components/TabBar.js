@@ -1,4 +1,5 @@
 import React from "react";
+import { TouchableOpacity, Text } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useNavigation, CommonActions } from '@react-navigation/native';
@@ -23,7 +24,7 @@ const ProfileStack = createStackNavigator();
 
 const HomeStackScreen = () => {
   return (
-    <HomeStack.Navigator>
+    <HomeStack.Navigator screenOptions={{ headerTintColor: Colors.darkGreen }}>
       <HomeStack.Screen
         name="YourCommunities"
         component={YourCommunities}
@@ -80,15 +81,31 @@ const HomeStackScreen = () => {
 
 const ProfileStackScreen = () => {
   return (
-    <ProfileStack.Navigator>
+    <ProfileStack.Navigator
+      screenOptions={{ headerTintColor: Colors.darkGreen }}
+    >
       <ProfileStack.Screen name="Profile" component={Profile} />
+      <ProfileStack.Screen
+        name="JoinCommunity"
+        component={JoinCommunity}
+        options={{
+          title: "Join Community",
+        }}
+      />
+      <ProfileStack.Screen
+        name="CreateCommunity"
+        component={CreateCommunity}
+        options={{ title: "Create a Community" }}
+      />
     </ProfileStack.Navigator>
   );
 };
 
 const ErrandStackScreen = () => {
   return (
-    <ErrandStack.Navigator>
+    <ErrandStack.Navigator
+      screenOptions={{ headerTintColor: Colors.darkGreen }}
+    >
       <ErrandStack.Screen
         name="ActiveErrand"
         component={ActiveErrand}
@@ -97,7 +114,7 @@ const ErrandStackScreen = () => {
       <ErrandStack.Screen
         name="ActiveRequest"
         component={ActiveRequest}
-        options={{ title: "", headerTintColor: "green" }}
+        options={{ title: "" }}
       />
     </ErrandStack.Navigator>
   );

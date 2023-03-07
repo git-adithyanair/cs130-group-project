@@ -6,7 +6,7 @@ import { Dim, Colors, Font, BorderRadius } from "../Constants";
 import useRequest from "../hooks/useRequest";
 
 const CommunityCard = (props) => {
-  const id = props.communityId
+  const id = props.communityId;
   const [loading, setLoading] = useState(false);
   const [joined, setJoined] = useState(false);
 
@@ -14,18 +14,19 @@ const CommunityCard = (props) => {
     url: "/community/join",
     method: "post",
     body: {
-      id: id
+      id: id,
     },
     onSuccess: (data) => {
-      setLoading(false)
-      setJoined(true)
-    }
-  })
+      setLoading(false);
+      setJoined(true);
+    },
+    onFail: () => setLoading(false),
+  });
 
   const handleJoined = async () => {
-    setLoading(true)
+    setLoading(true);
     await joinCommunity.doRequest();
-  }
+  };
 
   return (
     <TouchableOpacity
@@ -74,6 +75,7 @@ const CommunityCard = (props) => {
             height: "27%",
             alignSelf: "center",
             backgroundColor: joined ? Colors.lightGreen : Colors.darkGreen,
+            marginTop: 8,
           }}
           appButtonText={{
             textTransform: "none",

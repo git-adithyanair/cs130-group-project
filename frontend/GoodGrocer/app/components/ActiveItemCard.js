@@ -35,12 +35,20 @@ const ActiveItemCard = (props) => {
             <Text>{props.item.extra_notes.String}</Text>
           </Text>
         </View>
-        <View style={{ width: 75, height: 75, marginLeft: "auto" }}>
+        <View style={{ marginLeft: "auto" }}>
           <Image
-            source={{
-              uri: props.item.image.String,
+            source={
+              props.item.image.Valid
+                ? {
+                    uri: props.item.image.String,
+                  }
+                : require("../assets/grocery-item.png")
+            }
+            style={{
+              width: Dim.width * 0.15,
+              height: Dim.width * 0.15,
+              borderRadius: 10,
             }}
-            style={{ flex: 1, borderRadius: 10 }}
           />
         </View>
       </Card.Content>

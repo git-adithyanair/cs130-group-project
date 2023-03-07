@@ -16,6 +16,7 @@ import { useSelector } from "react-redux";
 const ActiveErrand = ({ navigation }) => {
   const [data, setData] = useState({});
   const [completeErrandEnabled, setCompleteErrandEnabled] = useState(true);
+  const [loading, setLoading] = useState(true);
   const token = useSelector((state) => state.user.token);
 
   const getData = async () => {
@@ -33,6 +34,7 @@ const ActiveErrand = ({ navigation }) => {
   };
 
   const completeErrand = async () => {
+    setLoading(true);
     axios
       .post(
         `${API_URL}/errand/update-status`,
@@ -45,9 +47,11 @@ const ActiveErrand = ({ navigation }) => {
         }
       )
       .then(({ data }) => {
+        setLoading(false);
         setData({});
       })
       .catch((error) => {
+        setLoading(false);
         console.error(error);
       });
   };
@@ -90,7 +94,7 @@ const ActiveErrand = ({ navigation }) => {
         data={data.requests}
         renderItem={(itemData) => (
           <ErrandRequestCard
-            imageUri="https://i.pinimg.com/236x/10/f4/a9/10f4a952ddf8e6828ae6833b3088dfa0.jpg"
+            imageUri={itemData.item.user.profile_picture}
             name={itemData.item.user.full_name}
             storeName={itemData.item.store.name}
             storeAddress={itemData.item.store.address}
@@ -99,18 +103,21 @@ const ActiveErrand = ({ navigation }) => {
             onPress={() =>
               navigation.navigate("ActiveRequest", {
                 user: itemData.item.user,
-                profileImage:
-                  "https://i.pinimg.com/236x/10/f4/a9/10f4a952ddf8e6828ae6833b3088dfa0.jpg",
+                profileImage: itemData.item.user.profile_picture,
                 items: itemData.item.items,
                 store: itemData.item.store,
               })
             }
-            key={itemData.item.id}
           />
         )}
         keyExtractor={(item) => item.id}
         ListHeaderComponent={() => (
-          <View style={{ alignItems: "center" }}>
+          <View
+            style={{
+              alignItems: "center",
+              opacity: JSON.stringify(data) === "{}" ? 0 : 100,
+            }}
+          >
             <Text style={styles.title}>Errand for {data.community_name}</Text>
           </View>
         )}
