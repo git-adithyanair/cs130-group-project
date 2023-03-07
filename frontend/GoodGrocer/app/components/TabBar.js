@@ -3,7 +3,6 @@ import { TouchableOpacity, Text } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useNavigation, CommonActions } from '@react-navigation/native';
-import { navigate,TouchableOpacity } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import JoinCommunity from "../screens/JoinCommunity";
 import YourCommunities from "../screens/YourCommunities";

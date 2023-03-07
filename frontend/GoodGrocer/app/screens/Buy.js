@@ -69,10 +69,10 @@ function Buy({navigation}) {
                 <Text style={styles.title}>Your Items</Text>
             </View>
             <ScrollView style={{margin: 20}}>
+                {/* <ItemCard itemName={"Apples"} numOfItem={"3"}></ItemCard>
                 <ItemCard itemName={"Apples"} numOfItem={"3"}></ItemCard>
                 <ItemCard itemName={"Apples"} numOfItem={"3"}></ItemCard>
-                <ItemCard itemName={"Apples"} numOfItem={"3"}></ItemCard>
-                <ItemCard itemName={"Apples"} numOfItem={"3"}></ItemCard>
+                <ItemCard itemName={"Apples"} numOfItem={"3"}></ItemCard> */}
                 <View style={{alignItems: 'center'}}>
                     <Button
                       title={"Complete your Order"}
