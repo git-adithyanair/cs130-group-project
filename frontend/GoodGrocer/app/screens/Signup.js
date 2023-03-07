@@ -30,6 +30,7 @@ function Signup({ navigation }) {
         <TextInput
           onChange={(password) => setPassword(password.nativeEvent.text)}
           placeholder="Enter a password..."
+          secureTextEntry={true}
         />
         <Text>Name</Text>
         <TextInput

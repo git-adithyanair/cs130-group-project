@@ -38,6 +38,7 @@ const Login = ({ navigation }) => {
         <TextInput
           onChange={(password) => setPassword(password.nativeEvent.text)}
           placeholder="Enter your password..."
+          secureTextEntry={true}
         />
         <Button
           title={"Log In"}

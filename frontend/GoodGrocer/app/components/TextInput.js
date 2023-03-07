@@ -11,6 +11,7 @@ const TextInput = (props) => {
       autoCapitalize="none"
       placeholder={props.placeholder || "Enter text here..."}
       placeholderTextColor={Colors.darkGreen}
+      secureTextEntry={props.secureTextEntry}
     />
   );
 };
