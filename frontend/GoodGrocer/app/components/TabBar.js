@@ -1,4 +1,5 @@
 import React from "react";
+import { Button } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import { TouchableOpacity } from "react-native";
@@ -11,6 +12,8 @@ import ActiveErrand from "../screens/ActiveErrand";
 import ActiveRequest from "../screens/ActiveRequest";
 import RequestList from "../screens/RequestList";
 import RequestDetail from "../screens/RequestDetail";
+import CreateCommunity from "../screens/CreateCommunity";
+import AddStores from "../screens/AddStores";
 import Buy from "../screens/Buy";
 
 const HomeStack = createStackNavigator();
@@ -40,12 +43,24 @@ const HomeStackScreen = () => {
       <HomeStack.Screen
         name="JoinCommunity"
         component={JoinCommunity}
-        options={{ title: "Join Community" }}
+        options={{
+          title: "Join Community",
+        }}
       />
       <HomeStack.Screen
         name="RequestDetail"
         component={RequestDetail}
         options={{ title: "Request Details" }}
+      />
+      <HomeStack.Screen
+        name="CreateCommunity"
+        component={CreateCommunity}
+        options={{ title: "Create a Community" }}
+      />
+      <HomeStack.Screen
+        name="AddStores"
+        component={AddStores}
+        options={{ title: "Add Stores" }}
       />
       <HomeStack.Screen
         name="Buy"

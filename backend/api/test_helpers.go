@@ -89,6 +89,15 @@ func createRandomRequest(t *testing.T, userID int64, communityID int64, storeID 
 	}
 }
 
+func createRandomRequestWithNoStore(t *testing.T, userID int64, communityID int64) db.Request {
+	return db.Request{
+		ID:          util.RandomID(),
+		UserID:      userID,
+		CommunityID: sql.NullInt64{Int64: communityID, Valid: true},
+		StoreID:     sql.NullInt64{Int64: 0, Valid: false},
+	}
+}
+
 func createRandomRequestWithRandomStatus(t *testing.T, userID int64) db.Request {
 	requestStatus := []db.RequestStatus{
 		db.RequestStatusCompleted,
@@ -172,6 +181,14 @@ func createRandomItemWithUser(t *testing.T, requestedBy int64) db.Item {
 
 func createRandomMember(t *testing.T, userID int64, communityID int64) db.Member {
 	return db.Member{
+		UserID:      userID,
+		CommunityID: communityID,
+	}
+}
+
+func createRandomErrand(t *testing.T, userID int64, communityID int64) db.Errand {
+	return db.Errand{
+		ID:          util.RandomID(),
 		UserID:      userID,
 		CommunityID: communityID,
 	}

@@ -82,11 +82,21 @@ const YourCommunities = (props) => {
               width={200}
               appButtonContainer={{
                 backgroundColor: Colors.lightGreen,
-                marginTop: 20,
+                marginTop: 20
               }}
               appButtonText={{ textTransform: "none" }}
               title={"Join More"}
               onPress={() => props.navigation.navigate("JoinCommunity")}
+            />
+            <Button
+              width={200}
+              appButtonContainer={{
+                backgroundColor: Colors.lightGreen,
+                marginTop: 20,
+              }}
+              appButtonText={{ textTransform: "none" }}
+              title={"Create a Community"}
+              onPress={() => props.navigation.navigate("CreateCommunity")}
             />
           </View>
         )}
