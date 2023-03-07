@@ -110,7 +110,12 @@ const ActiveErrand = ({ navigation }) => {
         )}
         keyExtractor={(item) => item.id}
         ListHeaderComponent={() => (
-          <View style={{ alignItems: "center" }}>
+          <View
+            style={{
+              alignItems: "center",
+              opacity: JSON.stringify(data) === "{}" ? 0 : 100,
+            }}
+          >
             <Text style={styles.title}>Errand for {data.community_name}</Text>
           </View>
         )}

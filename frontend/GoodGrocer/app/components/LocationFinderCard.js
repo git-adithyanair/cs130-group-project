@@ -6,7 +6,7 @@ import {
   View,
   FlatList,
 } from "react-native";
-import { Dim, Colors, GOOGLE_MAPS_API_KEY, Font } from "../Constants";
+import { Colors, GOOGLE_MAPS_API_KEY } from "../Constants";
 import TextInput from "../components/TextInput";
 import Button from "./Button";
 import axios from "axios";
@@ -51,7 +51,9 @@ const LocationFinderCard = (props) => {
       <TextInput
         style={{ width: props.width }}
         onChange={(address) => setAddress(address.nativeEvent.text)}
-        placeholder={props.placeholder ? props.placeholder : "Enter your address..."}
+        placeholder={
+          props.placeholder ? props.placeholder : "Enter your address..."
+        }
       />
       <Button
         title={"Search"}
@@ -81,6 +83,7 @@ const LocationFinderCard = (props) => {
             name={itemData.item.name}
             address={itemData.item.formatted_address}
             selected={itemData.item.place_id === selectedLocation.place_id}
+            width={props.width - 9}
             onPress={(isSelected) => {
               console.log(selectedLocation);
               const sendData = isSelected
@@ -116,17 +119,17 @@ const AddressCard = (props) => {
     <View>
       <TouchableOpacity onPress={selectItem}>
         <View
-          style={
-            selected
+          style={{
+            ...(selected
               ? styles.addressContainerSelected
-              : styles.addressContainerUnselected
-          }
+              : styles.addressContainerUnselected),
+            width: props.width,
+          }}
         >
           <Text
             style={{
               fontWeight: "bold",
               color: selected ? "black" : Colors.darkGreen,
-              // fontSize: Font.s2.size,
             }}
           >
             {props.name}
@@ -149,7 +152,6 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 20,
     borderRadius: 10,
-    width: Dim.width * 0.7 - 9,
   },
   addressContainerSelected: {
     backgroundColor: Colors.lightGreen,
@@ -157,7 +159,6 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 20,
     borderRadius: 10,
-    width: Dim.width * 0.7 - 9,
   },
 });
 
