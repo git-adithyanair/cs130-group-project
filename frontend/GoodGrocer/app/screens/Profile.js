@@ -43,6 +43,11 @@ function Profile({ navigation }) {
 
   const handleNavigation = (section) => {
     switch (section) {
+      case "My Requests":
+        navigation.navigate("UserRequests", {
+          user: userData,
+        });
+        break;
       case "Join Community":
         navigation.navigate("JoinCommunity");
         break;
