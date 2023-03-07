@@ -98,7 +98,7 @@ func createRandomRequestWithNoStore(t *testing.T, userID int64, communityID int6
 	}
 }
 
-func createRandomRequestWithRandomStatus(t *testing.T, userID int64, storeID int64) db.Request {
+func createRandomRequestWithRandomStatus(t *testing.T, userID int64, storeID int64, communityID int64) db.Request {
 	requestStatus := []db.RequestStatus{
 		db.RequestStatusCompleted,
 		db.RequestStatusInProgress,
@@ -107,7 +107,7 @@ func createRandomRequestWithRandomStatus(t *testing.T, userID int64, storeID int
 	return db.Request{
 		ID:          util.RandomID(),
 		UserID:      userID,
-		CommunityID: sql.NullInt64{Int64: util.RandomID(), Valid: true},
+		CommunityID: sql.NullInt64{Int64: communityID, Valid: true},
 		StoreID:     sql.NullInt64{Int64: storeID, Valid: true},
 		Status:      requestStatus[util.RandomInt(0, len(requestStatus)-1)],
 	}
