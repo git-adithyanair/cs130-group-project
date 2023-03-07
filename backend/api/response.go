@@ -80,9 +80,10 @@ type userRequestsResponse struct {
 }
 
 type userRequestsDetailResponse struct {
-	Request db.Request `json:"request"`
-	Store   *db.Store  `json:"store"`
-	Items   []db.Item  `json:"items"`
+	Request       db.Request `json:"request"`
+	Store         *db.Store  `json:"store"`
+	Items         []db.Item  `json:"items"`
+	CommunityName string     `json:"community_name"`
 }
 
 // ========================================================================

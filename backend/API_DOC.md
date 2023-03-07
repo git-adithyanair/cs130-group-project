@@ -320,6 +320,7 @@ Endpoint to get users requests grouped by status.
         "y_coord": "[float, y coordinate of google maps location]",
         "address": "[string, full address of the store]"
       },
+      "community_name": "[string, name of the community that the request belongs to]",
       "items": [
         {
           "id": "[int, id of the item]",

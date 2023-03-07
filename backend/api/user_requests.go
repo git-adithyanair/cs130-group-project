@@ -64,9 +64,20 @@ func getRequestsForStatus(ctx *gin.Context, server *Server, userID int64, status
 			return nil
 		}
 
+		community, err := server.queries.GetCommunity(ctx, request.CommunityID.Int64)
+		if err != nil {
+			if err == sql.ErrNoRows {
+				ctx.JSON(http.StatusNotFound, errorResponse(api_error.ErrNoCommunity, err))
+			} else {
+				ctx.JSON(http.StatusInternalServerError, unknownErrorResponse(err))
+			}
+			return nil
+		}
+
 		requestRes[i] = userRequestsDetailResponse{
-			Request: request,
-			Items:   items,
+			Request:       request,
+			Items:         items,
+			CommunityName: community.Name,
 		}
 
 		if request.StoreID.Valid {
