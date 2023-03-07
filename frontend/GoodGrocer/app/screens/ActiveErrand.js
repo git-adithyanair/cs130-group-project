@@ -94,7 +94,7 @@ const ActiveErrand = ({ navigation }) => {
         data={data.requests}
         renderItem={(itemData) => (
           <ErrandRequestCard
-            imageUri="https://i.pinimg.com/236x/10/f4/a9/10f4a952ddf8e6828ae6833b3088dfa0.jpg"
+            imageUri={itemData.item.user.profile_picture}
             name={itemData.item.user.full_name}
             storeName={itemData.item.store.name}
             storeAddress={itemData.item.store.address}
@@ -103,8 +103,7 @@ const ActiveErrand = ({ navigation }) => {
             onPress={() =>
               navigation.navigate("ActiveRequest", {
                 user: itemData.item.user,
-                profileImage:
-                  "https://i.pinimg.com/236x/10/f4/a9/10f4a952ddf8e6828ae6833b3088dfa0.jpg",
+                profileImage: itemData.item.user.profile_picture,
                 items: itemData.item.items,
                 store: itemData.item.store,
               })
