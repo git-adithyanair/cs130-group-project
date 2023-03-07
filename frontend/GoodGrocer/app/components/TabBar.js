@@ -1,6 +1,7 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
+import { TouchableOpacity } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import JoinCommunity from "../screens/JoinCommunity";
 import YourCommunities from "../screens/YourCommunities";
@@ -10,6 +11,7 @@ import ActiveErrand from "../screens/ActiveErrand";
 import ActiveRequest from "../screens/ActiveRequest";
 import RequestList from "../screens/RequestList";
 import RequestDetail from "../screens/RequestDetail";
+import Buy from "../screens/Buy";
 
 const HomeStack = createStackNavigator();
 const ErrandStack = createStackNavigator();
@@ -26,7 +28,14 @@ const HomeStackScreen = () => {
       <HomeStack.Screen
         name="RequestList"
         component={RequestList}
-        options={{ title: "Community Requests" }}
+        options={{ title: "Community Requests",
+        headerRight: () => (
+              <TouchableOpacity>
+                <Ionicons name={"add-circle"} size={30} color={Colors.darkGreen}/>
+              </TouchableOpacity>
+          ),
+        }}
+
       />
       <HomeStack.Screen
         name="JoinCommunity"
@@ -37,6 +46,11 @@ const HomeStackScreen = () => {
         name="RequestDetail"
         component={RequestDetail}
         options={{ title: "Request Details" }}
+      />
+      <HomeStack.Screen
+        name="Buy"
+        component={Buy}
+        options={{ title: "Create Order" }}
       />
     </HomeStack.Navigator>
   );
