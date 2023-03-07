@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	db "github.com/git-adithyanair/cs130-group-project/db/sqlc"
+	api_error "github.com/git-adithyanair/cs130-group-project/errors"
 
 	"github.com/gin-gonic/gin"
 	"github.com/git-adithyanair/cs130-group-project/token"
@@ -37,7 +38,7 @@ func (server *Server) GetUserRequest(ctx *gin.Context) {
 
 }
 
-func getRequestsForStatus(ctx *gin.Context, server *Server, userID int64, status db.RequestStatus) []db.Request {
+func getRequestsForStatus(ctx *gin.Context, server *Server, userID int64, status db.RequestStatus) []userRequestsDetailResponse {
 	arg := db.GetRequestsForUserByStatusParams{
 		UserID: userID,
 		Status: status,
@@ -51,5 +52,37 @@ func getRequestsForStatus(ctx *gin.Context, server *Server, userID int64, status
 		}
 	}
 
-	return requests
+	requestRes := make([]userRequestsDetailResponse, len(requests))
+	for i, request := range requests {
+		items, err := server.queries.GetItemsByRequest(ctx, request.ID)
+		if err != nil {
+			if err == sql.ErrNoRows {
+				ctx.JSON(http.StatusNotFound, errorResponse(api_error.ErrNoItem, err))
+			} else {
+				ctx.JSON(http.StatusInternalServerError, unknownErrorResponse(err))
+			}
+			return nil
+		}
+
+		requestRes[i] = userRequestsDetailResponse{
+			Request: request,
+			Items:   items,
+		}
+
+		if request.StoreID.Valid {
+			store, err := server.queries.GetStore(ctx, request.StoreID.Int64)
+			if err != nil {
+				if err == sql.ErrNoRows {
+					ctx.JSON(http.StatusNotFound, errorResponse(api_error.ErrNoStore, err))
+				} else {
+					ctx.JSON(http.StatusInternalServerError, unknownErrorResponse(err))
+				}
+				return nil
+			}
+
+			requestRes[i].Store = &store
+		}
+	}
+
+	return requestRes
 }
