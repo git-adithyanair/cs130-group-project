@@ -8,6 +8,7 @@
   - [Register User](#register-user)
   - [Login User](#login-user)
 - [User](#user)
+  - [Get Current User](#get-current-user)
   - [Update User Location](#update-user-location)
   - [Update Profile Picture](#update-profile-picture)
   - [Update Name](#update-name)
@@ -133,6 +134,36 @@ Logs in user and returns auth token.
 ---
 
 ## User
+
+### Get Current User
+
+Endpoint to retrieve current user's information.
+
+**URL** : `http://api.good-grocer.click/user`
+
+**Method** : `GET`
+
+**Auth Required** : YES
+
+**Body Parameters** :
+
+```json
+{}
+```
+
+**Success Response** : `200 OK`
+
+```json
+{
+  "id": "[string, user id]",
+  "email": "[string, user email]",
+  "full_name": "[string, user full name]",
+  "created_at": "[date, time when account was created]",
+  "x_coord": "[float, user address x coord]",
+  "y_coord": "[float, user address y coord]",
+  "community_count": "[int, number of communities that the user has joined]"
+}
+```
 
 ### Update User Location
 

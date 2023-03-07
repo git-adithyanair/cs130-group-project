@@ -589,6 +589,21 @@ func (mr *MockDBStoreMockRecorder) GetMemberCountInCommunity(arg0, arg1 interfac
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetMemberCountInCommunity", reflect.TypeOf((*MockDBStore)(nil).GetMemberCountInCommunity), arg0, arg1)
 }
 
+// GetNumberOfUserCommunities mocks base method.
+func (m *MockDBStore) GetNumberOfUserCommunities(arg0 context.Context, arg1 int64) (int64, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetNumberOfUserCommunities", arg0, arg1)
+	ret0, _ := ret[0].(int64)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetNumberOfUserCommunities indicates an expected call of GetNumberOfUserCommunities.
+func (mr *MockDBStoreMockRecorder) GetNumberOfUserCommunities(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetNumberOfUserCommunities", reflect.TypeOf((*MockDBStore)(nil).GetNumberOfUserCommunities), arg0, arg1)
+}
+
 // GetPendingRequestsByCommunityId mocks base method.
 func (m *MockDBStore) GetPendingRequestsByCommunityId(arg0 context.Context, arg1 sql.NullInt64) ([]db.Request, error) {
 	m.ctrl.T.Helper()

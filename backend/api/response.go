@@ -146,3 +146,29 @@ type userCommunityResponse struct {
 }
 
 // ========================================================================
+
+// ========================================================================
+// Type and function to return only unprotected user information plus their number of communities.
+type getUserResponse struct {
+	ID             int64     `json:"id"`
+	Email          string    `json:"email"`
+	FullName       string    `json:"full_name"`
+	CreatedAt      time.Time `json:"created_at"`
+	ProfilePicture string    `json:"profile_picture"`
+	XCoord         float64   `json:"x_coord"`
+	YCoord         float64   `json:"y_coord"`
+	CommunityCount int64     `json:"community_count"`
+}
+
+func newGetUserResponse(user db.User, communityCount int64) getUserResponse {
+	return getUserResponse{
+		ID:             user.ID,
+		FullName:       user.FullName,
+		Email:          user.Email,
+		CreatedAt:      user.CreatedAt,
+		ProfilePicture: user.ProfilePicture,
+		XCoord:         user.XCoord,
+		YCoord:         user.YCoord,
+		CommunityCount: communityCount,
+	}
+}
