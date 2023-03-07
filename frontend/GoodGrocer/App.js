@@ -17,6 +17,7 @@ import ErrorPopup from "./app/components/ErrorPopup";
 
 import { store, persistor } from "./app/store/config";
 import { updateDetails } from "./app/store/actions";
+import { Colors } from "./app/Constants";
 
 const Stack = createStackNavigator();
 
@@ -72,7 +73,7 @@ const App = () => {
             )
           }
         />
-        <Stack.Navigator>
+        <Stack.Navigator screenOptions={{ headerTintColor: Colors.darkGreen }}>
           <Stack.Screen
             name="Landing"
             component={Landing}
