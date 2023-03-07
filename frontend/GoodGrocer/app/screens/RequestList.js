@@ -98,17 +98,6 @@ function RequestList(props) {
             Requests in {props.route.params.communityName}
           </Text>
         }
-        ListFooterComponent={
-          <Button
-            width={200}
-            appButtonContainer={{
-              marginTop: 20,
-              alignSelf: "center",
-            }}
-            title={"Create a Request"}
-            onPress={() => {}}
-          />
-        }
       />
       {selectedRequests.length > 0 ? (
         <View

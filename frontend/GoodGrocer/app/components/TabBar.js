@@ -1,4 +1,5 @@
 import React from "react";
+import { Button } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -28,12 +29,17 @@ const HomeStackScreen = () => {
       <HomeStack.Screen
         name="RequestList"
         component={RequestList}
-        options={{ title: "Community Requests" }}
+        options={{
+          title: "Community Requests",
+          headerRight: () => <Button title={"Create"} onPress={() => {}} />,
+        }}
       />
       <HomeStack.Screen
         name="JoinCommunity"
         component={JoinCommunity}
-        options={{ title: "Join Community" }}
+        options={{
+          title: "Join Community",
+        }}
       />
       <HomeStack.Screen
         name="RequestDetail"
