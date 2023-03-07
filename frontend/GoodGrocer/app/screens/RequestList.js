@@ -77,6 +77,10 @@ function RequestList(props) {
                   requestId: item.id,
                   storeName: item.storeName,
                   items: item.items,
+                  user: {
+                    name: item.name,
+                    profileImage: item.imageUri,
+                  },
                 })
               }
               onPressSelect={() => {
