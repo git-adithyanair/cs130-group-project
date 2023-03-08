@@ -45,7 +45,7 @@ const AddStores = (props) => {
       stores: stores,
     },
     onSuccess: (data) => {
-      props.navigation.navigate("YourCommunities")
+      props.navigation.navigate("YourCommunities");
     },
   });
 
@@ -55,7 +55,7 @@ const AddStores = (props) => {
         <Text style={styles.title}>Store Name</Text>
         <TextInput
           placeholder="Enter Store Name"
-          onChange={(n) => setStoreName(n.nativeEvent.text)}
+          onChange={(n) => setStoreName(n)}
         />
       </View>
       <View style={{ marginTop: 30, ...styles.minWrapper }}>

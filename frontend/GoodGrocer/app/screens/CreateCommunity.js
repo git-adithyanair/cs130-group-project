@@ -10,16 +10,16 @@ const CreateCommunity = (props) => {
   const [range, setRange] = useState("");
   const [locationData, setLocationData] = useState({});
 
-  const handleName = (e) => {
-    setName(e.nativeEvent.text)
+  const handleName = (text) => {
+    setName(text);
   };
 
-  const handleRange = (e) => {
-    setRange(e.nativeEvent.text)
+  const handleRange = (text) => {
+    setRange(text);
   };
 
-  const handleLocation = (e) => {
-    setLocationData(e)
+  const handleLocation = (text) => {
+    setLocationData(text);
   };
 
   return (
@@ -28,14 +28,14 @@ const CreateCommunity = (props) => {
         <Text style={styles.title}>Community Name</Text>
         <TextInput
           placeholder="Enter Community Name"
-          onChange={(e) => handleName(e)}
+          onChange={(text) => handleName(text)}
         />
       </View>
       <View style={styles.minWrapper}>
         <Text style={styles.title}>Community Range</Text>
         <TextInput
           placeholder="Enter Community Range (m)"
-          onChange={(e) => handleRange(e)}
+          onChange={(text) => handleRange(text)}
         />
       </View>
       <View style={{ marginTop: 30, ...styles.minWrapper }}>
@@ -43,7 +43,7 @@ const CreateCommunity = (props) => {
           searchLabel="Community address"
           placeholder={"Enter Community Address"}
           width={Dim.width * 0.9}
-          onSelectLocation={(e) => handleLocation(e)}
+          onSelectLocation={(text) => handleLocation(text)}
         />
       </View>
       <Button
@@ -57,7 +57,7 @@ const CreateCommunity = (props) => {
             props.navigation.navigate("AddStores", {
               communityName: name,
               communityRange: range,
-              communityAddr: locationData
+              communityAddr: locationData,
             });
           }
         }}

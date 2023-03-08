@@ -50,7 +50,7 @@ const LocationFinderCard = (props) => {
       <Text style={{ fontWeight: "bold" }}>{props.searchLabel}</Text>
       <TextInput
         style={{ width: props.width }}
-        onChange={(address) => setAddress(address.nativeEvent.text)}
+        onChange={(address) => setAddress(address)}
         placeholder={
           props.placeholder ? props.placeholder : "Enter your address..."
         }

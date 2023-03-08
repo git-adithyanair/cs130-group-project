@@ -6,7 +6,7 @@ const TextInput = (props) => {
   return (
     <RN_TextInput
       style={{ ...styles.input, ...props.style }}
-      onChange={props.onChange}
+      onChangeText={props.onChange}
       value={props.value}
       autoCapitalize="none"
       placeholder={props.placeholder || "Enter text here..."}
