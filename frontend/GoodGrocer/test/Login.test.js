@@ -17,7 +17,6 @@ test("given valid email and password, the login is successful", () => {
 
   const mockedDoRequest = jest.fn(() => {
     store.dispatch(setToken("token"));
-    console.log("HERE");
   });
 
   useRequest.mockImplementation(() => {
