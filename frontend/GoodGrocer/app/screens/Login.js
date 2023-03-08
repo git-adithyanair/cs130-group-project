@@ -34,12 +34,12 @@ const Login = ({ navigation }) => {
         <Text style={styles.titleText}>Welcome Back</Text>
         <Text>Email</Text>
         <TextInput
-          onChange={(email) => setEmail(email.nativeEvent.text)}
+          onChange={(email) => setEmail(email)}
           placeholder="Enter your email..."
         />
         <Text>Password</Text>
         <TextInput
-          onChange={(password) => setPassword(password.nativeEvent.text)}
+          onChange={(password) => setPassword(password)}
           placeholder="Enter your password..."
           secureTextEntry={true}
         />

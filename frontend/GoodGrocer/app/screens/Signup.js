@@ -23,25 +23,23 @@ function Signup({ navigation }) {
         <Text style={styles.titleText}>Welcome!</Text>
         <Text>Email</Text>
         <TextInput
-          onChange={(email) => setEmail(email.nativeEvent.text)}
+          onChange={(email) => setEmail(email)}
           placeholder="Enter your email..."
         />
         <Text>Password</Text>
         <TextInput
-          onChange={(password) => setPassword(password.nativeEvent.text)}
+          onChange={(password) => setPassword(password)}
           placeholder="Enter a password..."
           secureTextEntry={true}
         />
         <Text>Name</Text>
         <TextInput
-          onChange={(name) => setName(name.nativeEvent.text)}
+          onChange={(name) => setName(name)}
           placeholder="Enter your name..."
         />
         <Text>Phone Number</Text>
         <TextInput
-          onChange={(phoneNumber) =>
-            setPhoneNumber(phoneNumber.nativeEvent.text)
-          }
+          onChange={(phoneNumber) => setPhoneNumber(phoneNumber)}
           placeholder="Enter your phone number..."
         />
         <Button
