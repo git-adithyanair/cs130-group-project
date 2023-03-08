@@ -32,15 +32,9 @@ const HomeStackScreen = () => {
       <HomeStack.Screen
         name="RequestList"
         component={RequestList}
-        options={({ navigation }) => ({
+        options={{
           title: "Community Requests",
-          headerRight: () => (
-            <TouchableOpacity
-              onPress={() => navigation.navigate("Buy")}>
-              <Ionicons name={"add-circle"} size={30} color={Colors.darkGreen}/>
-            </TouchableOpacity>
-          ),
-        })}
+        }}
       />
       <HomeStack.Screen
         name="JoinCommunity"

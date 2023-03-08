@@ -1,15 +1,29 @@
 import React, { useEffect, useState } from "react";
-import { SafeAreaView, StyleSheet, Text, FlatList, View } from "react-native";
+import { SafeAreaView, StyleSheet, Text, FlatList, View, TouchableOpacity } from "react-native";
 import RequestCard from "../components/RequestCard";
 import { Colors, Dim, Font } from "../Constants";
 import useRequest from "../hooks/useRequest";
 import Button from "../components/Button";
+import Ionicons from "react-native-vector-icons/Ionicons"
 
 function RequestList(props) {
   const [communityRequestData, setCommunityRequestData] = useState([]);
   const [selectedRequests, setSelectedRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [creatingErrand, setCreatingErrand] = useState(false);
+
+  useEffect(() => {
+    props.navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity
+          onPress={() => props.navigation.navigate("Buy",
+                                        {communityId: props.route.params.communityId,
+                                         communityName: props.route.params.communityName})}>
+          <Ionicons name={"add-circle"} size={30} color={Colors.darkGreen}/>
+        </TouchableOpacity>
+      ),
+    });
+  }, [props.navigation]);
 
   const getCommunityRequests = useRequest({
     url: `/community/requests?id=${props.route.params.communityId}`,
