@@ -1,13 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Button from "../components/Button";
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  Image,
-  View,
-  FlatList,
-} from "react-native";
+import { SafeAreaView, StyleSheet, Text, View, FlatList } from "react-native";
 import axios from "axios";
 import { Dim, Colors, Font, API_URL } from "../Constants";
 import ErrandRequestCard from "../components/ErrandRequestCard";
@@ -134,7 +127,7 @@ const ActiveErrand = ({ navigation }) => {
             {JSON.stringify(data) === "{}" ? (
               <Text style={styles.noErrandText}>
                 You currently do not have an active errand. To create an errand,
-                go to the home tab and select some requests!
+                go to Your Communities tab and select some requests!
               </Text>
             ) : (
               <Button

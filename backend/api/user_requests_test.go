@@ -9,7 +9,6 @@ import (
 	mock_db "github.com/git-adithyanair/cs130-group-project/db/mock"
 	db "github.com/git-adithyanair/cs130-group-project/db/sqlc"
 	"github.com/git-adithyanair/cs130-group-project/token"
-	"github.com/git-adithyanair/cs130-group-project/util"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
 )
@@ -19,13 +18,16 @@ func TestGetUserRequest(t *testing.T) {
 	user, _ := createRandomUser(t)
 	in_progress, complete, pending := []db.Request{}, []db.Request{}, []db.Request{}
 	groceryStore := createRandomStore(t)
+	community := createRandomCommunity(t, user.ID)
 	items := make(map[int64]([]db.Item))
-	requests_no_items := []db.Request{createRandomRequest(t, user.ID, util.RandomID(), groceryStore.ID)}
-	requests_invalid_store := []db.Request{createRandomRequest(t, user.ID, util.RandomID(), groceryStore.ID+100)}
+	requests_no_items := []db.Request{createRandomRequest(t, user.ID, community.ID, groceryStore.ID)}
+	requests_invalid_store := []db.Request{createRandomRequest(t, user.ID, community.ID, groceryStore.ID+100)}
+	requests_invalid_community := []db.Request{createRandomRequest(t, user.ID, community.ID+100, groceryStore.ID+100)}
 	requests_invalid_store_items := []db.Item{createRandomItem(t, user.ID, requests_invalid_store[0].ID, db.ItemQuantityTypeGal, 0.0, false, false, false)}
+	requests_invalid_community_items := []db.Item{createRandomItem(t, user.ID, requests_invalid_community[0].ID, db.ItemQuantityTypeGal, 0.0, false, false, false)}
 
 	for i := 0; i < 10; i++ {
-		request := createRandomRequestWithRandomStatus(t, user.ID, groceryStore.ID)
+		request := createRandomRequestWithRandomStatus(t, user.ID, groceryStore.ID, community.ID)
 		if request.Status == db.RequestStatusInProgress {
 			in_progress = append(in_progress, request)
 		} else if request.Status == db.RequestStatusPending {
@@ -69,6 +71,10 @@ func TestGetUserRequest(t *testing.T) {
 						Times(1).
 						Return(items[request.ID], nil)
 					store.EXPECT().
+						GetCommunity(gomock.Any(), community.ID).
+						Times(1).
+						Return(community, nil)
+					store.EXPECT().
 						GetStore(gomock.Any(), groceryStore.ID).
 						Times(1).
 						Return(groceryStore, nil)
@@ -86,6 +92,10 @@ func TestGetUserRequest(t *testing.T) {
 						Times(1).
 						Return(items[request.ID], nil)
 					store.EXPECT().
+						GetCommunity(gomock.Any(), community.ID).
+						Times(1).
+						Return(community, nil)
+					store.EXPECT().
 						GetStore(gomock.Any(), groceryStore.ID).
 						Times(1).
 						Return(groceryStore, nil)
@@ -102,6 +112,10 @@ func TestGetUserRequest(t *testing.T) {
 						GetItemsByRequest(gomock.Any(), request.ID).
 						Times(1).
 						Return(items[request.ID], nil)
+					store.EXPECT().
+						GetCommunity(gomock.Any(), community.ID).
+						Times(1).
+						Return(community, nil)
 					store.EXPECT().
 						GetStore(gomock.Any(), groceryStore.ID).
 						Times(1).
@@ -208,6 +222,10 @@ func TestGetUserRequest(t *testing.T) {
 						Times(1).
 						Return(items[request.ID], nil)
 					store.EXPECT().
+						GetCommunity(gomock.Any(), community.ID).
+						Times(1).
+						Return(community, nil)
+					store.EXPECT().
 						GetStore(gomock.Any(), groceryStore.ID).
 						Times(1).
 						Return(groceryStore, nil)
@@ -224,6 +242,10 @@ func TestGetUserRequest(t *testing.T) {
 						GetItemsByRequest(gomock.Any(), request.ID).
 						Times(1).
 						Return(items[request.ID], nil)
+					store.EXPECT().
+						GetCommunity(gomock.Any(), community.ID).
+						Times(1).
+						Return(community, nil)
 					store.EXPECT().
 						GetStore(gomock.Any(), groceryStore.ID).
 						Times(1).
@@ -286,6 +308,58 @@ func TestGetUserRequest(t *testing.T) {
 			},
 		},
 		{
+			name: "StatusNotFoundCommunity",
+			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
+				addAuthorization(t, request, tokenMaker, authorizationTypeBearer, user.ID, user.Email)
+			},
+			buildStubs: func(store *mock_db.MockDBStore) {
+				store.EXPECT().
+					GetRequestsForUserByStatus(gomock.Any(), db.GetRequestsForUserByStatusParams{
+						UserID: user.ID,
+						Status: db.RequestStatusPending,
+					}).
+					Times(1).
+					Return(requests_invalid_community, nil)
+				store.EXPECT().
+					GetItemsByRequest(gomock.Any(), requests_invalid_community[0].ID).
+					Times(1).
+					Return(requests_invalid_community_items, nil)
+				store.EXPECT().
+					GetCommunity(gomock.Any(), community.ID+100).
+					Times(1).
+					Return(db.Community{}, sql.ErrNoRows)
+			},
+			checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
+				require.Equal(t, http.StatusNotFound, recorder.Code)
+			},
+		},
+		{
+			name: "InternalServerErrorCommunity",
+			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
+				addAuthorization(t, request, tokenMaker, authorizationTypeBearer, user.ID, user.Email)
+			},
+			buildStubs: func(store *mock_db.MockDBStore) {
+				store.EXPECT().
+					GetRequestsForUserByStatus(gomock.Any(), db.GetRequestsForUserByStatusParams{
+						UserID: user.ID,
+						Status: db.RequestStatusPending,
+					}).
+					Times(1).
+					Return(requests_invalid_community, nil)
+				store.EXPECT().
+					GetItemsByRequest(gomock.Any(), requests_invalid_community[0].ID).
+					Times(1).
+					Return(requests_invalid_community_items, nil)
+				store.EXPECT().
+					GetCommunity(gomock.Any(), community.ID+100).
+					Times(1).
+					Return(db.Community{}, sql.ErrConnDone)
+			},
+			checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
+				require.Equal(t, http.StatusInternalServerError, recorder.Code)
+			},
+		},
+		{
 			name: "StatusNotFoundStore",
 			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
 				addAuthorization(t, request, tokenMaker, authorizationTypeBearer, user.ID, user.Email)
@@ -302,6 +376,10 @@ func TestGetUserRequest(t *testing.T) {
 					GetItemsByRequest(gomock.Any(), requests_invalid_store[0].ID).
 					Times(1).
 					Return(requests_invalid_store_items, nil)
+				store.EXPECT().
+					GetCommunity(gomock.Any(), community.ID).
+					Times(1).
+					Return(community, nil)
 				store.EXPECT().
 					GetStore(gomock.Any(), groceryStore.ID+100).
 					Times(1).
@@ -328,6 +406,10 @@ func TestGetUserRequest(t *testing.T) {
 					GetItemsByRequest(gomock.Any(), requests_invalid_store[0].ID).
 					Times(1).
 					Return(requests_invalid_store_items, nil)
+				store.EXPECT().
+					GetCommunity(gomock.Any(), community.ID).
+					Times(1).
+					Return(community, nil)
 				store.EXPECT().
 					GetStore(gomock.Any(), groceryStore.ID+100).
 					Times(1).

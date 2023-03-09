@@ -2,7 +2,7 @@ import React from "react";
 import { TouchableOpacity, Text } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
-import { useNavigation, CommonActions } from '@react-navigation/native';
+import { useNavigation, CommonActions } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import JoinCommunity from "../screens/JoinCommunity";
 import YourCommunities from "../screens/YourCommunities";
@@ -17,7 +17,8 @@ import AddStores from "../screens/AddStores";
 import Buy from "../screens/Buy";
 import OrderCreated from "../screens/OrderCreated";
 import ChangeName from "../screens/ChangeName";
-import ChangeAddress from "../screens/ChangeAddress";
+import ChangeAddress from "../screens/ChangeAddress";;
+import UserRequests from "../screens/UserRequests";
 
 const HomeStack = createStackNavigator();
 const ErrandStack = createStackNavigator();
@@ -80,6 +81,18 @@ const ProfileStackScreen = () => {
       screenOptions={{ headerTintColor: Colors.darkGreen }}
     >
       <ProfileStack.Screen name="Profile" component={Profile} />
+      <ProfileStack.Screen
+        name="UserRequests"
+        component={UserRequests}
+        options={{
+          title: "My Requests",
+        }}
+      />
+      <ProfileStack.Screen
+        name="RequestDetail"
+        component={RequestDetail}
+        options={{ title: "Request Details" }}
+      />
       <ProfileStack.Screen
         name="JoinCommunity"
         component={JoinCommunity}
@@ -154,7 +167,7 @@ const TabBar = (props) => {
           } else if (route.name === "MyProfile") {
             iconName = focused ? "person" : "person-outline";
           } else if (route.name === "Errand") {
-            iconName = focused ? "ios-list" : "ios-list-outline";
+            iconName = focused ? "cart" : "cart-outline";
           }
           return <Ionicons name={iconName} size={size} color={"white"} />;
         },
