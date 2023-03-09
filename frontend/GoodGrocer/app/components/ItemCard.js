@@ -3,6 +3,7 @@ import { Image, Text, View, StyleSheet } from "react-native";
 import { Dim, Colors, Font } from "../Constants";
 
 const RequestCard = (props) => {
+  console.log(props.quantity);
   return (
     <View style={styles.container}>
       <Image
@@ -30,7 +31,7 @@ const RequestCard = (props) => {
         <View style={{ height: 4 }} />
         {props.quantityType !== "numerical" ? (
           <Text>
-            Amount: {props.quantity.toFixed(2)} {props.quantityType}
+            Amount: {props.quantity} {props.quantityType}
           </Text>
         ) : (
           <Text>Amount: {Math.round(props.quantity)} count</Text>

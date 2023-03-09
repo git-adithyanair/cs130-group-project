@@ -18,7 +18,7 @@ const Tab = createBottomTabNavigator();
 function Buy({navigation, route}) {
     const [store, setStore] = useState('');
     const [item, setItem] = useState('');
-    const [numItems, setNumItems] = useState('');
+    const [numItems, setNumItems] = useState(1.0);
     const [type, setType] = useState('');
     const [brand, setBrand] = useState('');
     const [notes, setNotes] = useState('');
@@ -46,7 +46,8 @@ function Buy({navigation, route}) {
                             "preferred_brand": brand,
                             "image": null,
                             "extra_notes": notes,};
-
+      // console.log(numItems);
+      console.log(individualItem);
       setItems(prev => [...prev, individualItem]);
     }
     const completeOrder = () => {
@@ -134,18 +135,20 @@ function Buy({navigation, route}) {
           </View>
           <View>
           <FlatList
-            data={DATA}
-            renderItem={({item}) => <Item title={item.title} />}
-            // extraData={changedData}
-            keyExtractor={item => item.id}
-          />
-          </View>
-            {/* <ScrollView style={{margin: 20}}> */}
-                {/* <ItemCard itemName={"Apples"} numOfItem={"3"}></ItemCard>
-                <ItemCard itemName={"Apples"} numOfItem={"3"}></ItemCard>
-                <ItemCard itemName={"Apples"} numOfItem={"3"}></ItemCard>
-                <ItemCard itemName={"Apples"} numOfItem={"3"}></ItemCard> */}
-                <View style={{alignItems: 'center', marginTop: 20, marginBottom: 20}}>
+            data={items}
+            renderItem={({item}) =>
+            <ItemCard
+                  name={item.name}
+                  quantity={item.quantity}
+                  quantityType={item.quantity_type}
+                  preferredBrand={item.preferred_brand}
+                  extraNotes={item.extra_notes}
+                />}
+
+
+            keyExtractor={(item) => item.name}
+            ListFooterComponent={() => (
+              <View style={{alignItems: 'center'}}>
                     <Button
                       title={"Complete your Order"}
                       onPress={() => completeOrder()}
@@ -153,7 +156,9 @@ function Buy({navigation, route}) {
                       backgroundColor={Colors.blue}
                       width={300} />
                 </View>
-            {/* </ScrollView> */}
+            )}
+          />
+          </View>
         </SafeAreaView>
     );
 
