@@ -17,6 +17,7 @@ import AddStores from "../screens/AddStores";
 import Buy from "../screens/Buy";
 import OrderCreated from "../screens/OrderCreated";
 import UserRequests from "../screens/UserRequests";
+import UpdateProfilePicture from "../screens/UpdateProfilePicture";
 
 const HomeStack = createStackNavigator();
 const ErrandStack = createStackNavigator();
@@ -99,6 +100,11 @@ const ProfileStackScreen = () => {
         name="RequestDetail"
         component={RequestDetail}
         options={{ title: "Request Details" }}
+      />
+      <ProfileStack.Screen
+        name="UpdateProfilePicture"
+        component={UpdateProfilePicture}
+        options={{ title: "Update Profile Picture" }}
       />
       <ProfileStack.Screen
         name="JoinCommunity"

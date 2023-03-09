@@ -38,13 +38,21 @@ function Profile({ navigation }) {
   const userInfo = async () => await getUserInfo.doRequest();
 
   useEffect(() => {
-    userInfo();
-  }, []);
+    const unsubscribe = navigation.addListener("focus", () => {
+      userInfo();
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   const handleNavigation = (section) => {
     switch (section) {
       case "My Requests":
         navigation.navigate("UserRequests", {
+          user: userData,
+        });
+        break;
+      case "Change Profile Picture":
+        navigation.navigate("UpdateProfilePicture", {
           user: userData,
         });
         break;
