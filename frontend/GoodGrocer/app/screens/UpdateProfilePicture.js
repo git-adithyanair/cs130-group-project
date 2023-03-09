@@ -3,47 +3,29 @@ import {
   SafeAreaView,
   StyleSheet,
   Text,
-  Image,
   View,
   TouchableOpacity,
   ImageBackground,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { useDispatch } from "react-redux";
 
 import Button from "../components/Button";
-import { Colors, Dim, Font } from "../Constants";
+import { Colors, Dim } from "../Constants";
 import useRequest from "../hooks/useRequest";
-import { setToken } from "../store/actions";
-import LocationFinderCard from "../components/LocationFinderCard";
 
-function AddressSignup({ route, navigation }) {
-  const { email, name, phoneNumber, password } = route.params;
+function UpdateProfilePicture({ route, navigation }) {
   const [pictureUri, setPictureUri] = useState("");
-  const [locationData, setLocationData] = useState({});
   const [loading, setLoading] = useState(false);
 
-  const dispatch = useDispatch();
-
-  const signup = useRequest({
-    url: "/user",
+  const updateProfilePicture = useRequest({
+    url: "/user/update-profile-pic",
     method: "post",
     body: {
-      email,
-      password,
-      full_name: name,
-      phone_number: phoneNumber,
-      address: locationData.address,
-      place_id: locationData.place_id,
-      x_coord: locationData.x_coord,
-      y_coord: locationData.y_coord,
-      profile_picture: pictureUri
-        ? "data:image/png;base64," + pictureUri
-        : "DEFAULT",
+      image: "data:image/png;base64," + pictureUri,
     },
     onSuccess: (data) => {
       setLoading(false);
-      dispatch(setToken(data.token));
+      navigation.goBack();
     },
     onFail: () => setLoading(false),
   });
@@ -79,36 +61,20 @@ function AddressSignup({ route, navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{ width: 300 }}>
-        <Text style={styles.titleText}>Final steps!</Text>
-        <LocationFinderCard
-          searchLabel="Find your address"
-          width={Dim.width * 0.7}
-          onSelectLocation={(data) => {
-            setLocationData(data);
-          }}
-        />
+      <View style={{ width: 300, justifyContent: "center" }}>
         <View style={{ marginTop: 30 }}>
-          {pictureUri ? (
-            <ImageBackground
-              style={{
-                width: Dim.width * 0.5,
-                height: Dim.width * 0.5,
-                alignSelf: "center",
-              }}
-              source={{ uri: "data:image/png;base64," + pictureUri }}
-            />
-          ) : (
-            <View style={styles.defaultPic}>
-              <Image
-                source={require("../assets/default-profile-pic.png")}
-                style={{
-                  width: Dim.width * 0.5,
-                  height: Dim.width * 0.5,
-                }}
-              />
-            </View>
-          )}
+          <ImageBackground
+            style={{
+              width: Dim.width * 0.5,
+              height: Dim.width * 0.5,
+              alignSelf: "center",
+            }}
+            source={{
+              uri: pictureUri
+                ? "data:image/png;base64," + pictureUri
+                : route.params.user.profile_picture,
+            }}
+          />
         </View>
 
         <TouchableOpacity
@@ -122,26 +88,25 @@ function AddressSignup({ route, navigation }) {
               fontWeight: "bold",
             }}
           >
-            Click here to add a profile picture...
+            Click here to update your profile picture...
           </Text>
         </TouchableOpacity>
       </View>
       <Button
-        title={"Sign Up"}
+        title={"Submit"}
         onPress={async () => {
           setLoading(true);
-          await signup.doRequest();
+          await updateProfilePicture.doRequest();
         }}
         textColor={"white"}
         backgroundColor={"#0070CA"}
         width={Dim.width * 0.7}
         appButtonContainer={{
-          backgroundColor:
-            JSON.stringify(locationData) === "{}" ? "#d3d3d3" : "#0070CA",
+          backgroundColor: pictureUri === "" ? "#d3d3d3" : Colors.darkGreen,
           alignSelf: "center",
           marginBottom: 40,
         }}
-        disabled={JSON.stringify(locationData) === "{}"}
+        disabled={pictureUri === ""}
         loading={loading}
       />
     </SafeAreaView>
@@ -155,15 +120,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
-  titleText: {
-    marginVertical: 20,
-    fontFamily: Font.s1.family,
-    fontSize: 30,
-    fontWeight: Font.s1.weight,
-  },
   defaultPic: {
     alignItems: "center",
   },
 });
 
-export default AddressSignup;
+export default UpdateProfilePicture;
