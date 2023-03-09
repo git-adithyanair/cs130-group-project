@@ -15,7 +15,9 @@ import RequestDetail from "../screens/RequestDetail";
 import CreateCommunity from "../screens/CreateCommunity";
 import AddStores from "../screens/AddStores";
 import Buy from "../screens/Buy";
-import OrderCreated from "../screens/OrderCreated"
+import OrderCreated from "../screens/OrderCreated";
+import ChangeName from "../screens/ChangeName";
+import ChangeAddress from "../screens/ChangeAddress";
 
 const HomeStack = createStackNavigator();
 const ErrandStack = createStackNavigator();
@@ -89,6 +91,16 @@ const ProfileStackScreen = () => {
         name="CreateCommunity"
         component={CreateCommunity}
         options={{ title: "Create a Community" }}
+      />
+      <ProfileStack.Screen
+        name="ChangeName"
+        component={ChangeName}
+        options={{ title: "Change Name" }}
+      />
+      <ProfileStack.Screen
+        name="ChangeAddress"
+        component={ChangeAddress}
+        options={{ title: "Change Address" }}
       />
     </ProfileStack.Navigator>
   );

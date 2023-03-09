@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {SafeAreaView, StyleSheet, FlatList, Pressable, Image, Text, Title, View, ScrollView } from 'react-native';
 import Login from './Login';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -8,51 +8,85 @@ import TextInput from '../components/TextInput';
 import ItemCard from '../components/ItemCard';
 import {Colors, Font} from '../Constants';
 import { Picker } from '@react-native-picker/picker';
-
+import SearchBar from "../components/SearchBar";
+import useRequest from "../hooks/useRequest";
 
 
 const Tab = createBottomTabNavigator();
-
-
 
 function Buy({navigation, route}) {
     const [store, setStore] = useState('');
     const [item, setItem] = useState('');
     const [numItems, setNumItems] = useState(1.0);
-    const [type, setType] = useState('');
+    const [type, setType] = useState('lbs');
     const [brand, setBrand] = useState('');
     const [notes, setNotes] = useState('');
     const [items, setItems] = useState([]);
+    const [storesData, setStoresData] = useState([]);
     const [isModalVisible, setIsModalVisible] = React.useState(false);
     const handleModal = () => setIsModalVisible(() => !isModalVisible);
-    const [DATA, setDATA] = useState([]);
-
-    const Item = ({title}) => (
-      <View style={styles.item}>
-        <Text style={styles.title}>{title}</Text>
-      </View>
-    );
 
     const addItem = () => {
       setIsModalVisible(() => !isModalVisible);
-      let dataPoint = {id: '5s694d0f-3da1-4r1f-bd96-145571e29d72',
-      title: 'Fourth Item'};
-      setDATA(prev => [...prev, dataPoint]);
 
-      console.log(DATA);
+      var amount = parseFloat(numItems)
+      console.log(typeof amount)
       let individualItem = {"name": item,
                             "quantity_type": type,
-                            "quantity": numItems,
+                            "quantity": amount,
                             "preferred_brand": brand,
-                            "image": null,
+                            "image": "",
                             "extra_notes": notes,};
-      // console.log(numItems);
-      console.log(individualItem);
+      setItem(null);
+      setType(null);
+      setNumItems(null);
+      setBrand(null);
+      setNotes(null);
       setItems(prev => [...prev, individualItem]);
+      console.log(items);
     }
-    const completeOrder = () => {
+
+    const getStores = useRequest({
+      url:  `/community/stores/${route.params.communityId}`,
+      method: "get",
+      onSuccess: (data) => {
+        const stores = [];
+        data.forEach((storeData) => {
+          stores.push({
+            name: storeData.name,
+            id: storeData.id,
+          });
+        });
+        setStoresData(stores);
+      },
+    });
+
+    const createRequest = useRequest({
+      url: "/request",
+      method: "post",
+      body: {
+        community_id: route.params.communityId,
+        store_id: store,
+        items: items,
+      },
+      onSuccess: () => {
         navigation.navigate('OrderCreated');
+      },
+      onFailure: () => {
+        log.console("Backend Error");
       }
+    });
+
+    const allStores = async () => await getStores.doRequest();
+
+    useEffect(() => {
+      allStores();
+    }, []);
+
+    // const completeOrder = () => {
+    //     async () => await createRequest.doRequest();
+    //     navigation.navigate('OrderCreated');
+    // }
     return (
         <SafeAreaView style={styles.container}>
           <View style={{marginTop: 10, marginBottom: 30}}>
@@ -134,30 +168,35 @@ function Buy({navigation, route}) {
             <Text style={styles.title}>Your Items</Text>
           </View>
           <View>
-          <FlatList
-            data={items}
-            renderItem={({item}) =>
-            <ItemCard
-                  name={item.name}
-                  quantity={item.quantity}
-                  quantityType={item.quantity_type}
-                  preferredBrand={item.preferred_brand}
-                  extraNotes={item.extra_notes}
-                />}
-
-
-            keyExtractor={(item) => item.name}
-            ListFooterComponent={() => (
-              <View style={{alignItems: 'center'}}>
-                    <Button
-                      title={"Complete your Order"}
-                      onPress={() => completeOrder()}
-                      textColor={"white"}
-                      backgroundColor={Colors.blue}
-                      width={300} />
-                </View>
-            )}
-          />
+            <FlatList
+              data={items}
+              contentContainerStyle={{ paddingBottom: 20}}
+              renderItem={({item}) =>
+              <ItemCard
+                    name={item.name}
+                    quantity={item.quantity}
+                    quantityType={item.quantity_type}
+                    preferredBrand={item.preferred_brand}
+                    extraNotes={item.extra_notes}
+                  />}
+              keyExtractor={(item) => item.name}
+              ItemSeparatorComponent={() => (
+                <View
+                  style={{
+                    height: 10,
+                  }}
+                />
+              )}
+              ListFooterComponent={() => (
+                <View style={{alignItems: 'center', marginTop: 10}}>
+                      <Button
+                        title={"Complete your Order"}
+                        onPress={async () => await createRequest.doRequest()}
+                        backgroundColor={Colors.darkGreen}
+                        width={300} />
+                  </View>
+              )}
+            />
           </View>
         </SafeAreaView>
     );
