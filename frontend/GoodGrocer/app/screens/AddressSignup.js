@@ -37,7 +37,7 @@ function AddressSignup({ route, navigation }) {
       place_id: locationData.place_id,
       x_coord: locationData.x_coord,
       y_coord: locationData.y_coord,
-      profile_picture: pictureUri || "DEFAULT",
+      profile_picture: "data:image/png;base64," + pictureUri || "DEFAULT",
     },
     onSuccess: (data) => {
       setLoading(false);

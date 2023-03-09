@@ -164,7 +164,7 @@ const TabBar = (props) => {
           } else if (route.name === "MyProfile") {
             iconName = focused ? "person" : "person-outline";
           } else if (route.name === "Errand") {
-            iconName = focused ? "ios-list" : "ios-list-outline";
+            iconName = focused ? "cart" : "cart-outline";
           }
           return <Ionicons name={iconName} size={size} color={"white"} />;
         },
