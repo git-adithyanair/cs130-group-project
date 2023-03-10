@@ -1,15 +1,16 @@
-import React, {useEffect, useState} from 'react';
-import {SafeAreaView, StyleSheet, FlatList, Pressable, Image, Text, Title, View, ScrollView } from 'react-native';
+import React, {useState} from 'react';
+import { SafeAreaView, Alert, StyleSheet, FlatList, Text, View } from 'react-native';
 import Login from './Login';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Modal from "react-native-modal";
 import Button from '../components/Button';
 import TextInput from '../components/TextInput';
 import ItemCard from '../components/ItemCard';
-import {Colors, Font} from '../Constants';
+import {Colors, Font, Dim} from '../Constants';
 import { Picker } from '@react-native-picker/picker';
 import SearchBar from "../components/SearchBar";
 import useRequest from "../hooks/useRequest";
+import Color from 'color';
 
 
 const Tab = createBottomTabNavigator();
@@ -17,7 +18,7 @@ const Tab = createBottomTabNavigator();
 function Buy({navigation, route}) {
     const [store, setStore] = useState('');
     const [item, setItem] = useState('');
-    const [numItems, setNumItems] = useState(1.0);
+    const [numItems, setNumItems] = useState('');
     const [type, setType] = useState('lbs');
     const [brand, setBrand] = useState('');
     const [notes, setNotes] = useState('');
@@ -28,77 +29,59 @@ function Buy({navigation, route}) {
 
     const addItem = () => {
       setIsModalVisible(() => !isModalVisible);
+      if (!item || !numItems || !type) {
+        Alert.alert("Oops!", "You need the type, quantity and quantity type of an item to add them");
+      } else {
+        var amount = parseFloat(numItems)
+        // console.log(typeof amount)
+        let individualItem = {"name": item,
+                              "quantity_type": type,
+                              "quantity": amount,
+                              "preferred_brand": brand,
+                              "image": "",
+                              "extra_notes": notes,};
+        setItem('');
+        setType('');
+        setNumItems('');
+        setBrand('');
+        setNotes('');
+        setItems(prev => [...prev, individualItem]);
+        // console.log(items);
+      }
 
-      var amount = parseFloat(numItems)
-      console.log(typeof amount)
-      let individualItem = {"name": item,
-                            "quantity_type": type,
-                            "quantity": amount,
-                            "preferred_brand": brand,
-                            "image": "",
-                            "extra_notes": notes,};
-      setItem(null);
-      setType(null);
-      setNumItems(null);
-      setBrand(null);
-      setNotes(null);
-      setItems(prev => [...prev, individualItem]);
-      console.log(items);
     }
-
-    const getStores = useRequest({
-      url:  `/community/stores/${route.params.communityId}`,
-      method: "get",
-      onSuccess: (data) => {
-        const stores = [];
-        data.forEach((storeData) => {
-          stores.push({
-            name: storeData.name,
-            id: storeData.id,
-          });
-        });
-        setStoresData(stores);
-      },
-    });
 
     const createRequest = useRequest({
       url: "/request",
       method: "post",
       body: {
         community_id: route.params.communityId,
-        store_id: store,
+        store_id: route.params.storeId,
         items: items,
       },
       onSuccess: () => {
         navigation.navigate('OrderCreated');
       },
-      onFailure: () => {
+      onFail: () => {
         log.console("Backend Error");
       }
     });
 
-    const allStores = async () => await getStores.doRequest();
-
-    useEffect(() => {
-      allStores();
-    }, []);
-
-    // const completeOrder = () => {
-    //     async () => await createRequest.doRequest();
-    //     navigation.navigate('OrderCreated');
-    // }
     return (
         <SafeAreaView style={styles.container}>
           <View style={{marginTop: 10, marginBottom: 30}}>
                 <View style={{marginLeft: 20}}>
-                    <Text style={styles.title}>Create an Order in {route.params.communityName}</Text>
-                    <Text style={{fontSize: 18, marginTop: 5}}>Pick your Store </Text>
-                </View>
-                <View style={{marginTop: 10, marginLeft: 30, marginRight: 30}}>
-                    <TextInput onChange={store => setStore(store.nativeEvent.text)}/>
+                    <Text style={styles.title}>Create an Order in</Text>
+                    <Text style={styles.title}>{route.params.communityName} for </Text>
+                    <Text style={styles.title}>{route.params.storeName}</Text>
+                    {/* <Text style={{fontSize: 18, marginTop: 5}}>Pick your Store </Text> */}
                 </View>
                 <View style={styles.content}>
-                    <Button title={"Add Items"} onPress={handleModal} textColor={"white"} backgroundColor={Colors.lightGreen} width={250} />
+                    <Button
+                        title={"Add Items"}
+                        onPress={handleModal}
+                        width={Dim.width * 0.5}
+                        appButtonContainer={styles.button} />
                     <Modal isVisible={isModalVisible} transparent={true} style={styles.modalStyle}>
                     <View
                             style={styles.outerModal}>
@@ -108,7 +91,7 @@ function Buy({navigation, route}) {
                                     <Text style={styles.modalFont}>Type of Item</Text>
                                 </View>
                                 <View style={styles.modalTextinput}>
-                                  <TextInput onChange={item => setItem(item.nativeEvent.text)}/>
+                                  <TextInput onChange={(item) => setItem(item)}/>
                                 </View>
                                 <View>
                                     <View style={styles.content}>
@@ -131,7 +114,7 @@ function Buy({navigation, route}) {
                                         Quantity of Item
                                     </Text>
                                     <View style={styles.modalTextinput}>
-                                      <TextInput onChange={numItems => setNumItems(numItems.nativeEvent.text)}/>
+                                      <TextInput onChange={(numItems) => setNumItems(numItems)}/>
                                     </View>
                                 </View>
                                 <View>
@@ -139,7 +122,7 @@ function Buy({navigation, route}) {
                                         Preferred Brand
                                     </Text>
                                     <View style={styles.modalTextinput}>
-                                      <TextInput onChange={brand => setBrand(brand.nativeEvent.text)}/>
+                                      <TextInput onChange={(brand) => setBrand(brand)}/>
                                     </View>
                                 </View>
                                 <View>
@@ -147,7 +130,7 @@ function Buy({navigation, route}) {
                                         Notes
                                     </Text>
                                     <View style={styles.modalTextinput}>
-                                      <TextInput onChange={notes => setNotes(notes.nativeEvent.text)}/>
+                                      <TextInput onChange={(notes) => setNotes(notes)}/>
                                     </View>
                                 </View>
                                 <View style={{ alignItems: 'center', marginBottom: 10}}>
@@ -167,7 +150,7 @@ function Buy({navigation, route}) {
           <View style={{marginLeft: 20, marginBottom: 10}}>
             <Text style={styles.title}>Your Items</Text>
           </View>
-          <View>
+          <View style={{flex: 1, ...styles.minWrapper}}>
             <FlatList
               data={items}
               contentContainerStyle={{ paddingBottom: 20}}
@@ -192,6 +175,7 @@ function Buy({navigation, route}) {
                       <Button
                         title={"Complete your Order"}
                         onPress={async () => await createRequest.doRequest()}
+                        textColor={"white"}
                         backgroundColor={Colors.darkGreen}
                         width={300} />
                   </View>
@@ -224,7 +208,7 @@ const styles = StyleSheet.create({
       marginLeft: 20,
     },
     modalStyle: {
-      backgroundColor: Colors.cream,
+      backgroundColor: 'rgba(52, 52, 52, 0)',
       margin: 50,
     },
     outerModal: {
@@ -233,13 +217,12 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
     },
     innerModal: {
-      // alignItems: 'center',
       backgroundColor: Colors.cream,
       marginVertical: 60,
       width: '90%',
       borderWidth: 1,
       borderColor: '#fff',
-      borderRadius: 7,
+      borderRadius: 5,
       elevation: 6,
     },
     modalTextinput: {
@@ -251,6 +234,15 @@ const styles = StyleSheet.create({
       padding: 20,
       marginVertical: 8,
       marginHorizontal: 16,
+    },
+    button: {
+      alignSelf: "center",
+      backgroundColor: Colors.lightGreen,
+      marginTop: 30,
+    },
+    minWrapper: {
+      width: Dim.width * 0.9,
+      alignSelf: "center",
     },
   });
 

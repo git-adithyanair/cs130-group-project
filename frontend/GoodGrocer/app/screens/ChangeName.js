@@ -7,6 +7,7 @@ import useRequest from "../hooks/useRequest";
 
 function ChangeName({navigation}) {
     const [name, setName] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const changeUserName = useRequest({
         url: "/user/update-name",
@@ -15,12 +16,10 @@ function ChangeName({navigation}) {
           name: name,
         },
         onSuccess: (data) => {
-            console.log(name);
-            props.navigation.navigate("YourCommunities");
+          setLoading(false);
+          navigation.goBack();
         },
-        onFail: (data) => {
-            console.log(name);
-        },
+        onFail: () => setLoading(false),
       });
 
     return (
@@ -29,12 +28,15 @@ function ChangeName({navigation}) {
                 <Text style={styles.title}>Change your Name</Text>
             </View>
             <View style ={{ marginTop: 10, marginLeft: 30, marginRight: 30}}>
-                <TextInput onChange={name => setName(name.nativeEvent.text)}></TextInput>
+                <TextInput onChange={(name) => setName(name)}></TextInput>
             </View>
             <View style={{alignItems: 'center'}}>
                 <Button
                     title={"Submit"}
-                    onPress={async () => await changeUserName.doRequest()}
+                    onPress={async () => {
+                      setLoading(true);
+                      await changeUserName.doRequest();
+                    }}
                     textColor={"white"}
                     backgroundColor={Colors.lightGreen}
                     width={250}>

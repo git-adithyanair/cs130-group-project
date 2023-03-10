@@ -16,7 +16,7 @@ function RequestList(props) {
     props.navigation.setOptions({
       headerRight: () => (
         <TouchableOpacity
-          onPress={() => props.navigation.navigate("Buy",
+          onPress={() => props.navigation.navigate("PickStore",
                                         {communityId: props.route.params.communityId,
                                          communityName: props.route.params.communityName})}>
           <Ionicons name={"add-circle"} size={30} color={Colors.darkGreen}/>

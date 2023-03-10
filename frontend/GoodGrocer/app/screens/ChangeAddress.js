@@ -8,6 +8,7 @@ import useRequest from "../hooks/useRequest";
 
 function ChangeAddress({navigation}) {
     const [locationData, setLocationData] = useState({});
+    const [loading, setLoading] = useState(false);
 
     const handleLocation = (e) => {
       setLocationData(e)
@@ -23,12 +24,13 @@ function ChangeAddress({navigation}) {
         y_coord: locationData.y_coord,
       },
       onSuccess: (data) => {
-          props.navigation.navigate("YourCommunities");
+        setLoading(false);
+        navigation.goBack();
+          // props.navigation.navigate("YourCommunities");
       },
-      onFail: (data) => {
-          console.log(locationData);
-      },
+      onFail: () => setLoading(false),
     });
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={{marginTop: 20, marginLeft: 20}}>
@@ -46,26 +48,11 @@ function ChangeAddress({navigation}) {
               title={"Submit"}
               appButtonContainer={styles.button}
               width={Dim.width * 0.5}
-              onPress={async () => await updateAddress.doRequest()}
+              onPress={async () => {
+                setLoading(true);
+                await updateAddress.doRequest();
+              }}
             />
-              {/* <View style ={{marginTop: 20}}>
-              <LocationFinderCard
-                searchLabel="You Address"
-                placeholder={"Enter your New Address"}
-                width={Dim.width * 0.9}
-                onSelectLocation={(e) => handleLocation(e)}
-              />
-
-            </View>
-            <View style={{alignSelf: 'center'}}>
-            <Button
-                    title={"Submit"}
-                    onPress={async () => await updateAddress.doRequest()}
-                    textColor={"white"}
-                    backgroundColor={Colors.lightGreen}
-                    width={250}>
-                </Button>
-            </View> */}
         </SafeAreaView>
 
     );

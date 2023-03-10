@@ -19,6 +19,7 @@ import OrderCreated from "../screens/OrderCreated";
 import ChangeName from "../screens/ChangeName";
 import ChangeAddress from "../screens/ChangeAddress";;
 import UserRequests from "../screens/UserRequests";
+import PickStore from "../screens/PickStore";
 
 const HomeStack = createStackNavigator();
 const ErrandStack = createStackNavigator();
@@ -70,6 +71,11 @@ const HomeStackScreen = () => {
         name="OrderCreated"
         component={OrderCreated}
         options={{ title: "Order Created" }}
+      />
+      <HomeStack.Screen
+        name="PickStore"
+        component={PickStore}
+        options={{ title: "Pick Store" }}
       />
     </HomeStack.Navigator>
   );
