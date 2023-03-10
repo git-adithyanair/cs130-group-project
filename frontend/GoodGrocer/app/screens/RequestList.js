@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { SafeAreaView, StyleSheet, Text, FlatList, View, TouchableOpacity } from "react-native";
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  FlatList,
+  View,
+  TouchableOpacity,
+} from "react-native";
 import RequestCard from "../components/RequestCard";
 import { Colors, Dim, Font } from "../Constants";
 import useRequest from "../hooks/useRequest";
 import Button from "../components/Button";
-import Ionicons from "react-native-vector-icons/Ionicons"
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 function RequestList(props) {
   const [communityRequestData, setCommunityRequestData] = useState([]);
@@ -16,10 +23,15 @@ function RequestList(props) {
     props.navigation.setOptions({
       headerRight: () => (
         <TouchableOpacity
-          onPress={() => props.navigation.navigate("PickStore",
-                                        {communityId: props.route.params.communityId,
-                                         communityName: props.route.params.communityName})}>
-          <Ionicons name={"add-circle"} size={30} color={Colors.darkGreen}/>
+          onPress={() =>
+            props.navigation.navigate("PickStore", {
+              communityId: props.route.params.communityId,
+              communityName: props.route.params.communityName,
+            })
+          }
+          style={{ marginRight: 20 }}
+        >
+          <Ionicons name={"add"} size={30} color={Colors.darkGreen} />
         </TouchableOpacity>
       ),
     });

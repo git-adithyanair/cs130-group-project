@@ -74,7 +74,6 @@ function Profile({ navigation }) {
       default:
         break;
     }
-    console.log(section);
   };
 
   return (

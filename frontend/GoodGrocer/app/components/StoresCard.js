@@ -48,7 +48,6 @@ const StoresCard = (props) => {
     <View style={{ ...styles.container, width: props.width }}>
       <Text style={{ fontWeight: "bold" }}>Pick your store</Text>
       <FlatList
-        horizontal
         showsHorizontalScrollIndicator={true}
         contentContainerStyle={{ marginTop: 10 }}
         pagingEnabled={true}
@@ -61,7 +60,6 @@ const StoresCard = (props) => {
             selected={itemData.item.place_id === selectedStore.place_id}
             width={props.width - 9}
             onPress={(isSelected) => {
-              // console.log(selectedStore);
               const sendData = isSelected
                 ? {
                     address: itemData.item.address,
@@ -71,14 +69,13 @@ const StoresCard = (props) => {
                   }
                 : {};
               setSelectedStore(sendData);
-              // console.log(selectedStore);
               props.onSelectStore(sendData);
             }}
           />
         )}
         keyExtractor={() => Math.random().toString()}
-        ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
-      ></FlatList>
+        ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+      />
     </View>
   );
 };
@@ -92,28 +89,26 @@ const StoreCard = (props) => {
   };
 
   return (
-    <View>
-      <TouchableOpacity onPress={selectItem}>
-        <View
+    <TouchableOpacity onPress={selectItem}>
+      <View
+        style={{
+          ...(selected
+            ? styles.addressContainerSelected
+            : styles.addressContainerUnselected),
+          width: props.width,
+        }}
+      >
+        <Text
           style={{
-            ...(selected
-              ? styles.addressContainerSelected
-              : styles.addressContainerUnselected),
-            width: props.width,
+            fontWeight: "bold",
+            color: selected ? "black" : Colors.darkGreen,
           }}
         >
-          <Text
-            style={{
-              fontWeight: "bold",
-              color: selected ? "black" : Colors.darkGreen,
-            }}
-          >
-            {props.name}
-          </Text>
-          <Text style={{ color: "black" }}>{props.address}</Text>
-        </View>
-      </TouchableOpacity>
-    </View>
+          {props.name}
+        </Text>
+        <Text style={{ color: "black" }}>{props.address}</Text>
+      </View>
+    </TouchableOpacity>
   );
 };
 

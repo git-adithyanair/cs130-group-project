@@ -14,13 +14,13 @@ import RequestList from "../screens/RequestList";
 import RequestDetail from "../screens/RequestDetail";
 import CreateCommunity from "../screens/CreateCommunity";
 import AddStores from "../screens/AddStores";
-import Buy from "../screens/Buy";
 import OrderCreated from "../screens/OrderCreated";
 import ChangeName from "../screens/ChangeName";
-import ChangeAddress from "../screens/ChangeAddress";;
+import ChangeAddress from "../screens/ChangeAddress";
 import UserRequests from "../screens/UserRequests";
 import PickStore from "../screens/PickStore";
 import UpdateProfilePicture from "../screens/UpdateProfilePicture";
+import CreateRequest from "../screens/CreateRequest";
 
 const HomeStack = createStackNavigator();
 const ErrandStack = createStackNavigator();
@@ -64,9 +64,9 @@ const HomeStackScreen = () => {
         options={{ title: "Add Stores" }}
       />
       <HomeStack.Screen
-        name="Buy"
-        component={Buy}
-        options={{ title: "Create Order" }}
+        name="CreateRequest"
+        component={CreateRequest}
+        options={{ title: "Create Request" }}
       />
       <HomeStack.Screen
         name="OrderCreated"

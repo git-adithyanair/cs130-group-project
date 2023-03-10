@@ -27,7 +27,7 @@ const RequestDetail = (props) => {
             preferredBrand={
               item.preferred_brand.Valid ? item.preferred_brand.String : null
             }
-            extraNotes={item.extra_notes.Valid ? item.extra_notes : null}
+            extraNotes={item.extra_notes.Valid ? item.extra_notes.String : null}
             imageUri={item.image.Valid ? item.image.String : null}
           />
         )}

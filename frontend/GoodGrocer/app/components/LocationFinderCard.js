@@ -33,7 +33,6 @@ const LocationFinderCard = (props) => {
           setData([]);
           setNoResults(true);
         } else if (data.status != "INVALID_REQUEST") {
-          console.log(data);
           setData(data.results);
           setNoResults(false);
         }
@@ -85,7 +84,6 @@ const LocationFinderCard = (props) => {
             selected={itemData.item.place_id === selectedLocation.place_id}
             width={props.width - 9}
             onPress={(isSelected) => {
-              console.log(selectedLocation);
               const sendData = isSelected
                 ? {
                     address: itemData.item.formatted_address,
@@ -95,7 +93,6 @@ const LocationFinderCard = (props) => {
                   }
                 : {};
               setSelectedLocation(sendData);
-              console.log(selectedLocation);
               props.onSelectLocation(sendData);
             }}
           />
