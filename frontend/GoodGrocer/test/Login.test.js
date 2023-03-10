@@ -1,5 +1,4 @@
 import React from "react";
-// import { FlatList } from "react-native";
 import { render, fireEvent } from "@testing-library/react-native";
 import { Provider } from "react-redux";
 
@@ -7,12 +6,6 @@ import { store } from "../app/store/config";
 import { setToken } from "../app/store/actions";
 import useRequest from "../app/hooks/useRequest";
 import Login from "../app/screens/Login";
-
-// jest.mock("react-native-keyboard-aware-scroll-view", () => {
-//   const KeyboardAwareScrollView = ({ children }) => children;
-//   const KeyboardAwareFlatList = FlatList;
-//   return { KeyboardAwareScrollView, KeyboardAwareFlatList };
-// });
 
 test("given valid email and password, the login is successful", () => {
   const component = render(
