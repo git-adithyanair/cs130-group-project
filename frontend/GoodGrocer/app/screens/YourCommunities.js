@@ -33,9 +33,6 @@ const YourCommunities = (props) => {
   
   const userInfo = async () => await getUserInfo.doRequest();
 
-  useEffect(()=>{
-    userInfo()
-  },[props.navigation,loadingUserCoords])
 
   const getCommunities = useRequest({
     url: "/user/community",
@@ -58,22 +55,30 @@ const YourCommunities = (props) => {
 
   const getUserCommunities = async () => getCommunities.doRequest();
 
+  useEffect(()=>{
+    userInfo()
+    if(!loadingUserCoords){
+      getUserCommunities()
+    }
+  },[props.navigation,loadingUserCoords])
 
   useEffect(() => {
     const unsubscribe = props.navigation.addListener("focus", () => {
       setCommunityData([]);
-      getUserCommunities();
+      if(!loadingUserCoords){
+        getUserCommunities();
+      }
     });
    return unsubscribe;
   }, [props.navigation,loadingUserCoords]);
 
-  useEffect(() => {
-      if(!loadingUserCoords){
-        setLoading(true)         
-        setCommunityData([]);
-        getUserCommunities();
-      }
-  }, [props.navigation,loadingUserCoords]);
+  // useEffect(() => {
+  //     if(!loadingUserCoords){
+  //       setLoading(true)         
+  //       setCommunityData([]);
+  //       getUserCommunities();
+  //     }
+  // }, [props.navigation,loadingUserCoords]);
 
 
 
@@ -124,7 +129,10 @@ const YourCommunities = (props) => {
               }}
               appButtonText={{ textTransform: "none" }}
               title={"Join More"}
-              onPress={() => props.navigation.navigate("JoinCommunity")}
+              onPress={() => props.navigation.navigate("JoinCommunity", {
+                userXCoord,
+                userYCoord
+              })}
             />
             <Button
               width={200}
