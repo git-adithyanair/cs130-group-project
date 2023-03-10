@@ -36,8 +36,12 @@ const RequestCard = (props) => {
             justifyContent: "center",
           }}
         >
-          <Text style={styles.storeText}>{props.storeName}</Text>
-          <Text style={styles.storeText}>{props.storeAddress}</Text>
+          <Text style={styles.storeText}>
+            {props.storeName === "" ? "Any Store" : props.storeName}
+          </Text>
+          {props.storeAddress !== "" ? (
+            <Text style={styles.storeText}>{props.storeAddress}</Text>
+          ) : null}
           <Text style={{ fontSize: 12 }}>{props.numItems} item(s) to get.</Text>
         </View>
       </TouchableOpacity>

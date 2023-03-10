@@ -89,8 +89,8 @@ const ActiveErrand = ({ navigation }) => {
           <ErrandRequestCard
             imageUri={itemData.item.user.profile_picture}
             name={itemData.item.user.full_name}
-            storeName={itemData.item.store.name}
-            storeAddress={itemData.item.store.address}
+            storeName={itemData.item.store ? itemData.item.store.name : ""}
+            storeAddress={itemData.item.store ? itemData.item.store.addres : ""}
             numItems={itemData.item.items.length}
             requestComplete={requestComplete(itemData.item.items)}
             onPress={() =>
