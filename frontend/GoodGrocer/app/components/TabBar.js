@@ -13,7 +13,6 @@ import ActiveRequest from "../screens/ActiveRequest";
 import RequestList from "../screens/RequestList";
 import RequestDetail from "../screens/RequestDetail";
 import CreateCommunity from "../screens/CreateCommunity";
-import AddStores from "../screens/AddStores";
 import OrderCreated from "../screens/OrderCreated";
 import ChangeName from "../screens/ChangeName";
 import ChangeAddress from "../screens/ChangeAddress";
@@ -57,11 +56,6 @@ const HomeStackScreen = () => {
         name="CreateCommunity"
         component={CreateCommunity}
         options={{ title: "Create a Community" }}
-      />
-      <HomeStack.Screen
-        name="AddStores"
-        component={AddStores}
-        options={{ title: "Add Stores" }}
       />
       <HomeStack.Screen
         name="CreateRequest"
