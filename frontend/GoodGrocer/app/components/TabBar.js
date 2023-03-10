@@ -16,7 +16,10 @@ import CreateCommunity from "../screens/CreateCommunity";
 import AddStores from "../screens/AddStores";
 import Buy from "../screens/Buy";
 import OrderCreated from "../screens/OrderCreated";
+import ChangeName from "../screens/ChangeName";
+import ChangeAddress from "../screens/ChangeAddress";;
 import UserRequests from "../screens/UserRequests";
+import PickStore from "../screens/PickStore";
 import UpdateProfilePicture from "../screens/UpdateProfilePicture";
 
 const HomeStack = createStackNavigator();
@@ -34,18 +37,9 @@ const HomeStackScreen = () => {
       <HomeStack.Screen
         name="RequestList"
         component={RequestList}
-        options={({ navigation }) => ({
+        options={{
           title: "Community Requests",
-          headerRight: () => (
-            <TouchableOpacity onPress={() => navigation.navigate("Buy")}>
-              <Ionicons
-                name={"add-circle"}
-                size={30}
-                color={Colors.darkGreen}
-              />
-            </TouchableOpacity>
-          ),
-        })}
+        }}
       />
       <HomeStack.Screen
         name="JoinCommunity"
@@ -78,6 +72,11 @@ const HomeStackScreen = () => {
         name="OrderCreated"
         component={OrderCreated}
         options={{ title: "Order Created" }}
+      />
+      <HomeStack.Screen
+        name="PickStore"
+        component={PickStore}
+        options={{ title: "Pick Store" }}
       />
     </HomeStack.Navigator>
   );
@@ -117,6 +116,16 @@ const ProfileStackScreen = () => {
         name="CreateCommunity"
         component={CreateCommunity}
         options={{ title: "Create a Community" }}
+      />
+      <ProfileStack.Screen
+        name="ChangeName"
+        component={ChangeName}
+        options={{ title: "Change Name" }}
+      />
+      <ProfileStack.Screen
+        name="ChangeAddress"
+        component={ChangeAddress}
+        options={{ title: "Change Address" }}
       />
     </ProfileStack.Navigator>
   );

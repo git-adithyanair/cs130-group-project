@@ -14,7 +14,7 @@ import useRequest from "../hooks/useRequest";
 // - onSelectStore(data) to get data for a store when it is selected
 //                 data is in form {address: "", place_id: "", name: 0.0, store_id: 0.0}
 // - communityId to know what community to get stores for
-/* Example: 
+/* Example:
     <StoresCard
         communityId={props.communityId}
         onSelectStore={(data) => {
@@ -61,7 +61,7 @@ const StoresCard = (props) => {
             selected={itemData.item.place_id === selectedStore.place_id}
             width={props.width - 9}
             onPress={(isSelected) => {
-              console.log(selectedStore);
+              // console.log(selectedStore);
               const sendData = isSelected
                 ? {
                     address: itemData.item.address,
@@ -71,7 +71,7 @@ const StoresCard = (props) => {
                   }
                 : {};
               setSelectedStore(sendData);
-              console.log(selectedStore);
+              // console.log(selectedStore);
               props.onSelectStore(sendData);
             }}
           />

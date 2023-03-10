@@ -62,6 +62,12 @@ function Profile({ navigation }) {
       case "Create Community":
         navigation.navigate("CreateCommunity");
         break;
+      case "Change Name":
+        navigation.navigate("ChangeName");
+        break;
+      case "Change Address":
+        navigation.navigate("ChangeAddress");
+        break;
       default:
         break;
     }
