@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import TextInput from "../components/TextInput";
 import Button from "../components/Button";
 import { SafeAreaView, StyleSheet, Text, View, Alert } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+
 import { Font } from "../Constants";
 import { useDispatch } from "react-redux";
 import { setToken } from "../store/actions";
@@ -30,36 +32,42 @@ const Login = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{ paddingTop: 50 }}>
-        <Text style={styles.titleText}>Welcome Back</Text>
-        <Text>Email</Text>
-        <TextInput
-          onChange={(email) => setEmail(email)}
-          placeholder="Enter your email..."
-        />
-        <Text>Password</Text>
-        <TextInput
-          onChange={(password) => setPassword(password)}
-          placeholder="Enter your password..."
-          secureTextEntry={true}
-        />
-        <Button
-          title={"Log In"}
-          onPress={async () => {
-            if (!email || !password) {
-              Alert.alert("Oops!", "Please fill out all fields.");
-            } else {
-              setLoading(true);
-              await login.doRequest();
-            }
-          }}
-          textColor={"white"}
-          backgroundColor={"#0070CA"}
-          width={300}
-          appButtonContainer={{ marginTop: 20 }}
-          loading={loading}
-        />
-      </View>
+      <KeyboardAwareScrollView
+        showsVerticalScrollIndicator={false}
+        extraScrollHeight={30}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={{ paddingTop: 50 }}>
+          <Text style={styles.titleText}>Welcome Back</Text>
+          <Text>Email</Text>
+          <TextInput
+            onChange={(email) => setEmail(email)}
+            placeholder="Enter your email..."
+          />
+          <Text>Password</Text>
+          <TextInput
+            onChange={(password) => setPassword(password)}
+            placeholder="Enter your password..."
+            secureTextEntry={true}
+          />
+          <Button
+            title={"Log In"}
+            onPress={async () => {
+              if (!email || !password) {
+                Alert.alert("Oops!", "Please fill out all fields.");
+              } else {
+                setLoading(true);
+                await login.doRequest();
+              }
+            }}
+            textColor={"white"}
+            backgroundColor={"#0070CA"}
+            width={300}
+            appButtonContainer={{ marginTop: 20 }}
+            loading={loading}
+          />
+        </View>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 };

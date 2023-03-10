@@ -198,7 +198,7 @@ Endpoint to update a user's home location.
 
 Endpoint to change user profile picture.
 
-**URL** : `http://api.good-grocer.click/update-profile-pic`
+**URL** : `http://api.good-grocer.click/user/update-profile-pic`
 
 **Method** : `POST`
 
@@ -224,7 +224,7 @@ Endpoint to change user profile picture.
 
 Endpoint to change user's full name.
 
-**URL** : `http://api.good-grocer.click/update-name`
+**URL** : `http://api.good-grocer.click/user/update-name`
 
 **Method** : `POST`
 
