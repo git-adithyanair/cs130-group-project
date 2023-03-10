@@ -26,14 +26,20 @@ const ActiveItemCard = (props) => {
             <Text style={{ marginTop: 20, fontWeight: "bold" }}>
               Preferred Brand:{" "}
             </Text>
-            <Text>{props.item.preferred_brand.String}</Text>
-          </Text>
-          <Text>
-            <Text style={{ marginTop: 20, fontWeight: "bold" }}>
-              Extra Notes:{" "}
+            <Text>
+              {props.item.preferred_brand.Valid
+                ? props.item.preferred_brand.String
+                : "Any"}
             </Text>
-            <Text>{props.item.extra_notes.String}</Text>
           </Text>
+          {props.item.extra_notes.Valid ? (
+            <Text>
+              <Text style={{ marginTop: 20, fontWeight: "bold" }}>
+                Extra Notes:{" "}
+              </Text>
+              <Text>{props.item.extra_notes.String}</Text>
+            </Text>
+          ) : null}
         </View>
         <View style={{ marginLeft: "auto" }}>
           <ImageBackground
