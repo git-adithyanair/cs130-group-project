@@ -6,10 +6,6 @@ import { Dim, Colors, Font } from "../Constants";
 import useRequest from "../hooks/useRequest";
 import Loading from "./Loading";
 
-
-
-
-
 const YourCommunities = (props) => {
   const [communityData, setCommunityData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -120,7 +116,7 @@ const YourCommunities = (props) => {
           />
         )}
         ListFooterComponent={() => (
-          <View style={{ alignItems: "center" }}>
+          <View style={{ alignItems: "center", paddingBottom: 20 }}>
             <Button
               width={200}
               appButtonContainer={{
