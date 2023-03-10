@@ -57,7 +57,10 @@ function Profile({ navigation }) {
         });
         break;
       case "Join Community":
-        navigation.navigate("JoinCommunity");
+        navigation.navigate("JoinCommunity", {
+          userXCoord: userData.x_coord,
+          userYCoord: userData.y_coord
+        });
         break;
       case "Create Community":
         navigation.navigate("CreateCommunity");
