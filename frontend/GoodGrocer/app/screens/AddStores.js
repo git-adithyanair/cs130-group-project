@@ -1,6 +1,7 @@
 import { React, useState } from "react";
 import { SafeAreaView, StyleSheet, View, Text, Alert } from "react-native";
 import { Dim, Colors, Font } from "../Constants";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import TextInput from "../components/TextInput";
 import LocationFinderCard from "../components/LocationFinderCard";
 import Button from "../components/Button";
@@ -51,45 +52,51 @@ const AddStores = (props) => {
 
   return (
     <SafeAreaView style={styles.wrapper}>
-      <View style={styles.minWrapper}>
-        <Text style={styles.title}>Store Name</Text>
-        <TextInput
-          placeholder="Enter Store Name"
-          onChange={(n) => setStoreName(n)}
-        />
-      </View>
-      <View style={{ marginTop: 30, ...styles.minWrapper }}>
-        <LocationFinderCard
-          searchLabel="Store address"
-          placeholder={"Enter Store Address"}
-          width={Dim.width * 0.9}
-          onSelectLocation={(data) => {
-            setStoreLocationData(data);
+      <KeyboardAwareScrollView
+        showsVerticalScrollIndicator={false}
+        extraScrollHeight={30}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={styles.minWrapper}>
+          <Text style={styles.title}>Store Name</Text>
+          <TextInput
+            placeholder="Enter Store Name"
+            onChange={(n) => setStoreName(n)}
+          />
+        </View>
+        <View style={{ marginTop: 30, ...styles.minWrapper }}>
+          <LocationFinderCard
+            searchLabel="Store address"
+            placeholder={"Enter Store Address"}
+            width={Dim.width * 0.9}
+            onSelectLocation={(data) => {
+              setStoreLocationData(data);
+            }}
+          />
+        </View>
+        <Button
+          title="Add Store"
+          appButtonContainer={{
+            alignSelf: "center",
+            backgroundColor: Colors.lightGreen,
+            marginTop: 10,
           }}
+          width={Dim.width * 0.5}
+          onPress={() => onPressAddStore()}
         />
-      </View>
-      <Button
-        title="Add Store"
-        appButtonContainer={{
-          alignSelf: "center",
-          backgroundColor: Colors.lightGreen,
-          marginTop: 10,
-        }}
-        width={Dim.width * 0.5}
-        onPress={() => onPressAddStore()}
-      />
-      <Text style={{ ...styles.title, alignSelf: "center" }}>
-        Number of Stores Added: {numStores}
-      </Text>
-      <Button
-        title="Create Community"
-        appButtonContainer={{
-          alignSelf: "center",
-          marginTop: 50,
-        }}
-        width={Dim.width * 0.7}
-        onPress={async () => await createCommunity.doRequest()}
-      />
+        <Text style={{ ...styles.title, alignSelf: "center" }}>
+          Number of Stores Added: {numStores}
+        </Text>
+        <Button
+          title="Create Community"
+          appButtonContainer={{
+            alignSelf: "center",
+            marginTop: 50,
+          }}
+          width={Dim.width * 0.7}
+          onPress={async () => await createCommunity.doRequest()}
+        />
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 };
