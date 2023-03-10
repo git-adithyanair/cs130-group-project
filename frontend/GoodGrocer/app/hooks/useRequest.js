@@ -37,6 +37,7 @@ const useRequest = ({
       const error = err.response
         ? {
             message: err.response.data.error,
+            rawMessage: err.response.data.raw,
             httpCode: err.response.status,
             internalCode: err.response.data.id,
           }

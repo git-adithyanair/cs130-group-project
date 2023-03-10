@@ -1,14 +1,16 @@
 import React from "react";
-import { Image, Text, View, StyleSheet } from "react-native";
+import { Image, Text, View, StyleSheet, ImageBackground } from "react-native";
 import { Dim, Colors, Font } from "../Constants";
 
-const RequestCard = (props) => {
+const ItemCard = (props) => {
   return (
     <View style={styles.container}>
-      <Image
+      <ImageBackground
         source={
           props.imageUri
-            ? { uri: props.imageUri }
+            ? {
+                uri: "data:image/png;base64," + props.imageUri,
+              }
             : require("../assets/grocery-item.png")
         }
         style={{
@@ -40,9 +42,7 @@ const RequestCard = (props) => {
           <Text>Prefers the {props.preferredBrand} brand.</Text>
         ) : null}
         <View style={{ height: 4 }} />
-        {props.extraNotes ? (
-          <Text>Extra notes: {props.preferredBrand}</Text>
-        ) : null}
+        {props.extraNotes ? <Text>Extra notes: {props.extraNotes}</Text> : null}
       </View>
     </View>
   );
@@ -61,4 +61,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RequestCard;
+export default ItemCard;

@@ -34,9 +34,6 @@ const ActiveRequest = ({ route, navigation }) => {
           headers: { Authorization: `Bearer ${token}` },
         }
       )
-      .then(({ data }) => {
-        console.log(data);
-      })
       .catch((error) => {
         console.error(error);
       });
@@ -61,7 +58,6 @@ const ActiveRequest = ({ route, navigation }) => {
             item={itemData.item}
             onPressUpdateFound={(found) => {
               updateFound(found, itemData.item.id);
-              console.log(user);
               setCompletedItems(completedItems + 1);
             }}
           />

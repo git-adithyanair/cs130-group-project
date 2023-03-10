@@ -12,6 +12,7 @@ const TextInput = (props) => {
       placeholder={props.placeholder || "Enter text here..."}
       placeholderTextColor={Colors.darkGreen}
       secureTextEntry={props.secureTextEntry}
+      keyboardType={props.keyboardType || "default"}
     />
   );
 };
