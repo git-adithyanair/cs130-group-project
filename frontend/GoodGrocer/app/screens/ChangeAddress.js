@@ -43,32 +43,26 @@ function ChangeAddress({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <KeyboardAwareScrollView
-        showsVerticalScrollIndicator={false}
-        extraScrollHeight={30}
-        keyboardShouldPersistTaps="handled"
-      >
-        <View style={{ marginTop: 20, marginLeft: 20 }}>
-          <Text style={styles.title}>Change your Address</Text>
-        </View>
-        <View style={{ marginTop: 30, ...styles.minWrapper }}>
-          <LocationFinderCard
-            searchLabel="Your Address"
-            placeholder={"Enter your new address"}
-            width={Dim.width * 0.9}
-            onSelectLocation={(e) => handleLocation(e)}
-          />
-        </View>
-        <Button
-          title={"Submit"}
-          appButtonContainer={styles.button}
-          width={Dim.width * 0.5}
-          onPress={async () => {
-            setLoading(true);
-            await updateAddress.doRequest();
-          }}
+      <View style={{ marginTop: 20, marginLeft: 20 }}>
+        <Text style={styles.title}>Change your Address</Text>
+      </View>
+      <View style={{ marginTop: 30, ...styles.minWrapper }}>
+        <LocationFinderCard
+          searchLabel="Your Address"
+          placeholder={"Enter your new address"}
+          width={Dim.width * 0.9}
+          onSelectLocation={(e) => handleLocation(e)}
         />
-      </KeyboardAwareScrollView>
+      </View>
+      <Button
+        title={"Submit"}
+        appButtonContainer={styles.button}
+        width={Dim.width * 0.5}
+        onPress={async () => {
+          setLoading(true);
+          await updateAddress.doRequest();
+        }}
+      />
     </SafeAreaView>
   );
 }

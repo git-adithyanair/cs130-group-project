@@ -128,6 +128,20 @@ function RequestList(props) {
             Requests in {props.route.params.communityName}
           </Text>
         }
+        ListEmptyComponent={() => (
+          <View
+            style={{ alignItems: "center", height: "100%", paddingTop: "10%" }}
+          >
+            <Text
+              style={{
+                fontSize: Font.s2.size,
+                alignSelf: "center",
+              }}
+            >
+              Create a request to get started! 🧸
+            </Text>
+          </View>
+        )}
       />
       {selectedRequests.length > 0 ? (
         <View
