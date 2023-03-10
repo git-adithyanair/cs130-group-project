@@ -33,7 +33,9 @@ const YourCommunities = (props) => {
   
   const userInfo = async () => await getUserInfo.doRequest();
 
-  useEffect(()=>{userInfo()},[])
+  useEffect(()=>{
+    userInfo()
+  },[props.navigation,loadingUserCoords])
 
   const getCommunities = useRequest({
     url: "/user/community",
@@ -66,10 +68,12 @@ const YourCommunities = (props) => {
   }, [props.navigation,loadingUserCoords]);
 
   useEffect(() => {
-      setLoading(true) 
-      setCommunityData([]);
-      getUserCommunities();
-    }, [loadingUserCoords]);
+      if(!loadingUserCoords){
+        setLoading(true)         
+        setCommunityData([]);
+        getUserCommunities();
+      }
+  }, [props.navigation,loadingUserCoords]);
 
 
 
