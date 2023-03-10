@@ -20,6 +20,7 @@ import ChangeName from "../screens/ChangeName";
 import ChangeAddress from "../screens/ChangeAddress";;
 import UserRequests from "../screens/UserRequests";
 import PickStore from "../screens/PickStore";
+import UpdateProfilePicture from "../screens/UpdateProfilePicture";
 
 const HomeStack = createStackNavigator();
 const ErrandStack = createStackNavigator();
@@ -98,6 +99,11 @@ const ProfileStackScreen = () => {
         name="RequestDetail"
         component={RequestDetail}
         options={{ title: "Request Details" }}
+      />
+      <ProfileStack.Screen
+        name="UpdateProfilePicture"
+        component={UpdateProfilePicture}
+        options={{ title: "Update Profile Picture" }}
       />
       <ProfileStack.Screen
         name="JoinCommunity"
