@@ -17,7 +17,6 @@ const ItemCard = (props) => {
           width: Dim.width * 0.15,
           height: Dim.width * 0.15,
           borderRadius: 100,
-          // marginBottom: 10,
         }}
       />
       <View style={{ marginLeft: 20 }}>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Button from "../components/Button";
-import { Image, Text, View, StyleSheet } from "react-native";
+import { ImageBackground, Text, View, StyleSheet } from "react-native";
 import { Card } from "react-native-paper";
 import { Dim, Colors } from "../Constants";
 
@@ -36,11 +36,11 @@ const ActiveItemCard = (props) => {
           </Text>
         </View>
         <View style={{ marginLeft: "auto" }}>
-          <Image
+          <ImageBackground
             source={
               props.item.image.Valid
                 ? {
-                    uri: props.item.image.String,
+                    uri: "data:image/png;base64," + props.item.image.String,
                   }
                 : require("../assets/grocery-item.png")
             }
