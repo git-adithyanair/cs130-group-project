@@ -12,3 +12,19 @@ jest.mock("redux-persist", () => {
       .mockImplementation((config, reducers) => reducers),
   };
 });
+jest.mock("react-native/Libraries/Utilities/Platform", () => {
+  const platform = jest.requireActual(
+    "react-native/Libraries/Utilities/Platform"
+  );
+  return {
+    ...platform,
+    constants: {
+      ...platform.constants,
+      reactNativeVersion: {
+        major: 0,
+        minor: 65,
+        patch: 1,
+      },
+    },
+  };
+});
