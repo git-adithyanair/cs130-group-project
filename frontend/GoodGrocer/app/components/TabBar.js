@@ -66,7 +66,7 @@ const HomeStackScreen = () => {
       <HomeStack.Screen
         name="CreateRequest"
         component={Buy}
-        options={{ title: "Order Created" }}
+        options={{ title: "Create Request" }}
       />
       <HomeStack.Screen
         name="OrderCreated"
