@@ -8,7 +8,8 @@ import {
   FlatList,
   TouchableOpacity,
 } from "react-native";
-import { Dim, Colors, Font, GOOGLE_MAPS_API_KEY } from "../Constants";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { Dim, Colors, GOOGLE_MAPS_API_KEY } from "../Constants";
 import TextInput from "../components/TextInput";
 import LocationFinderCard from "../components/LocationFinderCard";
 import Button from "../components/Button";
@@ -75,94 +76,110 @@ const CreateCommunity = (props) => {
       stores: storesSelected,
     },
     onSuccess: (data) => {
-      console.log("AHH", data)
+      console.log("AHH", data);
       props.navigation.navigate("YourCommunities");
     },
   });
 
   return (
     <SafeAreaView style={styles.wrapper}>
-      <View style={styles.minWrapper}>
-        <Text style={{...styles.title, marginTop: 20}}>Community Name</Text>
-        <TextInput
-          placeholder="Enter Community Name"
-          onChange={(e) => handleName(e)}
-        />
-      </View>
-      <View style={styles.minWrapper}>
-        <Text style={styles.title}>Community Range</Text>
-        <TextInput
-          placeholder="Enter Community Range (m)"
-          onChange={(e) => handleRange(e)}
-          keyboardType={"numeric"}
-        />
-      </View>
-      <View style={styles.minWrapper}>
-        <LocationFinderCard
-          searchLabel="Community address"
-          placeholder={"Enter Community Address"}
-          width={Dim.width * 0.9}
-          onSelectLocation={(e) => handleLocation(e)}
-        />
-      </View>
-      <Button
-        title="Add Stores"
-        appButtonContainer={styles.addStoreButton}
-        width={Dim.width * 0.5}
-        onPress={() => {
-          if (!locationData) {
-            Alert.alert("Oops!", "Please fill out community location field.");
-          } else {
-            searchStores();
-          }
-        }}
-      />
-      <Text style={{ paddingLeft: 20, paddingTop: 10 }}>
-        {noResults
-          ? "No results."
-          : stores.length !== 0
-          ? "Select stores →"
-          : null}
-      </Text>
-      <FlatList
-        horizontal
-        showsHorizontalScrollIndicator={true}
-        contentContainerStyle={{ marginTop: 10 }}
-        pagingEnabled={true}
-        style={styles.list}
-        data={stores}
-        renderItem={(itemData) => (
-          <StoresAddressCard
-            name={itemData.item.name}
-            address={itemData.item.formatted_address}
-            selected={itemData.item.place_id === selectedStoreLocation.place_id}
-            onPress={(isSelected) => {
-              const sendData = isSelected
-                ? {
-                    name: itemData.item.name,
-                    place_id: itemData.item.place_id,
-                    x_coord: itemData.item.x_coord,
-                    y_coord: itemData.item.y_coord,
-                    address: itemData.item.formatted_address,
-                  }
-                : {};
-              setStoreSelectedLocation(sendData);
-              setStoresSelected([...storesSelected, sendData]);
-            }}
+      <KeyboardAwareScrollView
+        showsVerticalScrollIndicator={false}
+        extraScrollHeight={30}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={styles.minWrapper}>
+          <Text style={{ ...styles.title, marginTop: 20 }}>Community Name</Text>
+          <TextInput
+            placeholder="Enter Community Name"
+            onChange={(e) => handleName(e)}
           />
-        )}
-        keyExtractor={() => Math.random().toString()}
-        ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
-      />
-      <Button
-        title="Create Community"
-        appButtonContainer={{
-          alignSelf: "center",
-          marginBottom: 20,
-        }}
-        width={Dim.width * 0.7}
-        onPress={async () => await createCommunity.doRequest()}
-      />
+        </View>
+        <View style={styles.minWrapper}>
+          <Text style={styles.title}>Community Range</Text>
+          <TextInput
+            placeholder="Enter Community Range (m)"
+            onChange={(e) => handleRange(e)}
+            keyboardType={"numeric"}
+          />
+        </View>
+        <View style={styles.minWrapper}>
+          <LocationFinderCard
+            searchLabel="Community address"
+            placeholder={"Enter Community Address"}
+            width={Dim.width * 0.9}
+            onSelectLocation={(e) => handleLocation(e)}
+          />
+        </View>
+        <Button
+          title="Add Stores"
+          appButtonContainer={styles.addStoreButton}
+          width={Dim.width * 0.5}
+          onPress={() => {
+            if (!locationData) {
+              Alert.alert("Oops!", "Please fill out community location field.");
+            } else {
+              searchStores();
+            }
+          }}
+        />
+        <Text style={{ paddingLeft: 20, paddingTop: 10 }}>
+          {noResults
+            ? "No results."
+            : stores.length !== 0
+            ? "Select stores →"
+            : null}
+        </Text>
+        <FlatList
+          horizontal
+          showsHorizontalScrollIndicator={true}
+          contentContainerStyle={{ marginTop: 10 }}
+          style={styles.list}
+          data={stores}
+          renderItem={(itemData) => (
+            <StoresAddressCard
+              name={itemData.item.name}
+              address={itemData.item.formatted_address}
+              selected={
+                itemData.item.place_id === selectedStoreLocation.place_id
+              }
+              onPress={(isSelected) => {
+                const sendData = isSelected
+                  ? {
+                      name: itemData.item.name,
+                      place_id: itemData.item.place_id,
+                      x_coord: itemData.item.x_coord,
+                      y_coord: itemData.item.y_coord,
+                      address: itemData.item.formatted_address,
+                    }
+                  : {};
+                setStoreSelectedLocation(sendData);
+                if (isSelected) {
+                  setStoresSelected([...storesSelected, sendData]);
+                } else {
+                  setStoresSelected(
+                    storesSelected.filter(
+                      (store) => store.place_id !== itemData.item.place_id
+                    )
+                  );
+                }
+              }}
+            />
+          )}
+          keyExtractor={(item) => item.place_id}
+          ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
+        />
+        <Button
+          title="Create Community"
+          appButtonContainer={{
+            alignSelf: "center",
+            marginBottom: 20,
+            marginTop: 40,
+          }}
+          width={Dim.width * 0.7}
+          onPress={async () => await createCommunity.doRequest()}
+        />
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 };
@@ -181,7 +198,7 @@ const StoresAddressCard = (props) => {
             ...(selected
               ? styles.addressContainerSelected
               : styles.addressContainerUnselected),
-            width: Dim.width * 0.9,
+            width: Dim.width * 0.9 - 50,
           }}
         >
           <Text
@@ -234,4 +251,3 @@ const styles = StyleSheet.create({
 });
 
 export default CreateCommunity;
-

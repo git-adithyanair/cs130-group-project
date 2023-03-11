@@ -90,7 +90,9 @@ const ActiveErrand = ({ navigation }) => {
             imageUri={itemData.item.user.profile_picture}
             name={itemData.item.user.full_name}
             storeName={itemData.item.store ? itemData.item.store.name : ""}
-            storeAddress={itemData.item.store ? itemData.item.store.addres : ""}
+            storeAddress={
+              itemData.item.store ? itemData.item.store.address : ""
+            }
             numItems={itemData.item.items.length}
             requestComplete={requestComplete(itemData.item.items)}
             onPress={() =>

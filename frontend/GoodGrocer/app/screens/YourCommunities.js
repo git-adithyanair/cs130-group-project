@@ -5,30 +5,27 @@ import CommunityCard from "../components/CommunityCard";
 import { Dim, Colors, Font } from "../Constants";
 import useRequest from "../hooks/useRequest";
 import Loading from "./Loading";
+import getDistanceFromLatLonInMi from "../helpers/distance";
 
 const YourCommunities = (props) => {
   const [communityData, setCommunityData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [loadingUserCoords, setLoadingUserCoords] = useState(true); 
-  const getDistance = (x1, y1, x2, y2) => {
-    return Math.round(Math.sqrt(Math.pow(y2-y1,2)+Math.pow(x2-x1,2))*100)/100
-  }
+  const [loadingUserCoords, setLoadingUserCoords] = useState(true);
   const [userXCoord, setUserXCoord] = useState(0.0);
-  const [userYCoord, setUserYCoord] = useState(0.0); 
+  const [userYCoord, setUserYCoord] = useState(0.0);
 
   const getUserInfo = useRequest({
     url: "/user",
     method: "get",
     onSuccess: (data) => {
-      setUserXCoord(data.x_coord)
-      setUserYCoord(data.y_coord)
-      setLoadingUserCoords(false)
+      setUserXCoord(data.x_coord);
+      setUserYCoord(data.y_coord);
+      setLoadingUserCoords(false);
     },
-    onFail: () => setLoadingUserCoords(false) 
+    onFail: () => setLoadingUserCoords(false),
   });
-  
-  const userInfo = async () => await getUserInfo.doRequest();
 
+  const userInfo = async () => await getUserInfo.doRequest();
 
   const getCommunities = useRequest({
     url: "/user/community",
@@ -40,7 +37,12 @@ const YourCommunities = (props) => {
           members: community.member_count,
           communityId: community.community.id,
           communityName: community.community.name,
-          distance: getDistance(community.community.center_x_coord, community.community.center_y_coord, userXCoord, userYCoord)
+          distance: getDistanceFromLatLonInMi(
+            community.community.center_x_coord,
+            community.community.center_y_coord,
+            userXCoord,
+            userYCoord
+          ),
         });
       });
       setCommunityData(communities);
@@ -51,33 +53,30 @@ const YourCommunities = (props) => {
 
   const getUserCommunities = async () => getCommunities.doRequest();
 
-  useEffect(()=>{
-    userInfo()
-    if(!loadingUserCoords){
-      getUserCommunities()
+  useEffect(() => {
+    userInfo();
+    if (!loadingUserCoords) {
+      getUserCommunities();
     }
-  },[props.navigation,loadingUserCoords])
+  }, [props.navigation, loadingUserCoords]);
 
   useEffect(() => {
     const unsubscribe = props.navigation.addListener("focus", () => {
       setCommunityData([]);
-      if(!loadingUserCoords){
+      if (!loadingUserCoords) {
         getUserCommunities();
       }
     });
-   return unsubscribe;
-  }, [props.navigation,loadingUserCoords]);
+    return unsubscribe;
+  }, [props.navigation, loadingUserCoords]);
 
   // useEffect(() => {
   //     if(!loadingUserCoords){
-  //       setLoading(true)         
+  //       setLoading(true)
   //       setCommunityData([]);
   //       getUserCommunities();
   //     }
   // }, [props.navigation,loadingUserCoords]);
-
-
-
 
   if (loading || loadingUserCoords) {
     return <Loading />;
@@ -125,10 +124,12 @@ const YourCommunities = (props) => {
               }}
               appButtonText={{ textTransform: "none" }}
               title={"Join More"}
-              onPress={() => props.navigation.navigate("JoinCommunity", {
-                userXCoord,
-                userYCoord
-              })}
+              onPress={() =>
+                props.navigation.navigate("JoinCommunity", {
+                  userXCoord,
+                  userYCoord,
+                })
+              }
             />
             <Button
               width={200}

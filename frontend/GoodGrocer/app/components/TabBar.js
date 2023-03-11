@@ -20,6 +20,7 @@ import UserRequests from "../screens/UserRequests";
 import PickStore from "../screens/PickStore";
 import UpdateProfilePicture from "../screens/UpdateProfilePicture";
 import CreateRequest from "../screens/CreateRequest";
+import Buy from "../screens/Buy";
 
 const HomeStack = createStackNavigator();
 const ErrandStack = createStackNavigator();
@@ -57,9 +58,14 @@ const HomeStackScreen = () => {
         component={CreateCommunity}
         options={{ title: "Create a Community" }}
       />
-      <HomeStack.Screen
+      {/* <HomeStack.Screen
         name="CreateRequest"
         component={CreateRequest}
+        options={{ title: "Create Request" }}
+      /> */}
+      <HomeStack.Screen
+        name="CreateRequest"
+        component={Buy}
         options={{ title: "Create Request" }}
       />
       <HomeStack.Screen

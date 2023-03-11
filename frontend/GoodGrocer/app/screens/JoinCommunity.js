@@ -4,20 +4,17 @@ import CommunityCard from "../components/CommunityCard";
 import SearchBar from "../components/SearchBar";
 import { Dim, Colors, Font } from "../Constants";
 import useRequest from "../hooks/useRequest";
+import getDistanceFromLatLonInMi from "../helpers/distance";
 
 const JoinCommunity = (props) => {
-  const getDistance = (x1, y1, x2, y2) => {
-    return Math.round(Math.sqrt(Math.pow(y2-y1,2)+Math.pow(x2-x1,2))*100)/100
-  }
-  
   const [allCommunities, setAllCommunities] = useState([]);
   const [userCommunities, setUserCommunities] = useState([]);
   const [communities, setCommunities] = useState([]);
   const [searchedCommunities, setSearchedCommunities] = useState([]);
   const [community, setCommunity] = useState("");
 
-  const userXCoord = props.route.params.userXCoord
-  const userYCoord = props.route.params.userYCoord
+  const userXCoord = props.route.params.userXCoord;
+  const userYCoord = props.route.params.userYCoord;
 
   const getAllCommunities = useRequest({
     url: "/community",
@@ -47,14 +44,18 @@ const JoinCommunity = (props) => {
     setCommunities(
       allCommunities.filter(
         (community) =>
-          !userCommunities.find((comm) => comm.community.id === community.community.id)
+          !userCommunities.find(
+            (comm) => comm.community.id === community.community.id
+          )
       )
     );
 
     setSearchedCommunities(
       allCommunities.filter(
         (community) =>
-          !userCommunities.find((comm) => comm.community.id === community.community.id)
+          !userCommunities.find(
+            (comm) => comm.community.id === community.community.id
+          )
       )
     );
   }, [allCommunities, userCommunities]);
@@ -100,9 +101,12 @@ const JoinCommunity = (props) => {
                   : Font.s1.size,
             }}
             communityName={itemData.item.community.name}
-            distanceFromUser={
-              getDistance(userXCoord,userYCoord, itemData.item.community.center_x_coord, itemData.item.community.center_y_coord)
-            }
+            distanceFromUser={getDistanceFromLatLonInMi(
+              userXCoord,
+              userYCoord,
+              itemData.item.community.center_x_coord,
+              itemData.item.community.center_y_coord
+            )}
             numberOfMembers={itemData.item.member_count}
             joinCommunity={true}
             communityId={itemData.item.community.id}

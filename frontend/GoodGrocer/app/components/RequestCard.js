@@ -32,6 +32,7 @@ const RequestCard = (props) => {
           style={{
             marginLeft: 20,
             justifyContent: "center",
+            width: Dim.width * 0.45,
           }}
         >
           <Text style={styles.storeText}>{props.storeName}</Text>
@@ -46,7 +47,10 @@ const RequestCard = (props) => {
       </TouchableOpacity>
       {!props.isUserRequest ? (
         <TouchableOpacity
-          style={{ alignSelf: "center", padding: 10 }}
+          style={{
+            alignSelf: "center",
+            padding: 10,
+          }}
           onPress={props.onPressSelect}
         >
           <Ionicons
