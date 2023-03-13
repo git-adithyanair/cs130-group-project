@@ -34,6 +34,7 @@ const RequestCard = (props) => {
           style={{
             marginLeft: 20,
             justifyContent: "center",
+            width: Dim.width * 0.45,
           }}
         >
           <Text style={styles.storeText}>

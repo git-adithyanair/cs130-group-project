@@ -1,5 +1,5 @@
 import React from "react";
-import { View } from "react-native";
+import { View, StatusBar, LogBox } from "react-native";
 import { useFonts, Inter_600SemiBold } from "@expo-google-fonts/inter";
 import { Provider, useSelector, useDispatch } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
@@ -20,6 +20,9 @@ import { updateDetails } from "./app/store/actions";
 import { Colors } from "./app/Constants";
 
 const Stack = createStackNavigator();
+
+LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
+LogBox.ignoreAllLogs(); //Ignore all log notifications
 
 const App = () => {
   const dispatch = useDispatch();
@@ -107,6 +110,7 @@ const AppWrapper = () => {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
+        <StatusBar barStyle="dark-content" />
         <App />
       </PersistGate>
     </Provider>
