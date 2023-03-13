@@ -1,6 +1,8 @@
 package util
 
 import (
+	"fmt"
+
 	"github.com/twilio/twilio-go"
 	api "github.com/twilio/twilio-go/rest/api/v2010"
 )
@@ -17,6 +19,7 @@ func NotifyUser(phoneNumber string, message string) error {
 
 	_, err := client.Api.CreateMessage(params)
 	if err != nil {
+		fmt.Println("twilio error: " + err.Error())
 		return err
 	}
 
