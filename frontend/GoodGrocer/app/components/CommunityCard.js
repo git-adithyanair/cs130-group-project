@@ -41,6 +41,7 @@ const CommunityCard = (props) => {
             fontSize: Font.s1.size,
             fontFamily: Font.s1.family,
             fontWeight: Font.s1.weight,
+            width: "80%",
             ...props.communityNameStyle,
           }}
         >
@@ -92,7 +93,7 @@ const CommunityCard = (props) => {
 const styles = StyleSheet.create({
   main: {
     backgroundColor: Colors.cream,
-    height: Dim.height * 0.15,
+    height: Dim.height * 0.18,
     width: Dim.width * 0.4,
     borderRadius: BorderRadius,
     justifyContent: "center",

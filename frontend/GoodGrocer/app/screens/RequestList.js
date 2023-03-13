@@ -12,6 +12,7 @@ import { Colors, Dim, Font } from "../Constants";
 import useRequest from "../hooks/useRequest";
 import Button from "../components/Button";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import Loading from "./Loading";
 
 function RequestList(props) {
   const [communityRequestData, setCommunityRequestData] = useState([]);
@@ -43,6 +44,9 @@ function RequestList(props) {
     onSuccess: (data) => {
       const requests = [];
       data.forEach((requestData) => {
+        if (requestData.request.status === "completed") {
+          return;
+        }
         requests.push({
           name: requestData.user.full_name,
           storeName: requestData.store ? requestData.store.name : "Any Store",
@@ -55,6 +59,7 @@ function RequestList(props) {
         });
       });
       setCommunityRequestData(requests);
+      setLoading(false);
     },
   });
 
@@ -66,7 +71,6 @@ function RequestList(props) {
       request_ids: selectedRequests,
     },
     onSuccess: () => {
-      setLoading(true);
       setSelectedRequests([]);
       setCreatingErrand(false);
       props.navigation.navigate("Errand");
@@ -80,9 +84,12 @@ function RequestList(props) {
     if (loading) {
       const getRequests = async () => getCommunityRequests.doRequest();
       getRequests();
-      setLoading(false);
     }
   }, [loading]);
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <SafeAreaView style={styles.container}>
