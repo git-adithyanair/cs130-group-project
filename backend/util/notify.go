@@ -10,7 +10,13 @@ import (
 const FromPhoneNumber = "+12763228670"
 
 func NotifyUser(phoneNumber string, message string) error {
-	client := twilio.NewRestClient()
+
+	config, _ := LoadConfig("../")
+
+	client := twilio.NewRestClientWithParams(twilio.ClientParams{
+		Username: config.TwilioAccountSid,
+		Password: config.TwilioAuthToken,
+	})
 
 	params := &api.CreateMessageParams{}
 	params.SetBody(message)
