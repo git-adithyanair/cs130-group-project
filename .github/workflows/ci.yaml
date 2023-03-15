@@ -66,7 +66,7 @@ jobs:
           node-version: 18
 
       - name: Install dependencies
-        run: npm install --only=dev --legacy-peer-deps
+        run: npm install --only=dev --force
 
       - name: Test
         run: npm test
