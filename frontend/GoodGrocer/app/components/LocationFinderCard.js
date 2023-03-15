@@ -18,7 +18,6 @@ const LocationFinderCard = (props) => {
   const [data, setData] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState({});
   const [noResults, setNoResults] = useState(false);
-
   const search = async () => {
     axios
       .get(`https://maps.googleapis.com/maps/api/place/textsearch/json`, {
@@ -70,6 +69,7 @@ const LocationFinderCard = (props) => {
           ? "Select the correct address →"
           : null}
       </Text>
+
       <FlatList
         horizontal
         showsHorizontalScrollIndicator={true}
@@ -114,7 +114,7 @@ const AddressCard = (props) => {
 
   return (
     <View>
-      <TouchableOpacity onPress={selectItem}>
+      <TouchableOpacity onPress={selectItem} testID={props.name}>
         <View
           style={{
             ...(selected
