@@ -168,6 +168,7 @@ const Buy = ({ navigation, route }) => {
                 <Picker
                   selectedValue={type}
                   onValueChange={(itemValue, itemIndex) => setType(itemValue)}
+                  testID={'picker-select'}
                 >
                   <Picker.Item label="count" value="numerical" />
                   <Picker.Item label="lbs" value="lbs" />
@@ -297,8 +298,9 @@ const Buy = ({ navigation, route }) => {
               <Button
                 title={"Complete your Order"}
                 onPress={async () => {
-                  setLoading(true);
-                  await createRequest.doRequest();
+                  if (items.length !== 0) {
+                    setLoading(true);
+                    await createRequest.doRequest();}
                 }}
                 textColor={"white"}
                 backgroundColor={Colors.darkGreen}
