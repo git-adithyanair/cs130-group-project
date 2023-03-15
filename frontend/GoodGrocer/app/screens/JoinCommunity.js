@@ -84,6 +84,7 @@ const JoinCommunity = (props) => {
         onChangeText={(text) => searchCommunities(text)}
       />
       <FlatList
+        testID="communitiesToJoin"
         horizontal={false}
         numColumns={2}
         style={styles.list}
