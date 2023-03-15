@@ -10,12 +10,9 @@
     "test": "jest"
   },
   "jest": {
-    "preset": "react-native",
+    "preset": "jest-expo",
     "setupFiles": [
       "./test/jestSetup.js"
-    ],
-    "transformIgnorePatterns": [
-      "node_modules/(?!(jest-)?@?react-native|@react-native-community|@react-navigation)"
     ]
   },
   "dependencies": {
@@ -33,6 +30,7 @@
     "expo-image-picker": "^14.1.1",
     "expo-permissions": "^14.1.1",
     "expo-status-bar": "~1.4.2",
+    "jest-expo": "^48.0.2",
     "react": "18.1.0",
     "react-native": "0.70.5",
     "react-native-elements": "^3.4.3",
